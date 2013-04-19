@@ -17,7 +17,7 @@ public class BattleField {
 										 
 	//CONSTRUCTOR
 	public BattleField(String filename){	
-											// a constructor configuring the battlefield, where filename is the filename of a file containing 
+		this.filename = filename;			// a constructor configuring the battlefield, where filename is the filename of a file containing 
 											// some configurations(one per line): the last such configuration becomes the current
 											// configuration of the battlefield.
 	}
@@ -34,24 +34,23 @@ public class BattleField {
 	}
 	
 	//utility methods to set and retrieve a specific element on the battlefield;
-	void setBattleFieldElement(int x, int y, BattleFieldElement b){
-		battlefield[x][y]= b;
+	void setBattleFieldElement(int x, int y, BattleFieldElement){
+		BattleFieldElement[x][y]= BattleFieldElement;
 	}
 	
 	BattleFieldElement getBattleFieldElement(int x, int y){
-		return battlefield[x][y];
+		return BattleFieldElement[x][y];
 	}										
 
 	public String toString(){				// a method creating and returning a string rep-resenting the current battlefield configuration,
-		return null;									// whose encoding is as specified above;
+											// whose encoding is as specified above;
 	}									
 
 	public void setBattleField(String s){   // a method initializing the battle-field configuration as specified in the parameter: 
 		this.filename=s;
 	}										
 
-	public String getBattleField(){
-		return null;						// method returning the current configuration of the battlefield, encoded as specified above;
+	public String getBattleField(){			// method returning the current configuration of the battlefield, encoded as specified above;
 	}										
 
 	public void write(){					// a method appending the current configuration to the current content of the file;
@@ -59,14 +58,13 @@ public class BattleField {
 
 	public void reload(){					// a method reading again from the file named filename the configuration of the battlefield 
 											//(the last configuration found in the file is used);
+											
 	}
 	
-	public Object clone(){	
-		return null; 						//a method that creates and returns a copy of this object;
+	public Object clone(){					//a method that creates and returns a copy of this object;
 	}										
 
-	public void backup(String msg){
-		System.out.println(msg);
+	public void backup(String){
 	}										// makes a backup copy of the battlefield con-figuration, saving it onto a file whose name is passed
 											// as an argument; the file is created from scratch;
 
