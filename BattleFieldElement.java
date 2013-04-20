@@ -1,8 +1,8 @@
 public abstract class BattleFieldElement{
 
 	//FIELD
-		private int x;										
-		private int y;						//are fields storing the current position of the item on the battlefield.
+		protected int x;										
+		protected int y;						//are fields storing the current position of the item on the battlefield.
 	
 	//CONSTRUCTOR
 	public BattleFieldElement(int h, int v){
