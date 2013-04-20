@@ -26,13 +26,15 @@ public abstract class BattleFieldElement{
 											//	leftmost cell of the battlefield has coordinates (0,0));
 											//	- means from right to left or from bottom to top.
 	
-	public String toString(){				// the usual method inherited from Object; it
-		String info= "Position"				// should be overridden in such a way that every single item is correctly repre-sented as
-					+"\nx coord: "+this.x	// explained when describing the toString method in the BattleField class.
-					+"\ny coord: "+this.y
-					+"\n";
-		return info;
-	}
+
+	abstract public String toString();
+//	public String toString(){				// the usual method inherited from Object; it
+//		String info= "Position"				// should be overridden in such a way that every single item is correctly repre-sented as
+//					+"\nx coord: "+this.x	// explained when describing the toString method in the BattleField class.
+//					+"\ny coord: "+this.y
+//					+"\n";
+//		return info;
+//	}
 	
 	
 		
