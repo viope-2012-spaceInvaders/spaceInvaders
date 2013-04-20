@@ -41,13 +41,10 @@ public class Gun extends BattleFieldElement{
 										// -1= right to left		1= left to right
 	}
 	
-	public String toString(){
-		String info=""
-					+super.toString()
-					+"Type: Gun\n";		
-		return info;
+	@Override
+	public String toString() {
+		return "G";
 	}
-	
 	
 	
 }

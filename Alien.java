@@ -21,11 +21,9 @@ public abstract class Alien extends BattleFieldElement{
 	
 	abstract public int getYOffset();
 	
-	public String toString(){
-		String info=""
-					+super.toString()
-					+"Type: Alien\n";		
-		return info;
+	@Override
+	public String toString() {
+		return "A";
 	}
-	
+
 }

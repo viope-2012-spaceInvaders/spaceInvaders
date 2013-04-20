@@ -28,11 +28,9 @@ public class RedSpacecraft extends Alien{
 		return 0;
 	}
 	
-	public String toString(){
-		String info=""
-					+super.toString()
-					+"Alien type: RedSpaceCraft\n";		
-		return info;
+	@Override
+	public String toString() {
+		return "R";
 	}
 
 }

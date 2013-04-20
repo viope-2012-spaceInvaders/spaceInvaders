@@ -19,11 +19,9 @@ public class Empty extends BattleFieldElement{
 	}
 	
 	
-	public String toString(){				
-		String info= ""
-					+super.toString()
-					+"This cell is Empty!";
-		return info;
+	@Override
+	public String toString() {
+		return "-";
 	}
 	
 	

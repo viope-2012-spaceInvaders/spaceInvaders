@@ -12,11 +12,9 @@ class AlienShot extends BattleFieldElement	{
 
 	
 	//for collision with elements or borders remember to call the Empty class constructor"
-	public String toString(){
-		String info=""
-			+super.toString()
-			+"Fired by: Alien";
-		return info;							
+	@Override
+	public String toString() {
+		return "S";
 	}
 
 

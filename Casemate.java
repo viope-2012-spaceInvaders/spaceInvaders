@@ -25,11 +25,8 @@ public class Casemate extends BattleFieldElement {
 		return 0;
 	}
 	
-	public String toString(){
-		String info=""
-					+super.toString()
-					+"Type: Casemate\n";		
-		return info;
+	@Override
+	public String toString() {
+		return "C";
 	}
-	
 }
