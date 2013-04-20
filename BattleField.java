@@ -17,9 +17,11 @@ public class BattleField {
 										 
 	//CONSTRUCTOR
 	public BattleField(String filename){	
-											// a constructor configuring the battlefield, where filename is the filename of a file containing 
-											// some configurations(one per line): the last such configuration becomes the current
-											// configuration of the battlefield.
+		//just to test, we should use StringTokenizer here, I think	(by Andre)			// a constructor configuring the battlefield, where filename is the filename of a file containing 
+		this.rows=7;
+		this.columns=10;
+		this.battlefield = new BattleFieldElement[this.rows][this.columns];	// some configurations(one per line): the last such configuration becomes the current
+																				// configuration of the battlefield.
 	}
 	
 	
@@ -34,8 +36,13 @@ public class BattleField {
 	}
 	
 	//utility methods to set and retrieve a specific element on the battlefield;
-	void setBattleFieldElement(int x, int y, BattleFieldElement b){
-		battlefield[x][y]= b;
+	void setBattleFieldElement(int x, int y, BattleFieldElement b) throws IllegalPositionException{
+		if (x == rows-1 && b.toString() == "G") {
+			throw new IllegalPositionException("Only a Gun can be placed in row: ", x);
+		} else {
+			battlefield[x][y]= b;
+		}
+		
 	}
 	
 	BattleFieldElement getBattleFieldElement(int x, int y){
@@ -43,16 +50,30 @@ public class BattleField {
 	}										
 
 	public String toString(){				// a method creating and returning a string rep-resenting the current battlefield configuration,
-		return null;									// whose encoding is as specified above;
+		return getBattleField();									// whose encoding is as specified above;
 	}									
 
 	public void setBattleField(String s){   // a method initializing the battle-field configuration as specified in the parameter: 
 		this.filename=s;
-	}										
+	}
 
-	public String getBattleField(){
-		return null;						// method returning the current configuration of the battlefield, encoded as specified above;
-	}										
+	public String getBattleField() {
+		// to finish, not fully done yet, dont know why the if is not working (by Andre)
+		String enconding = null;
+		enconding = rows + "|" + columns;
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < columns; j++) {
+				// if (!battlefield[i][j].equals(null)) {
+				// enconding += battlefield[i][j].toString();
+			}
+
+			enconding += "$";
+		}
+		return enconding; 
+	}
+	// method returning the current configuration of the battlefield, encoded as specified above;
+	// 7|10|8-1R1-$4-3A1-1A1-$4-2C1-1A2-$4-2A4-$2-1C4A3-$2-1A7-$1-1G8-$ ("-" is a empty cell)
+							
 
 	public void write(){					// a method appending the current configuration to the current content of the file;
 	}
