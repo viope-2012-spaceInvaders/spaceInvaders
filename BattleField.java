@@ -15,15 +15,23 @@ public class BattleField {
 	private String filename;					 //field containing the name of the file where the configurations should be saved and that is used 
 													//to restore a saved configuration. 
 										 
-	//CONSTRUCTOR
-	public BattleField(String filename){	
-		//just to test, we should use StringTokenizer here, I think	(by Andre)			// a constructor configuring the battlefield, where filename is the filename of a file containing 
-		this.rows=7;
-		this.columns=10;
-		this.battlefield = new BattleFieldElement[this.rows][this.columns];	// some configurations(one per line): the last such configuration becomes the current
-																				// configuration of the battlefield.
+	// CONSTRUCTOR
+	// a constructor configuring the battlefield, where filename is the filename
+	// of a file containing some configurations(one per line): the last such
+	// configuration becomes the current // configuration of the battlefield.
+	public BattleField(String filename) throws IllegalElementException {
+		this.filename=filename;
+		// just to test
+		this.rows = 7;
+		this.columns = 10;
+		this.battlefield = new BattleFieldElement[this.rows][this.columns]; //
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < columns; j++) {
+				setBattleFieldElement(i, j, new Empty(i, j));
+
+			}
+		}
 	}
-	
 	
 	//METHODS
 
@@ -36,9 +44,9 @@ public class BattleField {
 	}
 	
 	//utility methods to set and retrieve a specific element on the battlefield;
-	void setBattleFieldElement(int x, int y, BattleFieldElement b) throws IllegalPositionException{
+	void setBattleFieldElement(int x, int y, BattleFieldElement b) throws IllegalElementException{
 		if (x == rows-1 && b.toString() == "G") {
-			throw new IllegalPositionException("Only a Gun can be placed in row: ", x);
+			throw new IllegalElementException("Only a Gun can be placed in row "+(rows-1)+" (bottom)");
 		} else {
 			battlefield[x][y]= b;
 		}
@@ -58,18 +66,17 @@ public class BattleField {
 	}
 
 	public String getBattleField() {
-		// to finish, not fully done yet, dont know why the if is not working (by Andre)
-		String enconding = null;
-		enconding = rows + "|" + columns;
-		for (int i = 0; i < rows; i++) {
+		// to finish, not fully done yet
+		// (by Andre)
+		String enconding = rows + "|" + columns + "|";
+		for (int i = 0 ; i < rows; i++) {
 			for (int j = 0; j < columns; j++) {
-				// if (!battlefield[i][j].equals(null)) {
-				// enconding += battlefield[i][j].toString();
-			}
+				enconding += battlefield[i][j].toString() ;
 
-			enconding += "$";
+			}enconding+= "$";
 		}
-		return enconding; 
+		
+		return enconding;
 	}
 	// method returning the current configuration of the battlefield, encoded as specified above;
 	// 7|10|8-1R1-$4-3A1-1A1-$4-2C1-1A2-$4-2A4-$2-1C4A3-$2-1A7-$1-1G8-$ ("-" is a empty cell)
