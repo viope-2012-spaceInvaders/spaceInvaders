@@ -8,8 +8,8 @@ public class TestSpaceInvaders {
 		System.out.println("2nd step :- "+bf); 
 		bf.move(); 
 		System.out.println("3rd step :- "+bf); 
-		bf.setBattleFieldElement(5,3,new GunShoot(5,3)); 
-		bf.setBattleFieldElement(2,1,new AlienShoot(2,1)); 
+		bf.setBattleFieldElement(5,3,new GunShot(5,3)); 
+		bf.setBattleFieldElement(2,1,new AlienShot(2,1)); 
 		System.out.println("new entries :- "+bf); 
 		bf.move(); 
 		System.out.println("4th step :- "+bf); 
