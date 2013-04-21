@@ -9,21 +9,13 @@ and then it inverts its direction. A gun can only exist on the bottom line, othe
 public class Gun extends BattleFieldElement{
 
 	//FIELD
-	private static int gunCounter=0;
+	
 	private int direction;
 	
 	//CONSTRUCTOR
-	public Gun(int h,int v) throws IllegalElementException{
-		gunCounter++;
-		if(gunCounter!=1)
-			throw new IllegalElementException("Only one Gun per BattleField");
-		else 
-			if(v != 0 /* battlefield's height */ )
-				throw new IllegalPositionException("The Gun can only be placed in the bottom line of the BattleField");
-			else{
-				super( h,v );				
-				direction=1;				//from left to right
-			}	
+	  public Gun(int h,int v) throws IllegalElementException{
+		super( h,v );		
+	    direction=1;  			//from left to right
 	}
 	
 	//METHODS

@@ -8,6 +8,7 @@ import java.io.File;
 public class BattleField {
 
 	//FIELD
+	protected int gunCounter=0;
 	private BattleFieldElement[][] battlefield;  //a field storing the initial battlefield configuration. Every element of this matrix must 
 												 //contain a non-null value.
 	private int rows;
@@ -19,7 +20,7 @@ public class BattleField {
 	// a constructor configuring the battlefield, where filename is the filename
 	// of a file containing some configurations(one per line): the last such
 	// configuration becomes the current // configuration of the battlefield.
-	public BattleField(String filename) throws IllegalElementException {
+	public BattleField(String filename) throws IllegalElementException, IllegalPositionException {
 		this.filename=filename;
 		// just to test
 		this.rows = 7;
@@ -44,14 +45,30 @@ public class BattleField {
 	}
 	
 	//utility methods to set and retrieve a specific element on the battlefield;
-	void setBattleFieldElement(int x, int y, BattleFieldElement b) throws IllegalElementException{
-		if (x == rows-1 && b.toString() == "G") {
-			throw new IllegalElementException("Only a Gun can be placed in row "+(rows-1)+" (bottom)");
-		} else {
-			battlefield[x][y]= b;
-		}
-		
-	}
+	  
+    void setBattleFieldElement(int x, int y, BattleFieldElement b) throws IllegalElementException, IllegalPositionException{
+	  	
+        if (x == rows-1 && !b.toString().equals("G")) 
+  				throw new IllegalElementException("Only a Gun can be placed in row "+(rows-1)+" (bottom)");
+  	  	else 
+  				battlefield[x][y]= b;
+  	  	
+        
+  	    if(b.toString().equals("G") && x != rows-1)
+           throw new IllegalPositionException("The Gun must be placed in the bottom line of the BattleField");
+        else 
+           if(b.toString().equals("G") && gunCounter>0)
+              throw new IllegalElementException("Only one Gun per BattleField");
+           else{
+    		    battlefield[x][y]= b;
+    		    gunCounter++; 
+           }
+        
+       
+       
+        
+  		
+  	}
 	
 	BattleFieldElement getBattleFieldElement(int x, int y){
 		return battlefield[x][y];

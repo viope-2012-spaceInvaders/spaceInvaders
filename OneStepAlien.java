@@ -29,11 +29,8 @@ public class OneStepAlien extends Alien{
 									// -1= right to left		1= left to right
 	}
 
-	public String toString(){
-		String info=""
-					+super.toString()
-					+"Alien type: OneStepAlien\n";		
-		return info;
+	public String toString() {
+		return "A";
 	}
 
 }

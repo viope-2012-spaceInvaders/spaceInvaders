@@ -22,14 +22,8 @@ abstract class Shot extends BattleFieldElement	{
 	abstract public int getXOffset();
 	
 	abstract public int getYOffset();
-	
-	
-	public String toString(){
-		String info=""
-			+super.toString()
-			+"Type: Shot";
-		return info;							
-	}	
+		
+	abstract public String toString();
 	
 	//for collision with elements or borders remember to call the Empty class constructor"
 	

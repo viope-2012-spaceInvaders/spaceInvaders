@@ -19,7 +19,7 @@ public class RedSpacecraft extends Alien{
 	
 	public int getXOffset(){
 		if(this.y!=0)						//the number of cells it can be moved will always be the opposite of its column, except when it is in the column[0];
-			return this.h*-1;
+			return this.y*-1;
 		else
 			return 0;
 	}

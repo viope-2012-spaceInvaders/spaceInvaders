@@ -9,10 +9,7 @@ public class Casemate extends BattleFieldElement {
 	//FIELD
 	
 	//CONSTRUCTOR
-	public Casemate(int h,int v) throws IllegalPositionException{
-		if(v == 0) // battlefield's bottom line 
-			throw new IllegalPositionException("The Casemate can be placed everywhere, except in the bottom line");
-		else
+	  public Casemate(int h,int v) {
 			super(h,v);			
 	}
 	

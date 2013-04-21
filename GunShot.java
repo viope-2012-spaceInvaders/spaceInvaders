@@ -24,7 +24,7 @@ class GunShot extends BattleFieldElement	{
 
 	public int getYOffset() {
 		if(this.x!=0)						//the number of cells it can be moved will always be the opposite of its row, except when it is in the row [0];
-			return this.h*-1;
+			return this.x*-1;
 		else
 			return 0;
 	}	
