@@ -83,27 +83,80 @@ public class BattleField {
 	}
 
 	public String getBattleField() {
-		// to finish, not fully done yet
-		// (by Andre)
-		String enconding = rows + "|" + columns + "|";
-		for (int i = 0 ; i < rows; i++) {
-			for (int j = 0; j < columns; j++) {
-				enconding += battlefield[i][j].toString() ;
 
-			}enconding+= "$";
-		}
+		//Message by Jacques :
+		//Method works IF the battlefield is a table of String. (but it is NOT!)
+		//I will change the type of c1 and c2 by BattlefieldElement 
+		//when I will know what exactly returns BattlefieldElement
+		//The way to do this will be very similar I think
 		
-		return enconding;
+		String string = ""; //The string which will return the Battlefield's configuration
+		String c1 = battlefield[0][0]; //The precedent column of the matrix
+		String c2; //The current column of the row
+		int i,j; //To run through the table
+		int occ = 1; //This is the occurence of an element
+		string = rows + "|" + columns + "|";
+		//end = "7|10|8 1R1 $4 3A1 1A1 $4 2C1 1A2 $4 2A4 $2 1C4A3 $2 1A7 $1 1G8 $" 
+		for (i = 0; i<rows ; i++ ) {
+			c1 = battlefield[i][0]; //Initialisation of the first case of the row
+			for ( j = 1; j< columns ; j++ ) {
+				c2 = battlefield[i][j];
+				//System.out.println(i + ";" +j+ " : " +c1+ " "+c2+" - "+occ);
+				if (c2 == c1){
+					occ++;
+					c1 = battlefield[i][j];
+				} else {
+					if (c1 == " ") {
+						string += occ + " ";
+						occ = 1;
+						c1 = battlefield[i][j];
+					} else {
+						string += occ + "" + c1;
+						occ = 1;
+						c1 = battlefield[i][j];
+					}
+				}
+				
+				if (j==columns-1) { // Detection if this is the last column of the row
+					string += occ + " ";
+					occ = 1;
+					c1 = battlefield[i][j];
+				}
+			}
+			string += "$"; 
+		}
+		return string;
 	}
 	// method returning the current configuration of the battlefield, encoded as specified above;
 	// 7|10|8-1R1-$4-3A1-1A1-$4-2C1-1A2-$4-2A4-$2-1C4A3-$2-1A7-$1-1G8-$ ("-" is a empty cell)
 							
 
 	public void write(){					// a method appending the current configuration to the current content of the file;
+		
 	}
 
 	public void reload(){					// a method reading again from the file named filename the configuration of the battlefield 
 											//(the last configuration found in the file is used);
+	
+		try {
+			FileReader fr = new FileReader(this.filename);
+			BufferedReader bf = new BufferedReader(fr);
+			String str = "", line = "";
+			try {
+				while (str != null) {
+					line = str;
+					str = bf.readLine();
+				}
+				setBattleField(line); //Send to setBattleField method, the lastest configuration of the file
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			System.out.println("File not found !");
+		}							
+	
 	}
 	
 	public Object clone(){	
