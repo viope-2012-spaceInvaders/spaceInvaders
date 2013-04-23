@@ -173,36 +173,6 @@ public class BattleField {
 
 	public String getBattleField() {
 
-<<<<<<< HEAD
-		int itemCounter = 0; 								
-		String item = "";						
-		String Encode = battlefield.length + "|" + battlefield[0].length + "|";	//it gives the matrix dimension
-		for (int i = 0 ; i < battlefield.length; i++) {							
-			if(i>0)	{														//every time it start a new line, except for line 0		
-				Encode=Encode+itemCounter + item+"$";						//it will add to Encode the itemCounter + the letter of the item and the $ simbol
-			}
-			
-			item=battlefield[i][0].toString();								
-			itemCounter=0;													
-			for (int j = 0; j < battlefield[0].length; j++) {
-				if(battlefield[i][j].toString().equals(item)) {				//always true for the first column
-					if(itemCounter==9){											//if itemCounter==9 then 
-						Encode=Encode + itemCounter + item;						//will add to Encode the itemCounter + the letter
-						itemCounter=1;											//and restart counting from 1
-					} else {
-						itemCounter++;	//otherwise just add +1 to the counter
-					} 
-				} else {														//this else means: the battlefield item is different from the last one
-						Encode=Encode + itemCounter + item;						//add to Encode the itemCounter + the letter
-						itemCounter=1;											//set itemcounter to 1
-						item=battlefield[rows][columns].toString();						//change the item string to the letter of the current item
-=======
-		//Message by Jacques :
-		//Method works IF the battlefield is a table of String. (but it is NOT!)
-		//I will change the type of c1 and c2 by BattlefieldElement 
-		//when I will know what exactly returns BattlefieldElement
-		//The way to do this will be very similar I think
-		
 		String string = ""; //The string which will return the Battlefield's configuration
 		String c1 = battlefield[0][0].toString(); //The precedent column of the matrix
 		String c2; //The current column of the row
@@ -234,9 +204,7 @@ public class BattleField {
 					string += occ + " ";
 					occ = 1;
 					c1 = battlefield[i][j].toString();
->>>>>>> 8f6d10c51b07d1d39be632aee01fac26f55fd5ff
 				}
-	
 			}
 		}	
 		return Encode+itemCounter + item + "$";
