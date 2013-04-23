@@ -3,7 +3,10 @@ can be broadly described as a matrix: every element of this matrix will contain 
 a gun, a shot, a casemate or will be empty. An instance of BattleField represents a
 snapshot of the current battlefield configuration.*/
 
-import java.io.File;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class BattleField {
 
@@ -48,7 +51,7 @@ public class BattleField {
 	  
     void setBattleFieldElement(int x, int y, BattleFieldElement b) throws IllegalElementException, IllegalPositionException{
 	  	
-        if (x == rows-1 && !b.toString().equals("G")) 
+        if ((x == rows-1) && (!b.toString().equals("G")) && (!b.toString().equals("-"))) 
   				throw new IllegalElementException("Only a Gun can be placed in row "+(rows-1)+" (bottom)");
   	  	else 
   				battlefield[x][y]= b;
