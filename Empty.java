@@ -21,7 +21,7 @@ public class Empty extends BattleFieldElement{
 	
 	@Override
 	public String toString() {
-		return "-";
+		return " ";
 	}
 	
 	
