@@ -3,7 +3,8 @@ can be broadly described as a matrix: every element of this matrix will contain 
 a gun, a shot, a casemate or will be empty. An instance of BattleField represents a
 snapshot of the current battlefield configuration.*/
 
-import java.io.File;
+import java.io.*;
+import java.util.StringTokenizer;
 
 public class BattleField {
 
@@ -165,48 +166,33 @@ public class BattleField {
 
 	public String getBattleField() {
 
-		//Message by Jacques :
-		//Method works IF the battlefield is a table of String. (but it is NOT!)
-		//I will change the type of c1 and c2 by BattlefieldElement 
-		//when I will know what exactly returns BattlefieldElement
-		//The way to do this will be very similar I think
-		
-		String string = ""; //The string which will return the Battlefield's configuration
-		String c1 = battlefield[0][0]; //The precedent column of the matrix
-		String c2; //The current column of the row
-		int i,j; //To run through the table
-		int occ = 1; //This is the occurence of an element
-		string = rows + "|" + columns + "|";
-		//end = "7|10|8 1R1 $4 3A1 1A1 $4 2C1 1A2 $4 2A4 $2 1C4A3 $2 1A7 $1 1G8 $" 
-		for (i = 0; i<rows ; i++ ) {
-			c1 = battlefield[i][0]; //Initialisation of the first case of the row
-			for ( j = 1; j< columns ; j++ ) {
-				c2 = battlefield[i][j];
-				//System.out.println(i + ";" +j+ " : " +c1+ " "+c2+" - "+occ);
-				if (c2 == c1){
-					occ++;
-					c1 = battlefield[i][j];
-				} else {
-					if (c1 == " ") {
-						string += occ + " ";
-						occ = 1;
-						c1 = battlefield[i][j];
-					} else {
-						string += occ + "" + c1;
-						occ = 1;
-						c1 = battlefield[i][j];
-					}
-				}
-				
-				if (j==columns-1) { // Detection if this is the last column of the row
-					string += occ + " ";
-					occ = 1;
-					c1 = battlefield[i][j];
-				}
+		int itemCounter = 0; 								
+		String item = "";						
+		String Encode = battlefield.length + "|" + battlefield[0].length + "|";	//it gives the matrix dimension
+		for (int i = 0 ; i < battlefield.length; i++) {							
+			if(i>0)	{														//every time it start a new line, except for line 0		
+				Encode=Encode+itemCounter + item+"$";						//it will add to Encode the itemCounter + the letter of the item and the $ simbol
 			}
-			string += "$"; 
-		}
-		return string;
+			
+			item=battlefield[i][0].toString();								
+			itemCounter=0;													
+			for (int j = 0; j < battlefield[0].length; j++) {
+				if(battlefield[i][j].toString().equals(item)) {				//always true for the first column
+					if(itemCounter==9){											//if itemCounter==9 then 
+						Encode=Encode + itemCounter + item;						//will add to Encode the itemCounter + the letter
+						itemCounter=1;											//and restart counting from 1
+					} else {
+						itemCounter++;	//otherwise just add +1 to the counter
+					} 
+				} else {														//this else means: the battlefield item is different from the last one
+						Encode=Encode + itemCounter + item;						//add to Encode the itemCounter + the letter
+						itemCounter=1;											//set itemcounter to 1
+						item=battlefield[rows][columns].toString();						//change the item string to the letter of the current item
+				}
+	
+			}
+		}	
+		return Encode+itemCounter + item + "$";
 	}
 	// method returning the current configuration of the battlefield, encoded as specified above;
 	// 7|10|8-1R1-$4-3A1-1A1-$4-2C1-1A2-$4-2A4-$2-1C4A3-$2-1A7-$1-1G8-$ ("-" is a empty cell)
