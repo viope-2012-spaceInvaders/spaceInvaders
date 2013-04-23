@@ -79,7 +79,88 @@ public class BattleField {
 	}									
 
 	public void setBattleField(String s){   // a method initializing the battle-field configuration as specified in the parameter: 
-		this.filename=s;
+		
+		String config_line = s;
+		StringTokenizer st = new StringTokenizer(config_line,"|");
+		
+		//Get the rows from the String
+		String s_rows = st.nextToken();
+		rows = Integer.parseInt(s_rows);
+		
+		//Get the columns from the String
+		String s_columns = st.nextToken();
+		columns = Integer.parseInt(s_columns);
+		
+		//The rest of the String (Positions of the BattlefieldElements
+		String result = st.nextToken();
+
+		int i = 0; //i : to trough the String; 
+		int l = 0, k = 0; //l & k : to place the BattlefieldElements in the matrix; 
+		int	itemCounter; //itemCounter : to count how many items of a BattlefieldElement there are
+		
+		char c = result.charAt(i); 
+		String stringCounter = "";
+
+		//Until the end of the String
+        while (i < result.length()-1) {
+        	
+        	//While there isn't detection of a BattlefieldElement
+	        while (c != ' ' && c != '$' && c != 'R' && c != 'A' && c != 'G' && c != 'C' && c != 's' && c != 'S') {
+	        	stringCounter += String.valueOf(c); //to converting the String into a integer
+	        	i++;
+	        	c = result.charAt(i);
+	        }
+
+	        //Processing when BattlefieldElement detected
+	        switch (c) { 
+	        	case ' ': 
+	        		for (itemCounter = Integer.parseInt(stringCounter);itemCounter>0;itemCounter--) {
+	        			setBattleFieldElement(l, k, new Empty(l, k));
+	        			k++;
+	        		}
+	        		break; 
+	        	case '$':
+	        		l++;
+	        		k = 0;
+	        		break;
+	        	case 'R': 
+	        		for (itemCounter = Integer.parseInt(stringCounter);itemCounter>0;itemCounter--) {
+	        			setBattleFieldElement(l, k, new RedSpacecraft(l, k));
+	        			k++;
+	        		}
+	        		break; 
+	        	case 'A': 
+	        		for (itemCounter = Integer.parseInt(stringCounter);itemCounter>0;itemCounter--) {
+	        			setBattleFieldElement(l, k, new Alien(l, k)); 
+	        			//Bug with Alien, I don't really know why, yet : "Cannot instantiate the type Alien"
+	        			k++;
+	        		}
+	        		break;  
+	        	case 'C': 
+	        		for (itemCounter = Integer.parseInt(stringCounter);itemCounter>0;itemCounter--) {
+	        			setBattleFieldElement(l, k, new Casemate(l, k));
+	        			k++;
+	        		}
+	        		break;  
+	        	case 'G': 
+	        		itemCounter = Integer.parseInt(stringCounter);
+	        		setBattleFieldElement(l, k, new Gun(l, k));
+	        		break;
+	        	case 's': 
+	        		setBattleFieldElement(l, k, new GunShot(l, k));
+	        		break;  
+	        	case 'S': 
+	        		setBattleFieldElement(l, k, new AlienShot(l, k));
+	        		break;  
+	        	default: 
+	        		break;
+	        }
+	        
+	        stringCounter = ""; //Reset of the stringCounter
+	        
+	        i++;
+        	c = result.charAt(i); //
+        }
 	}
 
 	public String getBattleField() {
