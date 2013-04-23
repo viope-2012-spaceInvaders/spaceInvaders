@@ -3,15 +3,8 @@ can be broadly described as a matrix: every element of this matrix will contain 
 a gun, a shot, a casemate or will be empty. An instance of BattleField represents a
 snapshot of the current battlefield configuration.*/
 
-<<<<<<< HEAD
 import java.io.*;
 import java.util.StringTokenizer;
-=======
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
->>>>>>> 8f6d10c51b07d1d39be632aee01fac26f55fd5ff
 
 public class BattleField {
 
@@ -33,7 +26,7 @@ public class BattleField {
 		// just to test
 		this.rows = 7;
 		this.columns = 10;
-		this.battlefield = new BattleFieldElement[this.rows][this.columns]; //
+		this.battlefield = new BattleFieldElement[this.rows][this.columns];
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < columns; j++) {
 				setBattleFieldElement(i, j, new Empty(i, j));
@@ -44,38 +37,34 @@ public class BattleField {
 	
 	//METHODS
 
-	public String getFilename(){				//	You should provide two methods
+	public String getFilename() {				//	You should provide two methods
 		return this.filename;					//	public String getFilename()
 	}
 										 
-	public void setFilename(String s){			//	void setFilename(String) with the obvious meaning.
+	public void setFilename(String s) {			//	void setFilename(String) with the obvious meaning.
 		this.filename= s;						
 	}
 	
 	//utility methods to set and retrieve a specific element on the battlefield;
 	  
-    void setBattleFieldElement(int x, int y, BattleFieldElement b) throws IllegalElementException, IllegalPositionException{
+    void setBattleFieldElement(int x, int y, BattleFieldElement b) throws IllegalElementException, IllegalPositionException {
 	  	
-        if ((x == rows-1) && (!b.toString().equals("G")) && (!b.toString().equals(" "))) 
+        if ((x == rows-1) && (!b.toString().equals("G")) && (!b.toString().equals(" "))) { 
   				throw new IllegalElementException("Only a Gun can be placed in row "+(rows-1)+" (bottom)");
-  	  	else 
+  	  	} else { 
   				battlefield[x][y]= b;
-  	  	
+  	  	}
         
-  	    if(b.toString().equals("G") && x != rows-1)
+  	    if(b.toString().equals("G") && x != rows-1) {
            throw new IllegalPositionException("The Gun must be placed in the bottom line of the BattleField");
-        else 
-           if(b.toString().equals("G") && gunCounter>0)
+		} else {
+			if(b.toString().equals("G") && gunCounter>0) {
               throw new IllegalElementException("Only one Gun per BattleField");
-           else{
+			} else {
     		    battlefield[x][y]= b;
     		    gunCounter++; 
-           }
-        
-       
-       
-        
-  		
+			}
+		}
   	}
 	
 	BattleFieldElement getBattleFieldElement(int x, int y){
@@ -86,7 +75,7 @@ public class BattleField {
 		return getBattleField();									// whose encoding is as specified above;
 	}									
 
-	public void setBattleField(String s){   // a method initializing the battle-field configuration as specified in the parameter: 
+	public void setBattleField(String s) {   // a method initializing the battle-field configuration as specified in the parameter: 
 		
 		String config_line = s;
 		StringTokenizer st = new StringTokenizer(config_line,"|");
@@ -206,8 +195,10 @@ public class BattleField {
 					c1 = battlefield[i][j].toString();
 				}
 			}
-		}	
-		return Encode+itemCounter + item + "$";
+			string += "$"; 
+		}
+		return string;
+
 	}
 	// method returning the current configuration of the battlefield, encoded as specified above;
 	// 7|10|8-1R1-$4-3A1-1A1-$4-2C1-1A2-$4-2A4-$2-1C4A3-$2-1A7-$1-1G8-$ ("-" is a empty cell)
@@ -241,16 +232,27 @@ public class BattleField {
 	
 	}
 	
-	public Object clone(){	
+	public Object clone() {
 		return null; 						//a method that creates and returns a copy of this object;
 	}										
 
-	public void backup(String msg){
-		System.out.println(msg);
+	public void backup(String file) {
+		File f = new File (file); 
+			try {
+			    FileWriter fw = new FileWriter (f);
+			 
+				String backup = this.getBattleField();
+		
+			    fw.write(backup);
+
+			    fw.close();
+			} catch (IOException exception) {
+			    System.out.println ("Impossible to create the backup file !");
+			}
 	}										// makes a backup copy of the battlefield con-figuration, saving it onto a file whose name is passed
 											// as an argument; the file is created from scratch;
 
-	void move(){
+	void move() {
 	}										// a method that advances the configuration of one step, starting from the upper left corner and proceeding
 											// left to right, one line at a time; the step must be performed in-place, without creating another copy
 											// of the matrix: this can be obtained by suitably exploiting the methods provided by the
