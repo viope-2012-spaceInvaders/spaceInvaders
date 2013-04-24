@@ -24,6 +24,7 @@ public class BattleField {
 	// configuration becomes the current // configuration of the battlefield.
 	public BattleField(String filename) throws IllegalElementException, IllegalPositionException {
 		setFilename(filename);
+		
 		reload();
 	}
 	
@@ -39,26 +40,41 @@ public class BattleField {
 	
 	//utility methods to set and retrieve a specific element on the battlefield;
 	  
-    void setBattleFieldElement(int x, int y, BattleFieldElement b) throws IllegalElementException, IllegalPositionException {
-	  	
-        if ((x == rows-1) && (!b.toString().equals("G")) && (!b.toString().equals(" "))) { 
-  				throw new IllegalElementException("Only a Gun can be placed in row "+(rows-1)+" (bottom)");
-  	  	} else { 
-  				battlefield[x][y]= b;
-  	  	}
-        
-  	    if(b.toString().equals("G") && x != rows-1) {
-           throw new IllegalPositionException("The Gun must be placed in the bottom line of the BattleField");
-		} else {
-			if(b.toString().equals("G") && gunCounter>0) {
-              throw new IllegalElementException("Only one Gun per BattleField");
-			} else {
-    		    battlefield[x][y]= b;
-    		    gunCounter++; 
-			}
-		}
-  	}
-	
+	void setBattleFieldElement(int x, int y, BattleFieldElement b) throws IllegalElementException, IllegalPositionException {
+			//check if something different from a Gun is placed in the bottom row
+	    if ((y == rows-1) && (!b.toString().equals("G")) && (!b.toString().equals(" "))) 
+	  		throw new IllegalElementException("Only Gun and Empty cells can be placed in the bottom row");
+			//check if something different from a RedSpacecraft is placed in the top row
+			if ((y == 0) && (!b.toString().equals("R"))  && ((!b.toString().equals(" ")))) 
+	  			throw new IllegalElementException("Only a RedSpacecraft and cells can be placed in the top row");
+			
+			switch(b.toString()){
+				case "R":	if(y != 0) {
+						throw new IllegalPositionException("RedSpacecraft cannot be placed in line "+y);
+	      			}
+					battlefield[x][y]= b;
+				break;
+						  
+				case "G": if(gunCounter>0) {
+						throw new IllegalElementException("Only one Gun per BattleField");
+					}
+	            	if(y != rows-1) {
+	            		throw new IllegalPositionException("The Gun must be placed in the bottom line of the BattleField");
+	            	}
+	            	gunCounter++;
+	            	battlefield[x][y]= b;
+				break;
+						
+				case "C": 	if((y==0)||(y==rows-1)) {
+						throw new IllegalPositionException("Casemates can't be placed in bottom or top line");
+			    	}
+					battlefield[x][y]= b;
+	         	break;
+				//gunshot			
+				default: battlefield[x][y]= b;
+			}	
+	}
+		
 	BattleFieldElement getBattleFieldElement(int x, int y){
 		return battlefield[x][y];
 	}										
@@ -68,7 +84,6 @@ public class BattleField {
 	}									
 
 	public void setBattleField(String s) throws IllegalElementException, IllegalPositionException {   // a method initializing the battle-field configuration as specified in the parameter: 
-		
 		String config_line = s;
 		StringTokenizer st = new StringTokenizer(config_line,"|");
 		
@@ -155,44 +170,35 @@ public class BattleField {
 
 	public String getBattleField() {
 
-		String string = ""; //The string which will return the Battlefield's configuration
-		String c1 = battlefield[0][0].toString(); //The precedent column of the matrix
-		String c2; //The current column of the row
-		int i,j; //To run through the table
-		int occ = 1; //This is the occurence of an element
-		string = rows + "|" + columns + "|";
-		//end = "7|10|8 1R1 $4 3A1 1A1 $4 2C1 1A2 $4 2A4 $2 1C4A3 $2 1A7 $1 1G8 $" 
-		for (i = 0; i<rows ; i++ ) {
-			c1 = battlefield[i][0].toString(); //Initialisation of the first case of the row
-			for ( j = 1; j< columns ; j++ ) {
-				c2 = battlefield[i][j].toString();
-				//System.out.println(i + ";" +j+ " : " +c1+ " "+c2+" - "+occ);
-				if (c2 == c1){
-					occ++;
-					c1 = battlefield[i][j].toString();
-				} else {
-					if (c1 == " ") {
-						string += occ + " ";
-						occ = 1;
-						c1 = battlefield[i][j].toString();
-					} else {
-						string += occ + "" + c1;
-						occ = 1;
-						c1 = battlefield[i][j].toString();
-					}
-				}
-				
-				if (j==columns-1) { // Detection if this is the last column of the row
-					string += occ + " ";
-					occ = 1;
-					c1 = battlefield[i][j].toString();
-				}
+		// method returning the current configuration of the battlefield, encoded as specified above;
+			// 7|10|8-1R1-$4-3A1-1A1-$4-2C1-1A2-$4-2A4-$2-1C4A3-$2-1A7-$1-1G8-$ ("_" is a empty cell)
+		int itemCounter=0; 	
+		String item=battlefield[0][0].toString();
+		String Encode = battlefield.length + "|" + battlefield[0].length + "|";
+		for (int i = 0 ; i < battlefield.length; i++) {
+			if(i>0) {
+				Encode=Encode+"$";
 			}
-			string += "$"; 
-		}
-		return string;
-
+			for (int j = 0; j < battlefield[0].length; j++) {
+				if(battlefield[i][j].toString().equals(item)) {
+					if(itemCounter==9){
+						Encode=Encode + itemCounter + item;
+						itemCounter=1;
+					}	
+					else
+						itemCounter++;
+				} else {
+					Encode=Encode + itemCounter + item;
+					itemCounter=0;
+					item=battlefield[i][j].toString();
+				}	
+			}	
+		}		
+		return Encode+itemCounter + item + "$";
 	}
+
+
+	
 	// method returning the current configuration of the battlefield, encoded as specified above;
 	// 7|10|8-1R1-$4-3A1-1A1-$4-2C1-1A2-$4-2A4-$2-1C4A3-$2-1A7-$1-1G8-$ ("-" is a empty cell)
 							
@@ -221,13 +227,13 @@ public class BattleField {
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			System.out.println("File not found !");
-		}							
-	
+		}
 	}
 	
-	public Object clone() {
-		return null; 						//a method that creates and returns a copy of this object;
-	}										
+	public Object clone() throws CloneNotSupportedException {
+		BattleFieldElement[][] BFcopy = (BattleFieldElement[][]) battlefield.clone(); 						//a method that creates and returns a copy of this object;
+		return BFcopy;
+	}											
 
 	public void backup(String file) {
 		File f = new File (file); 
@@ -245,7 +251,52 @@ public class BattleField {
 	}										// makes a backup copy of the battlefield con-figuration, saving it onto a file whose name is passed
 											// as an argument; the file is created from scratch;
 
-	void move() {
+	void move(){  	// a method that advances the configuration of one step, starting from the upper left corner and proceeding
+		// left to right, one line at a time; the step must be performed in-place, without creating another copy
+		// of the matrix: this can be obtained by suitably exploiting the methods provided by the
+		// BattleFieldElement objects; the move() method handles all special cases (e.g., the collisions).
+
+		for(int x=0; x<battlefield.length; x++)	{							// each row starting from 0 
+			for(int y=0; y<battlefield[0].length; y++) {						// each column starting from 0
+				switch(battlefield[x][y].toString()) {						// switch to the case returned from the toString() of the battlefield[x][y]
+	
+				//RedSpacecraft
+				case "R":	battlefield[x][y].move(x,y-1);				// move it one step left
+				break;
+				//CaseMate
+				case "C": 	
+				break;										// nothing happens
+				//Gun
+				case "G": 	if(battlefield.length==1)					// if the matrix has only 1 column, nothing happens
+				break;
+				
+				if(battlefield[x][y].getXOffset()!=0){						// otherway, if the offeset is different from 0
+					battlefield[x][y].move(x,y+battlefield[x][y].direction)	//move it 1 step to its current direction
+					break;
+				} else {																//otherway call the changeDirection before moving it
+					battlefield[x][y].changeDirection();
+					battlefield[x][y].move(x,y+battlefield[x][y].direction)
+					break;
+				}
+				//EmptyCell
+				case " ": break;										// nothing happens
+				//OneStepAlien
+				case "A": 	// to do
+				break;
+				//GunShot
+				case "s": if(battlefield[x][y]) {
+					
+				}
+				break;
+				//AlienShot
+				case "S":	
+				break;
+				
+				default: break;
+
+				}
+			}
+		}
 	}										// a method that advances the configuration of one step, starting from the upper left corner and proceeding
 											// left to right, one line at a time; the step must be performed in-place, without creating another copy
 											// of the matrix: this can be obtained by suitably exploiting the methods provided by the
