@@ -6,6 +6,7 @@ snapshot of the current battlefield configuration.*/
 import java.io.*;
 import java.util.StringTokenizer;
 
+
 public class BattleField {
 
 	//FIELD
@@ -22,17 +23,8 @@ public class BattleField {
 	// of a file containing some configurations(one per line): the last such
 	// configuration becomes the current // configuration of the battlefield.
 	public BattleField(String filename) throws IllegalElementException, IllegalPositionException {
-		this.filename=filename;
-		// just to test
-		this.rows = 7;
-		this.columns = 10;
-		this.battlefield = new BattleFieldElement[this.rows][this.columns];
-		for (int i = 0; i < rows; i++) {
-			for (int j = 0; j < columns; j++) {
-				setBattleFieldElement(i, j, new Empty(i, j));
-
-			}
-		}
+		setFilename(filename);
+		reload();
 	}
 	
 	//METHODS
@@ -75,7 +67,7 @@ public class BattleField {
 		return getBattleField();									// whose encoding is as specified above;
 	}									
 
-	public void setBattleField(String s) {   // a method initializing the battle-field configuration as specified in the parameter: 
+	public void setBattleField(String s) throws IllegalElementException, IllegalPositionException {   // a method initializing the battle-field configuration as specified in the parameter: 
 		
 		String config_line = s;
 		StringTokenizer st = new StringTokenizer(config_line,"|");
@@ -120,16 +112,12 @@ public class BattleField {
 	        		l++;
 	        		k = 0;
 	        		break;
-	        	case 'R': 
-	        		for (itemCounter = Integer.parseInt(stringCounter);itemCounter>0;itemCounter--) {
-	        			setBattleFieldElement(l, k, new RedSpacecraft(l, k));
-	        			k++;
-	        		}
+	        	case 'R':
+	        		setBattleFieldElement(l, k, new RedSpacecraft(l, k));
 	        		break; 
 	        	case 'A': 
 	        		for (itemCounter = Integer.parseInt(stringCounter);itemCounter>0;itemCounter--) {
-	        			setBattleFieldElement(l, k, new Alien(l, k)); 
-	        			//Bug with Alien, I don't really know why, yet : "Cannot instantiate the type Alien"
+	        			setBattleFieldElement(l, k, new OneStepAlien(l, k));
 	        			k++;
 	        		}
 	        		break;  
@@ -140,14 +128,19 @@ public class BattleField {
 	        		}
 	        		break;  
 	        	case 'G': 
-	        		itemCounter = Integer.parseInt(stringCounter);
 	        		setBattleFieldElement(l, k, new Gun(l, k));
 	        		break;
 	        	case 's': 
-	        		setBattleFieldElement(l, k, new GunShot(l, k));
+	        		for (itemCounter = Integer.parseInt(stringCounter);itemCounter>0;itemCounter--) {
+	        			setBattleFieldElement(l, k, new GunShot(l, k));
+	        			k++;
+	        		}
 	        		break;  
 	        	case 'S': 
-	        		setBattleFieldElement(l, k, new AlienShot(l, k));
+	        		for (itemCounter = Integer.parseInt(stringCounter);itemCounter>0;itemCounter--) {
+	        			setBattleFieldElement(l, k, new AlienShot(l, k));
+	        			k++;
+    				}
 	        		break;  
 	        	default: 
 	        		break;
@@ -208,7 +201,7 @@ public class BattleField {
 		
 	}
 
-	public void reload(){					// a method reading again from the file named filename the configuration of the battlefield 
+	public void reload() throws IllegalElementException, IllegalPositionException{					// a method reading again from the file named filename the configuration of the battlefield 
 											//(the last configuration found in the file is used);
 	
 		try {
