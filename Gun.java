@@ -13,7 +13,7 @@ public class Gun extends BattleFieldElement{
 	private int direction;
 	
 	//CONSTRUCTOR
-	  public Gun(int h,int v) throws IllegalElementException{
+	public Gun(int h,int v) throws IllegalElementException{
 		super( h,v );		
 	    direction=1;  			//from left to right
 	}
@@ -21,7 +21,7 @@ public class Gun extends BattleFieldElement{
 	//METHODS
 
 	public int getXOffset(){
-		return 0;
+		return 0; //TO DO
 	}
 	
 	public int getYOffset(){
