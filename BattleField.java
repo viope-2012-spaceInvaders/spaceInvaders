@@ -228,8 +228,15 @@ public class BattleField {
 	}
 	
 	public Object clone() throws CloneNotSupportedException {
-		BattleFieldElement[][] BFcopy = (BattleFieldElement[][]) battlefield.clone(); 						//a method that creates and returns a copy of this object;
-		return BFcopy;
+		 BattleFieldElement bf = null;
+		 
+	        try {
+	        	bf = (BattleFieldElement) super.clone();
+	        } catch(CloneNotSupportedException e) {
+	            System.out.println("Clone method not supported!");
+	        }
+	        bf = (BattleFieldElement)this.clone();
+	        return bf;
 	}											
 
 	public void backup(String file) {
@@ -253,91 +260,105 @@ public class BattleField {
 		// of the matrix: this can be obtained by suitably exploiting the methods provided by the
 		// BattleFieldElement objects; the move() method handles all special cases (e.g., the collisions).
 
+		
+		//IMPORTANT : there is an exception : 
+		//If the shot is just above a gun, the gun will move after, but it will be destroyed... 
+		//We will see this later, it's not very important for the moment
+		
+		//IMPORTANT 2 : We must use the function clone(), to clone the object in y+1, 
+		//Or we will lose it. The problem is I don't really know how to do this...
+		
 		for(int x=0; x<rows; x++)	{							// each row starting from 0 
 			for(int y=0; y<columns; y++) {						// each column starting from 0
+				
 				switch(battlefield[x][y].toString()) {						// switch to the case returned from the toString() of the battlefield[x][y]
 	
-				//RedSpacecraft
-				case "R":
-					if (battlefield[x][y].getXOffset()==0) { // Detection if the RedSpaceCraft has reached the final column of the battlefield 
-						setBattleFieldElement(x,y,new Empty(x,y));
-					} else {
-						battlefield[x][y].move(x,y+1);
-						setBattleFieldElement(x,y,new Empty(x,y));
-					}
-				break;
-				
-				//CaseMate
-				case "C": 	
-				break;										// nothing happens
-				
-				//Gun
-				case "G": 	
-					if(rows==1) {					// if the matrix has only 1 column, nothing happens
-						break;
-					}
-				
-					if(battlefield[x][y].getXOffset()!=0){						// otherway, if the offset is different from 0
-						battlefield[x][y].move(x+Gun.direction,y);	//move it 1 step to its current direction
-						break;
-					} else {																//otherway call the changeDirection before moving it
-						Gun.changeDirection();
-						battlefield[x][y].move(x+Gun.direction,y);
-						break;
-					}		
-					
-				//EmptyCell
-				case " ": 
-				break;										// nothing happens
-				
-				//OneStepAlien
-				case "A": 	// to do
-					
-				break;
-				
-				//GunShot
-				case "s": 
-					if (battlefield[x][y].getYOffset()==0) { //End of the battlefield
-					 //Shot will only be replaced by an empty cell -> done just before the break
-					} else if (battlefield[x][y-1].toString() == " ") {
-						battlefield[x][y].move(x,y-1);
-	
-					} else { 	//Collide anything
-							setBattleFieldElement(x,y+1,new Empty(x,y+1)); //Destruction of the touched element
-					}
-					
-					setBattleFieldElement(x,y,new Empty(x,y)); //Shot replaced by an empty cell
-					
-				break;
-				
-				//AlienShot
-				case "S":
-					if (battlefield[x][y].getYOffset()==0) { //End of the battlefield
-						 //Shot will only be replaced by an empty cell -> done just before the break
-					} else if (battlefield[x][y+1].toString() == " ") {
-						battlefield[x][y].move(x,y+1);
-
-					} else {
-						if (battlefield[x][y+1].toString() == "G") { //Collide with a gun
-							//IMPORTANT : there is an exception : 
-							//If the shot is just above a gun, the gun will move after, but it will be destroyed... 
-							//We will see this later, it's not very important for the moment
-							gunCounter--;
-							System.out.println("Gun destroyed !");
-							setBattleFieldElement(x,y+1,new Empty(x,y+1)); //Destruction of the gun
-							setBattleFieldElement(rows-1,columns/2,new Gun(rows-1,columns/2)); //Gun replaced on the center of the Battlefield
-						} else { //Collide with anything else
-							setBattleFieldElement(x,y+1,new Empty(x,y+1)); //Destruction of the touched element
-							
+					//RedSpacecraft
+					case "R":
+						if (battlefield[x][y].getXOffset()==0) { // Detection if the RedSpaceCraft has reached the final column of the battlefield 
+							setBattleFieldElement(x,y,new Empty(x,y));
+						} else {
+							battlefield[x][y].move(x,y+1);
+							setBattleFieldElement(x,y,new Empty(x,y));
 						}
-					}
+					break;
 					
-					setBattleFieldElement(x,y,new Empty(x,y)); //Shot replaced by an empty cell
+					//CaseMate
+					case "C": 	
+					break;										// nothing happens
 					
-				break;
+					//Gun
+					case "G": 	
+						if(rows==1) {					// if the matrix has only 1 column, nothing happens
+							break;
+						}
+					
+						if(battlefield[x][y].getXOffset()!=0){						// otherway, if the offset is different from 0
+							battlefield[x][y].move(x+Gun.direction,y);	//move it 1 step to its current direction
+							break;
+						} else {																//otherway call the changeDirection before moving it
+							Gun.changeDirection();
+							battlefield[x][y].move(x+Gun.direction,y);
+							break;
+						}		
+						
+					//EmptyCell
+					case " ": 
+					break;										// nothing happens
+					
+					//OneStepAlien
+					case "A": 	// to do
+						if (battlefield[x][y].getXOffset()==0 || battlefield[x][y+OneStepAlien.armyDirection].toString() == "C") { // Detection if the OneStepAlien has reached the end of the Batllefield, or if there is a collide with a Casemate
+							OneStepAlien.changeDirection();
+							battlefield[x][y].move(x+OneStepAlien.armyDirection,y); 
+							setBattleFieldElement(x,y,new Empty(x,y));
+						} else {
+							battlefield[x][y].move(x+OneStepAlien.armyDirection,y);
+							setBattleFieldElement(x,y,new Empty(x,y));
+						}
+						
+					break;
+					
+					//GunShot
+					case "s": 
+						if (battlefield[x][y].getYOffset()==0) { //End of the battlefield
+						 //Shot will only be replaced by an empty cell -> done just before the break
+						} else if (battlefield[x][y-1].toString() == " ") {
+							battlefield[x][y].move(x,y-1);
+		
+						} else { 	//Collide anything
+							setBattleFieldElement(x,y+1,new Empty(x,y+1)); //Destruction of the touched element
+						}
+						
+						setBattleFieldElement(x,y,new Empty(x,y)); //Shot replaced by an empty cell
 				
-				default:
-				break;
+					break;
+					
+					//AlienShot
+					case "S":
+						if (battlefield[x][y].getYOffset()==0) { //End of the battlefield
+							 //Shot will only be replaced by an empty cell -> done just before the break
+						} else if (battlefield[x][y+1].toString() == " ") {
+							battlefield[x][y].move(x,y+1);
+	
+						} else {
+							if (battlefield[x][y+1].toString() == "G") { //Collide with a gun
+								gunCounter--;
+								System.out.println("Gun destroyed !");
+								setBattleFieldElement(x,y+1,new Empty(x,y+1)); //Destruction of the gun
+								setBattleFieldElement(rows-1,columns/2,new Gun(rows-1,columns/2)); //Gun replaced on the center of the Battlefield
+							} else { //Collide with anything else
+								setBattleFieldElement(x,y+1,new Empty(x,y+1)); //Destruction of the touched element
+								
+							}
+						}
+						
+						setBattleFieldElement(x,y,new Empty(x,y)); //Shot replaced by an empty cell
+						
+					break;
+					
+					default:
+					break;
 
 				}
 			}
