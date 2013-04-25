@@ -1,6 +1,6 @@
 /*Alien is an abstract class extending BattleFieldElement, and representing all alien
 elements at play in the game*/
-/*test*/
+
 public abstract class Alien extends BattleFieldElement{
 
   //FIELDs

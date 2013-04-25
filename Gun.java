@@ -10,7 +10,7 @@ public class Gun extends BattleFieldElement{
 
 	//FIELD
 	
-	private int direction;
+	protected static int direction;
 	
 	//CONSTRUCTOR
 	public Gun(int h,int v) throws IllegalElementException{
@@ -25,7 +25,7 @@ public class Gun extends BattleFieldElement{
 			return (BattleField.columns - this.x);
 		}
 		else {
-			return x;
+			return -x;
 		}
 	}
 	
@@ -33,9 +33,9 @@ public class Gun extends BattleFieldElement{
 		return 0;
 	}
 	
-	public void changeDirection(){
-		this.direction *= -1;			//every call of this method change the direction	
-										// -1= right to left		1= left to right
+	public static void changeDirection(){
+		direction *= -1;			//every call of this method change the direction	
+									// -1= right to left		1= left to right
 	}
 	
 	@Override

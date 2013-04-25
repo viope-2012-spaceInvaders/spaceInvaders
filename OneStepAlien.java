@@ -21,7 +21,7 @@ public class OneStepAlien extends Alien{
 			return (BattleField.columns - this.x);
 		}
 		else {
-			return x;
+			return -this.x;
 		}
 	}
 	
