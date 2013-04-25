@@ -13,8 +13,8 @@ public class BattleField {
 	protected int gunCounter=0;
 	private BattleFieldElement[][] battlefield;  //a field storing the initial battlefield configuration. Every element of this matrix must 
 												 //contain a non-null value.
-	private int rows;
-	private int columns;						 //overall number of rows and columns of the battlefield.
+	protected static int rows;
+	protected static int columns;						 //overall number of rows and columns of the battlefield.
 	private String filename;					 //field containing the name of the file where the configurations should be saved and that is used 
 													//to restore a saved configuration. 
 										 
@@ -29,7 +29,7 @@ public class BattleField {
 	}
 	
 	//METHODS
-
+	
 	public String getFilename() {				//	You should provide two methods
 		return this.filename;					//	public String getFilename()
 	}
@@ -175,11 +175,11 @@ public class BattleField {
 		int itemCounter=0; 	
 		String item=battlefield[0][0].toString();
 		String Encode = battlefield.length + "|" + battlefield[0].length + "|";
-		for (int i = 0 ; i < battlefield.length; i++) {
+		for (int i = 0 ; i < rows; i++) {
 			if(i>0) {
 				Encode=Encode+"$";
 			}
-			for (int j = 0; j < battlefield[0].length; j++) {
+			for (int j = 0; j < columns; j++) {
 				if(battlefield[i][j].toString().equals(item)) {
 					if(itemCounter==9){
 						Encode=Encode + itemCounter + item;
@@ -209,7 +209,6 @@ public class BattleField {
 
 	public void reload() throws IllegalElementException, IllegalPositionException{					// a method reading again from the file named filename the configuration of the battlefield 
 											//(the last configuration found in the file is used);
-	
 		try {
 			FileReader fr = new FileReader(this.filename);
 			BufferedReader bf = new BufferedReader(fr);
@@ -221,12 +220,10 @@ public class BattleField {
 				}
 				setBattleField(line); //Send to setBattleField method, the lastest configuration of the file
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.out.println("IOException in the reload method!");
 			}
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			System.out.println("File not found !");
+			System.out.println("File not found in the reload method!");
 		}
 	}
 	
@@ -256,8 +253,8 @@ public class BattleField {
 		// of the matrix: this can be obtained by suitably exploiting the methods provided by the
 		// BattleFieldElement objects; the move() method handles all special cases (e.g., the collisions).
 
-		for(int x=0; x<battlefield.length; x++)	{							// each row starting from 0 
-			for(int y=0; y<battlefield[0].length; y++) {						// each column starting from 0
+		for(int x=0; x<rows; x++)	{							// each row starting from 0 
+			for(int y=0; y<columns; y++) {						// each column starting from 0
 				switch(battlefield[x][y].toString()) {						// switch to the case returned from the toString() of the battlefield[x][y]
 	
 				//RedSpacecraft
@@ -267,15 +264,15 @@ public class BattleField {
 				case "C": 	
 				break;										// nothing happens
 				//Gun
-				case "G": 	if(battlefield.length==1)					// if the matrix has only 1 column, nothing happens
+				case "G": 	if(rows==1)					// if the matrix has only 1 column, nothing happens
 				break;
 				
 				if(battlefield[x][y].getXOffset()!=0){						// otherway, if the offeset is different from 0
-					battlefield[x][y].move(x,y+battlefield[x][y].direction)	//move it 1 step to its current direction
+					battlefield[x][y].move(x+battlefield[x][y].direction,y);	//move it 1 step to its current direction
 					break;
 				} else {																//otherway call the changeDirection before moving it
 					battlefield[x][y].changeDirection();
-					battlefield[x][y].move(x,y+battlefield[x][y].direction)
+					battlefield[x][y].move(x+battlefield[x][y].direction,y);
 					break;
 				}
 				//EmptyCell
