@@ -8,7 +8,7 @@ whole army changes its direction of movement. */
 public class OneStepAlien extends Alien{ 
 
   //FIELD
-	public static int armyDirection = 1; 
+	protected static int armyDirection = 1; 
 	//CONSTRUCTOR
 	public OneStepAlien(int h, int v){
 		super(h,v);

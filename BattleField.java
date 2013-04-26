@@ -10,7 +10,7 @@ import java.util.StringTokenizer;
 public class BattleField {
 
 	//FIELD
-	protected int gunCounter=0;
+	private int gunCounter=0;
 	private BattleFieldElement[][] battlefield;  //a field storing the initial battlefield configuration. Every element of this matrix must 
 												 //contain a non-null value.
 	protected static int rows;
@@ -42,11 +42,11 @@ public class BattleField {
 	  
 	void setBattleFieldElement(int x, int y, BattleFieldElement b) throws IllegalElementException, IllegalPositionException {
 			//check if something different from a Gun is placed in the bottom row
-	    if ((y == rows-1) && (!b.toString().equals("G")) && (!b.toString().equals(" "))) 
-	  		throw new IllegalElementException("Only Gun and Empty cells can be placed in the bottom row");
+	    if ((y == rows-1) && (!b.toString().equals("G")) && (!b.toString().equals(" ")) && (!b.toString().equals("S")) ) 
+	  		throw new IllegalElementException("Only Gun, AlienShot or Empty cells can be placed in the bottom row");
 			//check if something different from a RedSpacecraft is placed in the top row
-			if ((y == 0) && (!b.toString().equals("R"))  && ((!b.toString().equals(" ")))) 
-	  			throw new IllegalElementException("Only a RedSpacecraft and cells can be placed in the top row");
+			if ((y == 0) && (!b.toString().equals("R"))  && ((!b.toString().equals(" "))) && (!b.toString().equals("s")) ) 
+	  			throw new IllegalElementException("Only a RedSpacecraft, Gunshot or Empty Cells can be placed in the top row");
 			
 			switch(b.toString()){
 				case "R":	if(y != 0) {
@@ -208,7 +208,7 @@ public class BattleField {
 	}
 
 	public void reload() throws IllegalElementException, IllegalPositionException{					// a method reading again from the file named filename the configuration of the battlefield 
-											//(the last configuration found in the file is used);
+																									//(the last configuration found in the file is used);
 		try {
 			FileReader fr = new FileReader(this.filename);
 			BufferedReader bf = new BufferedReader(fr);

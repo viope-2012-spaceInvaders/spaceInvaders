@@ -24,7 +24,7 @@ class AlienShot extends BattleFieldElement	{
 
 
 	public int getYOffset() {
-		return (BattleField.rows - this.y);
+		return (BattleField.rows - (this.y + 1));
 	}	
 	
 }
