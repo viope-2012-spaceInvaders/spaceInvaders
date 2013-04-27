@@ -48,14 +48,14 @@ public class BattleField {
 			if ((y == 0) && (!b.toString().equals("R"))  && ((!b.toString().equals(" "))) && (!b.toString().equals("s")) ) 
 	  			throw new IllegalElementException("Only a RedSpacecraft, Gunshot or Empty Cells can be placed in the top row");
 			
-			switch(b.toString().charAt(0)){
-				case 'R':	if(y != 0) {
+			switch(b.toString()){
+				case "R":	if(y != 0) {
 						throw new IllegalPositionException("RedSpacecraft cannot be placed in line "+y);
 	      			}
 					battlefield[x][y]= b;
 				break;
 						  
-				case 'G': if(gunCounter>0) {
+				case "G": if(gunCounter>0) {
 						throw new IllegalElementException("Only one Gun per BattleField");
 					}
 	            	if(y != rows-1) {
@@ -65,7 +65,7 @@ public class BattleField {
 	            	battlefield[x][y]= b;
 				break;
 						
-				case 'C': 	if((y==0)||(y==rows-1)) {
+				case "C": 	if((y==0)||(y==rows-1)) {
 						throw new IllegalPositionException("Casemates can't be placed in bottom or top line");
 			    	}
 					battlefield[x][y]= b;
@@ -203,6 +203,8 @@ public class BattleField {
 	// 7|10|8-1R1-$4-3A1-1A1-$4-2C1-1A2-$4-2A4-$2-1C4A3-$2-1A7-$1-1G8-$ ("-" is a empty cell)
 							
 
+	public void write(){					// a method appending the current configuration to the current content of the file;
+		
 	public void write() throws IOException{					// a method appending the current configuration to the current content of the file;
 		BufferedWriter buffer = new BufferedWriter(new FileWriter(this.filename));
 		buffer.write(this.getBattleField()+"\n");
@@ -272,10 +274,10 @@ public class BattleField {
 		for(int x=0; x<rows; x++)	{							// each row starting from 0 
 			for(int y=0; y<columns; y++) {						// each column starting from 0
 				
-				switch(battlefield[x][y].toString().charAt(0)) {						// switch to the case returned from the toString() of the battlefield[x][y]
+				switch(battlefield[x][y].toString()) {						// switch to the case returned from the toString() of the battlefield[x][y]
 	
 					//RedSpacecraft
-					case 'R':
+					case "R":
 						if (battlefield[x][y].getXOffset()==0) { // Detection if the RedSpaceCraft has reached the final column of the battlefield 
 							setBattleFieldElement(x,y,new Empty(x,y));
 						} else {
@@ -285,11 +287,11 @@ public class BattleField {
 					break;
 					
 					//CaseMate
-					case 'C': 	
+					case "C": 	
 					break;										// nothing happens
 					
 					//Gun
-					case 'G': 	
+					case "G": 	
 						if(rows==1) {					// if the matrix has only 1 column, nothing happens
 							break;
 						}
@@ -304,11 +306,11 @@ public class BattleField {
 						}		
 						
 					//EmptyCell
-					case ' ': 
+					case " ": 
 					break;										// nothing happens
 					
 					//OneStepAlien
-					case 'A': 	// to do
+					case "A": 	// to do
 						if (battlefield[x][y].getXOffset()==0 || battlefield[x][y+OneStepAlien.armyDirection].toString() == "C") { // Detection if the OneStepAlien has reached the end of the Batllefield, or if there is a collide with a Casemate
 							OneStepAlien.changeDirection();
 							battlefield[x][y].move(x+OneStepAlien.armyDirection,y); 
@@ -321,7 +323,7 @@ public class BattleField {
 					break;
 					
 					//GunShot
-					case 's': 
+					case "s": 
 						if (battlefield[x][y].getYOffset()==0) { //End of the battlefield
 						 //Shot will only be replaced by an empty cell -> done just before the break
 						} else if (battlefield[x][y-1].toString() == " ") {
@@ -336,7 +338,7 @@ public class BattleField {
 					break;
 					
 					//AlienShot
-					case 'S':
+					case "S":
 						if (battlefield[x][y].getYOffset()==0) { //End of the battlefield
 							 //Shot will only be replaced by an empty cell -> done just before the break
 						} else if (battlefield[x][y+1].toString() == " ") {
