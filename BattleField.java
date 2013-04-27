@@ -205,6 +205,9 @@ public class BattleField {
 
 	public void write(){					// a method appending the current configuration to the current content of the file;
 		
+	public void write() throws IOException{					// a method appending the current configuration to the current content of the file;
+		BufferedWriter buffer = new BufferedWriter(new FileWriter(this.filename));
+		buffer.write(this.getBattleField()+"\n");
 	}
 
 	public void reload() throws IllegalElementException, IllegalPositionException{					// a method reading again from the file named filename the configuration of the battlefield 
