@@ -17,7 +17,6 @@ class GunShot extends BattleFieldElement  {
 		return (this.y)*-1;
 	}	
 	
-	//for collision with elements or borders remember to call the Empty class constructor"
 	@Override
 	public String toString() {
 		return "s";

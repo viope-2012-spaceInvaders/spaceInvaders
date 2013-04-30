@@ -1,30 +1,25 @@
 class AlienShot extends BattleFieldElement	{
 
 	//FIELD
-	private static final int vDirection=1;	 //The aliens’ shots move from top to bottom (1 );  
+	private static final int vDirection=1;	 //from top to bottom;  
 
 	//CONSTRUCTORs
 	public AlienShot(int h, int v){
-		super(h,v);						//call the BattleFieldElemeng giving h & v parameters
+		super(h,v);						
 	}	
 	
 	//METHODS
-
-	
-	//for collision with elements or borders remember to call the Empty class constructor"
-	@Override
-	public String toString() {
-		return "S";
-	}
-
-
 	public int getXOffset() {
-		return 0; //
+		return 0; 
 	}
-
 
 	public int getYOffset() {
 		return (BattleField.rows - (this.y + 1));
 	}	
+	
+	@Override
+	public String toString() {
+		return "S";
+	}
 	
 }

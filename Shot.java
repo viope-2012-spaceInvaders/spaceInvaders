@@ -5,7 +5,6 @@ the same happens when a shot hits any other element (alien, casemate or gun).
 After reaching the border, a shot disappears from the battlefield.*/
 
 abstract class Shot extends BattleFieldElement	{
-
 	//FIELD
 						//The aliens’ shots move from top to bottom (1 );  
 						//Guns'shots move from bottom to top (-1)
@@ -17,14 +16,7 @@ abstract class Shot extends BattleFieldElement	{
 	}	
 	
 	//METHODS
-	
-	
 	abstract public int getXOffset();
-	
 	abstract public int getYOffset();
-		
 	abstract public String toString();
-	
-	//for collision with elements or borders remember to call the Empty class constructor"
-	
 }

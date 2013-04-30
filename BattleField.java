@@ -11,35 +11,112 @@ public class BattleField {
 
 	//FIELD
 	private int gunCounter=0;
-	private BattleFieldElement[][] battlefield;  //a field storing the initial battlefield configuration. Every element of this matrix must 
-												 //contain a non-null value.
+	private BattleFieldElement[][] battlefield;  // do not have to containt any null value
 	protected static int rows;
-	protected static int columns;						 //overall number of rows and columns of the battlefield.
-	private String filename;					 //field containing the name of the file where the configurations should be saved and that is used 
-													//to restore a saved configuration. 
+	protected static int columns;						
+	private String filename;					 //name of the file where the configurations used (saved,restored...)
 										 
 	// CONSTRUCTOR
-	// a constructor configuring the battlefield, where filename is the filename
-	// of a file containing some configurations(one per line): the last such
-	// configuration becomes the current // configuration of the battlefield.
 	public BattleField(String filename) throws IllegalElementException, IllegalPositionException {
 		setFilename(filename);
-		
-		reload();
+		setBattleField(filename);
 	}
 	
 	//METHODS
-	
-	public String getFilename() {				//	You should provide two methods
-		return this.filename;					//	public String getFilename()
+	public String getFilename() {				
+		return this.filename;					
 	}
 										 
-	public void setFilename(String s) {			//	void setFilename(String) with the obvious meaning.
+	public void setFilename(String s) {			
 		this.filename= s;						
 	}
+		  
+	public BattleFieldElement getBattleFieldElement(int x, int y){
+		return battlefield[x][y];
+	}										
+
+	public String toString(){				
+		return getBattleField();									
+	}									
+
+	public void backup(String file) {
+		File f = new File (file); 
+			try {
+			    FileWriter fw = new FileWriter (f);
+			 
+				String backup = this.getBattleField();
+		
+			    fw.write(backup);
+
+			    fw.close();
+			} catch (IOException exception) {
+			    System.out.println ("Impossible to create the backup file !");
+			}
+	}										
+
+	public String getBattleField() {
+		int itemCounter=0; 	
+		String item=battlefield[0][0].toString();												
+		String Encode = battlefield[0].length + "|" + battlefield.length + "|";				//Encode start with  #rows | #column |
+		for (int i = 0 ; i < rows; i++) {
+			if(i>0) {
+				Encode=Encode+"$";															//add a $ everytimes reach a newLine
+			}
+			for (int j = 0; j < columns; j++) {
+				if(battlefield[i][j].toString().equals(item)) {								//if last item and this one are of the same class
+					if(itemCounter==9){															// if is the 10th then write on the Encode string
+						Encode=Encode + itemCounter + item;
+						itemCounter=1;
+					}	
+					else																		//else increment the counter
+						itemCounter++;
+				} else {																	//else write on the string	
+					Encode=Encode + itemCounter + item;
+					itemCounter=1;
+					item=battlefield[i][j].toString();
+				}//end if-else	
+			}//end for(columns)	
+		}//end for(rows)		
+		
+		return Encode+itemCounter + item + "$";
+	}
+
+	public void write() throws IOException{					// append the current configuration to the current content of the file;
+		BufferedWriter buffer = new BufferedWriter(new FileWriter(this.filename));
+		buffer.write(this.getBattleField()+"\n");
+	}
 	
-	//utility methods to set and retrieve a specific element on the battlefield;
-	  
+	public void reload() throws IllegalElementException, IllegalPositionException{		// read again from filename the last-configuration of the battlefield 																									
+		try {
+			FileReader fr = new FileReader(this.filename);
+			BufferedReader bf = new BufferedReader(fr);
+			String str = "", line = "";
+			try {
+				while (str != null) {
+					line = str;
+					str = bf.readLine();
+				}
+				setBattleField(line); //Send to setBattleField method, the lastest configuration of the file
+			} catch (IOException e) {
+				System.out.println("IOException in the reload method!");
+			}
+		} catch (FileNotFoundException e) {
+			System.out.println("File not found in the reload method!");
+		}
+	}
+		
+	public Object clone() throws CloneNotSupportedException {
+		 BattleFieldElement bf = null;
+		    try {
+	        	bf = (BattleFieldElement) super.clone();
+	        } catch(CloneNotSupportedException e) {
+	            System.out.println("Clone method not supported!");
+	        }
+	        bf = (BattleFieldElement)this.clone();
+	        return bf;
+	}											
+
+	
 	void setBattleFieldElement(int x, int y, BattleFieldElement b) throws IllegalElementException, IllegalPositionException {
 			//check if something different from a Gun is placed in the bottom row
 	    if ((y == rows-1) && (!b.toString().equals("G")) && (!b.toString().equals(" ")) && (!b.toString().equals("S")) ) 
@@ -75,14 +152,6 @@ public class BattleField {
 			}	
 	}
 		
-	BattleFieldElement getBattleFieldElement(int x, int y){
-		return battlefield[x][y];
-	}										
-
-	public String toString(){				// a method creating and returning a string rep-resenting the current battlefield configuration,
-		return getBattleField();									// whose encoding is as specified above;
-	}									
-
 	public void setBattleField(String s) throws IllegalElementException, IllegalPositionException {   // a method initializing the battle-field configuration as specified in the parameter: 
 		String config_line = s;
 		StringTokenizer st = new StringTokenizer(config_line,"|");
@@ -167,96 +236,6 @@ public class BattleField {
         	c = result.charAt(i); //
         }
 	}
-
-	public String getBattleField() {
-
-		// method returning the current configuration of the battlefield, encoded as specified above;
-			// 7|10|8-1R1-$4-3A1-1A1-$4-2C1-1A2-$4-2A4-$2-1C4A3-$2-1A7-$1-1G8-$ ("_" is a empty cell)
-		int itemCounter=0; 	
-		String item=battlefield[0][0].toString();
-		String Encode = battlefield.length + "|" + battlefield[0].length + "|";
-		for (int i = 0 ; i < rows; i++) {
-			if(i>0) {
-				Encode=Encode+"$";
-			}
-			for (int j = 0; j < columns; j++) {
-				if(battlefield[i][j].toString().equals(item)) {
-					if(itemCounter==9){
-						Encode=Encode + itemCounter + item;
-						itemCounter=1;
-					}	
-					else
-						itemCounter++;
-				} else {
-					Encode=Encode + itemCounter + item;
-					itemCounter=0;
-					item=battlefield[i][j].toString();
-				}	
-			}	
-		}		
-		return Encode+itemCounter + item + "$";
-	}
-
-
-	
-	// method returning the current configuration of the battlefield, encoded as specified above;
-	// 7|10|8-1R1-$4-3A1-1A1-$4-2C1-1A2-$4-2A4-$2-1C4A3-$2-1A7-$1-1G8-$ ("-" is a empty cell)
-							
-
-	public void write(){					// a method appending the current configuration to the current content of the file;
-		
-	public void write() throws IOException{					// a method appending the current configuration to the current content of the file;
-		BufferedWriter buffer = new BufferedWriter(new FileWriter(this.filename));
-		buffer.write(this.getBattleField()+"\n");
-	}
-
-	public void reload() throws IllegalElementException, IllegalPositionException{					// a method reading again from the file named filename the configuration of the battlefield 
-																									//(the last configuration found in the file is used);
-		try {
-			FileReader fr = new FileReader(this.filename);
-			BufferedReader bf = new BufferedReader(fr);
-			String str = "", line = "";
-			try {
-				while (str != null) {
-					line = str;
-					str = bf.readLine();
-				}
-				setBattleField(line); //Send to setBattleField method, the lastest configuration of the file
-			} catch (IOException e) {
-				System.out.println("IOException in the reload method!");
-			}
-		} catch (FileNotFoundException e) {
-			System.out.println("File not found in the reload method!");
-		}
-	}
-	
-	public Object clone() throws CloneNotSupportedException {
-		 BattleFieldElement bf = null;
-		 
-	        try {
-	        	bf = (BattleFieldElement) super.clone();
-	        } catch(CloneNotSupportedException e) {
-	            System.out.println("Clone method not supported!");
-	        }
-	        bf = (BattleFieldElement)this.clone();
-	        return bf;
-	}											
-
-	public void backup(String file) {
-		File f = new File (file); 
-			try {
-			    FileWriter fw = new FileWriter (f);
-			 
-				String backup = this.getBattleField();
-		
-			    fw.write(backup);
-
-			    fw.close();
-			} catch (IOException exception) {
-			    System.out.println ("Impossible to create the backup file !");
-			}
-	}										// makes a backup copy of the battlefield con-figuration, saving it onto a file whose name is passed
-											// as an argument; the file is created from scratch;
 
 	void move() throws IllegalElementException, IllegalPositionException{  	// a method that advances the configuration of one step, starting from the upper left corner and proceeding
 		// left to right, one line at a time; the step must be performed in-place, without creating another copy
@@ -367,16 +346,7 @@ public class BattleField {
 			}
 		}
 	}										// a method that advances the configuration of one step, starting from the upper left corner and proceeding
-											// left to right, one line at a time; the step must be performed in-place, without creating another copy
-											// of the matrix: this can be obtained by suitably exploiting the methods provided by the
-											// BattleFieldElement objects; the move() method handles all special cases (e.g., the collisions).
 
+	
 
-
-/*Observe that the listed signatures don’t explicitly mention exceptions that methods
-should possibly throw: the implementer will have to carefully judge when the former
-have to be implemented.*/
-
-}
-
-//read the pdf to get more info about encoding
+}//end of class

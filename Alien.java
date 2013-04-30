@@ -3,16 +3,16 @@ elements at play in the game*/
 
 public abstract class Alien extends BattleFieldElement{
 
-  //FIELDs
+	//FIELDs
 	protected final int direction=-1;	
 	
-	//CONSTRUCTORs
+	//CONSTRUCTOR
 	public Alien(int h, int v){
-		super(h,v);						//call the BattleFieldElemeng giving h & v parameters
+		super(h,v);						
 	}
 	
 	//METHODs	
-	abstract public int getXOffset();	//this methods have to compare its x position with the battlefield's width
+	abstract public int getXOffset();	
 	abstract public int getYOffset();
 	abstract public String toString();
 

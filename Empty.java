@@ -3,7 +3,6 @@ cells of course don’t move*/
 
 public class Empty extends BattleFieldElement{
 	
-	//FIELD
 	//CONSTRUCTOR
 		public Empty(int h, int v){
 			super(h,v);

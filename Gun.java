@@ -34,8 +34,7 @@ public class Gun extends BattleFieldElement{
 	}
 	
 	public static void changeDirection(){
-		direction *= -1;			//every call of this method change the direction	
-									// -1= right to left		1= left to right
+		direction *= -1;			
 	}
 	
 	@Override
