@@ -1,7 +1,7 @@
 class GunShot extends BattleFieldElement  {
 
 	//FIELD
-	private static final int vDirection=-1;	 //The aliens’ shots move from top to bottom (1 );  
+	private static final int vDirection=-1;	 //The aliens' shots move from top to bottom (1 );  
 
 	//CONSTRUCTORs
 	public GunShot(int h, int v){

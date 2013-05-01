@@ -19,7 +19,7 @@ public class BattleField {
 	// CONSTRUCTOR
 	public BattleField(String filename) throws IllegalElementException, IllegalPositionException {
 		setFilename(filename);
-		setBattleField(filename);
+		reload();
 	}
 	
 	//METHODS
@@ -117,38 +117,53 @@ public class BattleField {
 	}											
 
 	
-	void setBattleFieldElement(int x, int y, BattleFieldElement b) throws IllegalElementException, IllegalPositionException {
-			//check if something different from a Gun is placed in the bottom row
-	    if ((y == rows-1) && (!b.toString().equals("G")) && (!b.toString().equals(" ")) && (!b.toString().equals("S")) ) 
+	void setBattleFieldElement(int x, int y, BattleFieldElement bf) throws IllegalElementException, IllegalPositionException {
+		//########################################
+		//TEST 
+		
+		BattleFieldElement b = new Empty(0,0); //initialisation of b
+		b = bf;
+		
+		battlefield[0][0] = new Empty(0,1); // This line throws Exception in thread "main" java.lang.NullPointerException 
+		
+		//########################################
+		//########################################
+		
+		//check if something different from a Gun is placed in the bottom row
+	    if ((x == rows-1) && (!b.toString().equals("G")) && (!b.toString().equals(" ")) && (!b.toString().equals("S")) ) 
 	  		throw new IllegalElementException("Only Gun, AlienShot or Empty cells can be placed in the bottom row");
 			//check if something different from a RedSpacecraft is placed in the top row
 			if ((y == 0) && (!b.toString().equals("R"))  && ((!b.toString().equals(" "))) && (!b.toString().equals("s")) ) 
 	  			throw new IllegalElementException("Only a RedSpacecraft, Gunshot or Empty Cells can be placed in the top row");
 			
 			switch(b.toString()){
-				case "R":	if(y != 0) {
+				case "R":	if(x != 0) {
 						throw new IllegalPositionException("RedSpacecraft cannot be placed in line "+y);
 	      			}
-					battlefield[x][y]= b;
+		
+					System.out.println(b.toString()); //Works
+					System.out.println(b.getXOffset()+" "+b.getYOffset()); //Works
+					System.out.println(x+" "+y); //Works
+					battlefield[x][y] = b;// DON T WOOOOOORKS
 				break;
 						  
 				case "G": if(gunCounter>0) {
 						throw new IllegalElementException("Only one Gun per BattleField");
 					}
-	            	if(y != rows-1) {
+	            	if(x != rows-1) {
 	            		throw new IllegalPositionException("The Gun must be placed in the bottom line of the BattleField");
 	            	}
 	            	gunCounter++;
-	            	battlefield[x][y]= b;
+	            	battlefield[x][y]= b;// DON T WOOOOOORKS
 				break;
 						
-				case "C": 	if((y==0)||(y==rows-1)) {
+				case "C": 	if((x==0)||(x==rows-1)) {
 						throw new IllegalPositionException("Casemates can't be placed in bottom or top line");
 			    	}
 					battlefield[x][y]= b;
 	         	break;
 				//gunshot			
-				default: battlefield[x][y]= b;
+				default: battlefield[x][y]= b;// DON T WOOOOOORKS
 			}	
 	}
 		
