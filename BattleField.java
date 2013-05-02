@@ -12,7 +12,7 @@ public class BattleField {
 
 	//FIELD
 	private int gunCounter=0;
-	private BattleFieldElement[][] battlefield;  // do not have to containt any null value
+	protected BattleFieldElement[][] battlefield;  // do not have to containt any null value
 	protected static int rows;
 	protected static int columns;						
 	private String filename;					 //name of the file where the configurations used (saved,restored...)
@@ -22,8 +22,7 @@ public class BattleField {
 		
 		setFilename(filename);
 		reload();
-
-	//	write();
+		//	write();
 		
 	}
 	
@@ -67,14 +66,15 @@ public class BattleField {
 		//System.out.println("columns: "+columns);
 		for (int i = 0 ; i < rows; i++) {
 			if(i>0) {
-				Encode=Encode+"$";															//add a $ everytimes reach a newLine
+				Encode=Encode+itemCounter+item+"$";											//add $ when newLine
+				item = this.battlefield[i][0].toString();
+				itemCounter=0;
 			}
 			for (int j = 0; j < columns; j++) {
 			//	System.out.println(a++);
 			//	System.out.println(Encode);
 			//	System.out.println(i+" "+j+" "+ "item: |"+this.battlefield[i][j].toString()+"|");
 				if(item.equals(this.battlefield[i][j].toString())) {								//if last item and this one are of the same class
-					
 					if(itemCounter==9){															// if is the 10th then write on the Encode string
 						Encode=Encode + itemCounter + item;
 						itemCounter=1;
@@ -211,7 +211,7 @@ public class BattleField {
 					y=0;		
 					result = result.substring(i+1);
 					i=0;
-					System.out.print(result);
+					//System.out.print(result);
 					continue;
 				}
 				
@@ -234,7 +234,7 @@ public class BattleField {
 										setBattleFieldElement(x, y, b);
 										break;  
 							
-							case 'C': 	b=new OneStepAlien(x,y);
+							case 'C': 	b=new Casemate(x,y);
 										setBattleFieldElement(x, y, b);
 										break;  
 										
@@ -265,57 +265,58 @@ public class BattleField {
 		
 	}
 
-	void move() throws IllegalElementException, IllegalPositionException{  	// a method that advances the configuration of one step, starting from the upper left corner and proceeding
-		// left to right, one line at a time; the step must be performed in-place, without creating another copy
-		// of the matrix: this can be obtained by suitably exploiting the methods provided by the
-		// BattleFieldElement objects; the move() method handles all special cases (e.g., the collisions).
-
-		
+	void move() throws IllegalElementException, IllegalPositionException{  	
 		//IMPORTANT : there is an exception : 
 		//If the shot is just above a gun, the gun will move after, but it will be destroyed... 
 		//We will see this later, it's not very important for the moment
 		
 		//IMPORTANT 2 : We must use the function clone(), to clone the object in y+1, 
 		//Or we will lose it. The problem is I don't really know how to do this...
+			
+		int consecutiveRed=0;
 		
-		for(int x=0; x<rows; x++)	{							// each row starting from 0 
-			for(int y=0; y<columns; y++) {						// each column starting from 0
-				
-				switch(this.battlefield[x][y].toString()) {						// switch to the case returned from the toString() of the battlefield[x][y]
-	
-					//RedSpacecraft
-					case "R":
-						if (battlefield[x][y].getXOffset()==0) { // Detection if the RedSpaceCraft has reached the final column of the battlefield 
-							setBattleFieldElement(x,y,new Empty(x,y));
-						} else {
-							battlefield[x][y].move(x,y+1);
-							setBattleFieldElement(x,y,new Empty(x,y));
-						}
-					break;
+		for(int y=0; y<rows; y++)	{							// each row starting from 0 
+			for(int x=0; x<columns; x++) {						// each column starting from 0
+				System.out.println("A) "+battlefield[x][y].toString());
+				switch(battlefield[x][y].toString()) {		// switch to the case returned from the toString() of the battlefield[x][y]
+										
+								//CaseMate & Empty
+					case " ":
+					case "C": 	break;							
 					
-					//CaseMate
-					case "C": 	
-					break;										// nothing happens
-					
+								//RedSpacecraft
+					case "R":	if(consecutiveRed==0){
+									setBattleFieldElement(x,y,new Empty(x,y));			//replace with an empty cell
+								}
+								consecutiveRed=0;
+								if(battlefield[x+1][y].toString().equals(" ")){			//if is near an empty cell
+									setBattleFieldElement(x+1,y,battlefield[x][y]);		//move it
+									x++;												//next pos won't move
+								}
+								if(battlefield[x+1][y].toString().equals("S")){			//if near a shot
+									setBattleFieldElement(x,y,new Empty(x,y));			//replace next pos with an empty cell too
+									x++;												//next pos won't move
+								}
+								if(battlefield[x+1][y].toString().equals("R")){			//if near a R
+									consecutiveRed=1;									//next one will not be replaced, just moved
+								}
+								break;
+					/*
 					//Gun
-					case "G": 	
-						if(rows==1) {					// if the matrix has only 1 column, nothing happens
-							break;
-						}
-					
-						if(battlefield[x][y].getXOffset()!=0){						// otherway, if the offset is different from 0
-							battlefield[x][y].move(x+Gun.direction,y);	//move it 1 step to its current direction
-							break;
-						} else {																//otherway call the changeDirection before moving it
-							Gun.changeDirection();
-							battlefield[x][y].move(x+Gun.direction,y);
-							break;
-						}		
+					case "G": 	if(toBeMoved.getXOffset()!=0){						// otherway, if the offset is different from 0
+									battlefield[x][y].move(x+Gun.direction,y);	//move it 1 step to its current direction
+									break;
+								} 
+								else {																//otherway call the changeDirection before moving it
+									Gun.changeDirection();
+									battlefield[x][y].move(x+Gun.direction,y);
+									break;
+								}		
+								if(columns==1) {					// if the matrix has only 1 column, nothing happens
+									break;
+								}
 						
-					//EmptyCell
-					case " ": 
-					break;										// nothing happens
-					
+										
 					//OneStepAlien
 					case "A": 	// to do
 						if (battlefield[x][y].getXOffset()==0 || battlefield[x][y+OneStepAlien.armyDirection].toString() == "C") { // Detection if the OneStepAlien has reached the end of the Batllefield, or if there is a collide with a Casemate
@@ -366,15 +367,15 @@ public class BattleField {
 						setBattleFieldElement(x,y,new Empty(x,y)); //Shot replaced by an empty cell
 						
 					break;
+					*/
+					default:	break;
 					
-					default:
-					break;
 
-				}
+				}//end switch
+				x++;
 			}
 		}
-	}										// a method that advances the configuration of one step, starting from the upper left corner and proceeding
-
+	}
 	
 
 }//end of class

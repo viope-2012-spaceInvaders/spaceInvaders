@@ -1,11 +1,10 @@
 public class TestSpaceInvaders { 
 	public static void main(String[] args) throws Exception { 
 		BattleField bf = new BattleField("es-in.txt"); 
-		System.out.println("at the beginning :- "); 
 		System.out.println("at the beginning :- "+bf); 
 		bf.move(); 
 		System.out.println("1st step :- "+ bf); 
-		bf.move(); 
+	/*	bf.move(); 
 		System.out.println("2nd step :- "+bf); 
 		bf.move(); 
 		System.out.println("3rd step :- "+bf); 
@@ -18,7 +17,7 @@ public class TestSpaceInvaders {
 		System.out.println("5th step :- "+bf); 
 		bf.move(); 
 		bf.setFilename("es-out.txt"); 
-		bf.write(); 
+		bf.write(); */
 	} 
 }
 
