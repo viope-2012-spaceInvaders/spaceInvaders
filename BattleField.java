@@ -5,7 +5,8 @@ snapshot of the current battlefield configuration.*/
 
 import java.io.*;
 import java.util.StringTokenizer;
-
+import java.lang.Integer;
+import java.lang.String;
 
 public class BattleField {
 
@@ -20,10 +21,9 @@ public class BattleField {
 	public BattleField(String filename) throws IllegalElementException, IllegalPositionException {
 		
 		setFilename(filename);
-		
 		reload();
 
-		write();
+	//	write();
 		
 	}
 	
@@ -37,7 +37,7 @@ public class BattleField {
 	}
 		  
 	public BattleFieldElement getBattleFieldElement(int x, int y){
-		return battlefield[x][y];
+		return battlefield[x][y];						//what if the position has been forced to null before the call? Manage it here or somewhere else?
 	}										
 
 	public String toString(){	
@@ -58,17 +58,23 @@ public class BattleField {
 
 	public String getBattleField() {
 		int itemCounter=0; 	
-
+		//int a=0;
 		String item = this.battlefield[0][0].toString();												
 		String Encode = this.battlefield.length + "|" + this.battlefield[0].length + "|";				//Encode start with  #rows | #column |
-
+		//testing
+		//System.out.println("encode: "+Encode);
+		//System.out.println("row: "+rows);
+		//System.out.println("columns: "+columns);
 		for (int i = 0 ; i < rows; i++) {
 			if(i>0) {
 				Encode=Encode+"$";															//add a $ everytimes reach a newLine
 			}
 			for (int j = 0; j < columns; j++) {
-				
-				if(this.battlefield[i][j].toString().equals(item)) {								//if last item and this one are of the same class
+			//	System.out.println(a++);
+			//	System.out.println(Encode);
+			//	System.out.println(i+" "+j+" "+ "item: |"+this.battlefield[i][j].toString()+"|");
+				if(item.equals(this.battlefield[i][j].toString())) {								//if last item and this one are of the same class
+					
 					if(itemCounter==9){															// if is the 10th then write on the Encode string
 						Encode=Encode + itemCounter + item;
 						itemCounter=1;
@@ -123,7 +129,7 @@ public class BattleField {
 		} 
 	}
 		
-	public Object clone() throws CloneNotSupportedException {
+	public Object clone() throws CloneNotSupportedException {			//it should be modified, it returns an Object, not just a BattleFieldElement (e.g. clone a whole battlefield)
 		 BattleFieldElement bf = null;
 		    try {
 	        	bf = (BattleFieldElement) super.clone();
@@ -142,125 +148,121 @@ public class BattleField {
 		//check if something different from a Gun is placed in the bottom row
 	    if ((x == rows-1) && (!b.toString().equals("G")) && (!b.toString().equals(" ")) && (!b.toString().equals("S")) ) 
 	  		throw new IllegalElementException("Only Gun, AlienShot or Empty cells can be placed in the bottom row");
-			//check if something different from a RedSpacecraft is placed in the top row
-			if ((y == 0) && (!b.toString().equals("R"))  && ((!b.toString().equals(" "))) && (!b.toString().equals("s")) ) 
-	  			throw new IllegalElementException("Only a RedSpacecraft, Gunshot or Empty Cells can be placed in the top row");
+		//check if something different from a RedSpacecraft is placed in the top row
+		if ((y == 0) && (!b.toString().equals("R"))  && ((!b.toString().equals(" "))) && (!b.toString().equals("s")) ) 
+	  		throw new IllegalElementException("Only a RedSpacecraft, Gunshot or Empty Cells can be placed in the top row");
 			
 			switch(b.toString()){
-				case "R":	
-					if(x != 0) {
-						throw new IllegalPositionException("RedSpacecraft cannot be placed in line "+y);
-	      			}
-					battlefield[x][y] = b;
-				break;
+				case "R":	if(x != 0) {
+								throw new IllegalPositionException("RedSpacecraft cannot be placed in line "+x);
+							}
+							battlefield[x][y] = b;
+							break;
 						  
-				case "G": if(gunCounter>0) {
-						throw new IllegalElementException("Only one Gun per BattleField");
-					}
-	            	if(x != rows-1) {
-	            		throw new IllegalPositionException("The Gun must be placed in the bottom line of the BattleField");
-	            	}
-	            	gunCounter++;
-	            	battlefield[x][y]= b;
-				break;
+				case "G":	 if(gunCounter>0) {
+								throw new IllegalElementException("Only one Gun per BattleField");
+							}
+							if(x != rows-1) {
+								throw new IllegalPositionException("The Gun must be placed in the bottom line of the BattleField");
+							}
+							gunCounter++;
+							battlefield[x][y]= b;
+							break;
 						
 				case "C": 	if((x==0)||(x==rows-1)) {
-						throw new IllegalPositionException("Casemates can't be placed in bottom or top line");
-			    	}
-					battlefield[x][y]= b;
-	         	break;
-				//gunshot			
-				default: this.battlefield[x][y]= b;
+								throw new IllegalPositionException("Casemates can't be placed in bottom or top line");
+							}
+							battlefield[x][y]= b;
+							break;
+							
+				default: 	battlefield[x][y]= b;
 			}	
 			
 	}
 		
 	public void setBattleField(String s) throws IllegalElementException, IllegalPositionException {   // a method initializing the battle-field configuration as specified in the parameter: 
-		String config_line = s;
-		StringTokenizer st = new StringTokenizer(config_line,"|");
-		
-		//Get the rows from the String
-		String s_rows = st.nextToken();
-		rows = Integer.parseInt(s_rows);
-		
-		//Get the columns from the String
-		String s_columns = st.nextToken();
-		columns = Integer.parseInt(s_columns);
-		
-		battlefield = new BattleFieldElement[rows][columns];
-		
-		
-		//The rest of the String (Positions of the BattlefieldElements
-		String result = st.nextToken();
+		try{
+			String config_line = s;
+			StringTokenizer st = new StringTokenizer(config_line,"|");
+			
+			//Get the rows from the String
+			String s_rows = st.nextToken();
+			rows = Integer.parseInt(s_rows);
+			
+			//Get the columns from the String
+			String s_columns = st.nextToken();
+			columns = Integer.parseInt(s_columns);
+			
+			battlefield = new BattleFieldElement[rows][columns];
+			
+			//The rest of the String (Positions of the BattlefieldElements
+			String result = st.nextToken();
+			
+			int i=0;
+			int x=0;
+			int y=0;
+			int numberOfItem=0;
+			String toBeConverted;			//had a problem with the parseint couse it require a String (not a character)
+			BattleFieldElement b=null;
 
-		int i = 0; //i : to trough the String; 
-		int l = 0, k = 0; //l & k : to place the BattlefieldElements in the matrix; 
-		int	itemCounter; //itemCounter : to count how many items of a BattlefieldElement there are
+			while(i<result.length()){
+				if(result.charAt(i)=='$'){				//this if check if the current char is a $, and in the case it is, set the newLine
+					x++;		//newLine
+					y=0;		
+					result = result.substring(i+1);
+					i=0;
+					System.out.print(result);
+					continue;
+				}
+				
+				if(i%2==0){				// 0-2-4-6 etc are always numbers
+					toBeConverted=""+result.charAt(i);
+					numberOfItem=Integer.parseInt(toBeConverted);
+				}
+				else {
+					for(int k=0;k<numberOfItem;k++){
+						switch (result.charAt(i)) { 
+							case ' ': 	b=new Empty(x,y);
+										setBattleFieldElement(x, y, b);
+										break; 
+										
+							case 'R':	b=new RedSpacecraft(x,y);
+										setBattleFieldElement(x, y, b);
+										break;
+										
+							case 'A': 	b=new OneStepAlien(x,y);
+										setBattleFieldElement(x, y, b);
+										break;  
+							
+							case 'C': 	b=new OneStepAlien(x,y);
+										setBattleFieldElement(x, y, b);
+										break;  
+										
+							case 'G': 	b=new Gun(x,y);
+										setBattleFieldElement(x, y, b);
+										break;
+										
+							case 's': 	b=new GunShot(x,y);
+										setBattleFieldElement(x, y, b);
+										break;  
+										
+							case 'S': 	b=new AlienShot(x,y);
+										setBattleFieldElement(x, y, b);
+										break; 
+																
+							default: 	break; // must throw an illegal string filename exception
+						}//end switch
+						y++;
+					}//end for
+				}//end else
+				i++;
+			}//end while
+		} catch(NullPointerException e){
+			System.out.println("test");
+		} catch(ArrayIndexOutOfBoundsException e){
+			System.out.println("test2");
+		}
 		
-		char c = result.charAt(i); 
-		String stringCounter = "";
-
-		//Until the end of the String
-        while (i < result.length()-1) {
-        	
-        	//While there isn't detection of a BattlefieldElement
-	        while (c != ' ' && c != '$' && c != 'R' && c != 'A' && c != 'G' && c != 'C' && c != 's' && c != 'S') {
-	        	stringCounter += String.valueOf(c); //to converting the String into a integer
-	        	i++;
-	        	c = result.charAt(i);
-	        }
-
-	        //Processing when BattlefieldElement detected
-	        switch (c) { 
-	        	case ' ': 
-	        		for (itemCounter = Integer.parseInt(stringCounter);itemCounter>0;itemCounter--) {
-	        			setBattleFieldElement(l, k, new Empty(l, k));
-	        			k++;
-	        		}
-	        		break; 
-	        	case '$':
-	        		l++;
-	        		k = 0;
-	        		break;
-	        	case 'R':
-	        		setBattleFieldElement(l, k, new RedSpacecraft(l, k));
-	        		break; 
-	        	case 'A': 
-	        		for (itemCounter = Integer.parseInt(stringCounter);itemCounter>0;itemCounter--) {
-	        			setBattleFieldElement(l, k, new OneStepAlien(l, k));
-	        			k++;
-	        		}
-	        		break;  
-	        	case 'C': 
-	        		for (itemCounter = Integer.parseInt(stringCounter);itemCounter>0;itemCounter--) {
-	        			setBattleFieldElement(l, k, new Casemate(l, k));
-	        			k++;
-	        		}
-	        		break;  
-	        	case 'G': 
-	        		setBattleFieldElement(l, k, new Gun(l, k));
-	        		break;
-	        	case 's': 
-	        		for (itemCounter = Integer.parseInt(stringCounter);itemCounter>0;itemCounter--) {
-	        			setBattleFieldElement(l, k, new GunShot(l, k));
-	        			k++;
-	        		}
-	        		break;  
-	        	case 'S': 
-	        		for (itemCounter = Integer.parseInt(stringCounter);itemCounter>0;itemCounter--) {
-	        			setBattleFieldElement(l, k, new AlienShot(l, k));
-	        			k++;
-    				}
-	        		break;  
-	        	default: 
-	        		break;
-	        }
-	        
-	        stringCounter = ""; //Reset of the stringCounter
-	        
-	        i++;
-        	c = result.charAt(i); //
-        }
 	}
 
 	void move() throws IllegalElementException, IllegalPositionException{  	// a method that advances the configuration of one step, starting from the upper left corner and proceeding
