@@ -18,8 +18,13 @@ public class BattleField {
 										 
 	// CONSTRUCTOR
 	public BattleField(String filename) throws IllegalElementException, IllegalPositionException {
+		
 		setFilename(filename);
+		
 		reload();
+
+		write();
+		
 	}
 	
 	//METHODS
@@ -35,7 +40,7 @@ public class BattleField {
 		return battlefield[x][y];
 	}										
 
-	public String toString(){				
+	public String toString(){	
 		return getBattleField();									
 	}									
 
@@ -43,11 +48,8 @@ public class BattleField {
 		File f = new File (file); 
 			try {
 			    FileWriter fw = new FileWriter (f);
-			 
 				String backup = this.getBattleField();
-		
 			    fw.write(backup);
-
 			    fw.close();
 			} catch (IOException exception) {
 			    System.out.println ("Impossible to create the backup file !");
@@ -56,14 +58,17 @@ public class BattleField {
 
 	public String getBattleField() {
 		int itemCounter=0; 	
-		String item=battlefield[0][0].toString();												
-		String Encode = battlefield[0].length + "|" + battlefield.length + "|";				//Encode start with  #rows | #column |
+
+		String item = this.battlefield[0][0].toString();												
+		String Encode = this.battlefield.length + "|" + this.battlefield[0].length + "|";				//Encode start with  #rows | #column |
+
 		for (int i = 0 ; i < rows; i++) {
 			if(i>0) {
 				Encode=Encode+"$";															//add a $ everytimes reach a newLine
 			}
 			for (int j = 0; j < columns; j++) {
-				if(battlefield[i][j].toString().equals(item)) {								//if last item and this one are of the same class
+				
+				if(this.battlefield[i][j].toString().equals(item)) {								//if last item and this one are of the same class
 					if(itemCounter==9){															// if is the 10th then write on the Encode string
 						Encode=Encode + itemCounter + item;
 						itemCounter=1;
@@ -71,9 +76,9 @@ public class BattleField {
 					else																		//else increment the counter
 						itemCounter++;
 				} else {																	//else write on the string	
-					Encode=Encode + itemCounter + item;
-					itemCounter=1;
-					item=battlefield[i][j].toString();
+					Encode = Encode + itemCounter + item;
+					itemCounter = 1;
+					item = this.battlefield[i][j].toString();
 				}//end if-else	
 			}//end for(columns)	
 		}//end for(rows)		
@@ -81,28 +86,41 @@ public class BattleField {
 		return Encode+itemCounter + item + "$";
 	}
 
-	public void write() throws IOException{					// append the current configuration to the current content of the file;
-		BufferedWriter buffer = new BufferedWriter(new FileWriter(this.filename));
-		buffer.write(this.getBattleField()+"\n");
+	public void write() {					// append the current configuration to the current content of the file;
+		
+		BufferedWriter bw = null;
+		
+		try {
+			bw = new BufferedWriter(new FileWriter(this.filename));
+			bw.write(this.getBattleField()+"\n");
+			bw.close();
+		} catch (IOException e) {
+			System.out.println("IOException in the write method !");
+		} 
+
 	}
 	
-	public void reload() throws IllegalElementException, IllegalPositionException{		// read again from filename the last-configuration of the battlefield 																									
+	public void reload() throws IllegalElementException, IllegalPositionException {		// read again from filename the last-configuration of the battlefield 																									
+		FileReader fr = null;
+		BufferedReader bf = null;
 		try {
-			FileReader fr = new FileReader(this.filename);
-			BufferedReader bf = new BufferedReader(fr);
+			fr = new FileReader(this.filename);
+			bf = new BufferedReader(fr);
 			String str = "", line = "";
-			try {
-				while (str != null) {
-					line = str;
-					str = bf.readLine();
-				}
-				setBattleField(line); //Send to setBattleField method, the lastest configuration of the file
-			} catch (IOException e) {
-				System.out.println("IOException in the reload method!");
+
+			while (str != null) {
+				line = str;
+				str = bf.readLine();
 			}
+			setBattleField(line); //Send to setBattleField method, the lastest configuration of the file
+		
+			bf.close();
+			fr.close();
 		} catch (FileNotFoundException e) {
 			System.out.println("File not found in the reload method!");
-		}
+		} catch (IOException e) {
+			System.out.println("IOException in the reload method!");
+		} 
 	}
 		
 	public Object clone() throws CloneNotSupportedException {
@@ -118,16 +136,8 @@ public class BattleField {
 
 	
 	void setBattleFieldElement(int x, int y, BattleFieldElement bf) throws IllegalElementException, IllegalPositionException {
-		//########################################
-		//TEST 
-		
-		BattleFieldElement b = new Empty(0,0); //initialisation of b
-		b = bf;
-		
-		battlefield[0][0] = new Empty(0,1); // This line throws Exception in thread "main" java.lang.NullPointerException 
-		
-		//########################################
-		//########################################
+
+		BattleFieldElement b = bf; //initialisation of b
 		
 		//check if something different from a Gun is placed in the bottom row
 	    if ((x == rows-1) && (!b.toString().equals("G")) && (!b.toString().equals(" ")) && (!b.toString().equals("S")) ) 
@@ -137,14 +147,11 @@ public class BattleField {
 	  			throw new IllegalElementException("Only a RedSpacecraft, Gunshot or Empty Cells can be placed in the top row");
 			
 			switch(b.toString()){
-				case "R":	if(x != 0) {
+				case "R":	
+					if(x != 0) {
 						throw new IllegalPositionException("RedSpacecraft cannot be placed in line "+y);
 	      			}
-		
-					System.out.println(b.toString()); //Works
-					System.out.println(b.getXOffset()+" "+b.getYOffset()); //Works
-					System.out.println(x+" "+y); //Works
-					battlefield[x][y] = b;// DON T WOOOOOORKS
+					battlefield[x][y] = b;
 				break;
 						  
 				case "G": if(gunCounter>0) {
@@ -154,7 +161,7 @@ public class BattleField {
 	            		throw new IllegalPositionException("The Gun must be placed in the bottom line of the BattleField");
 	            	}
 	            	gunCounter++;
-	            	battlefield[x][y]= b;// DON T WOOOOOORKS
+	            	battlefield[x][y]= b;
 				break;
 						
 				case "C": 	if((x==0)||(x==rows-1)) {
@@ -163,8 +170,9 @@ public class BattleField {
 					battlefield[x][y]= b;
 	         	break;
 				//gunshot			
-				default: battlefield[x][y]= b;// DON T WOOOOOORKS
+				default: this.battlefield[x][y]= b;
 			}	
+			
 	}
 		
 	public void setBattleField(String s) throws IllegalElementException, IllegalPositionException {   // a method initializing the battle-field configuration as specified in the parameter: 
@@ -178,6 +186,9 @@ public class BattleField {
 		//Get the columns from the String
 		String s_columns = st.nextToken();
 		columns = Integer.parseInt(s_columns);
+		
+		battlefield = new BattleFieldElement[rows][columns];
+		
 		
 		//The rest of the String (Positions of the BattlefieldElements
 		String result = st.nextToken();
@@ -268,7 +279,7 @@ public class BattleField {
 		for(int x=0; x<rows; x++)	{							// each row starting from 0 
 			for(int y=0; y<columns; y++) {						// each column starting from 0
 				
-				switch(battlefield[x][y].toString()) {						// switch to the case returned from the toString() of the battlefield[x][y]
+				switch(this.battlefield[x][y].toString()) {						// switch to the case returned from the toString() of the battlefield[x][y]
 	
 					//RedSpacecraft
 					case "R":
