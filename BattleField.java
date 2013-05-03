@@ -302,7 +302,30 @@ public class BattleField {
       							}
                   }
       						break;
-
+					//i'm not sure if this code work			
+					case "s": 
+					if(battlefield[i][j].getYOffset()<1){
+						setBattleFieldElement(i,j,new Empty(i,j));  
+					}else{
+						String elementType = battlefield[i+1][j].toString();
+						if(elementType.equals(" ")||elementType.equals("A")||elementType.equals("C")||elementType.equals("S")){
+							setBattleFieldElement(i+1,j, new GunShot(i+1, j));
+						}
+						
+					}
+					break;
+					case "S":
+					if(battlefield[i][j].getYOffset()<1){
+						setBattleFieldElement(i,j,new Empty(i,j)); 
+					}else{
+						String elementType = battlefield[i-1][j].toString();
+						if(elementType.equals(" ")||elementType.equals("A")||elementType.equals("C")||elementType.equals("S")){
+							setBattleFieldElement(i-1,j, new GunShot(i-1, j));
+						}
+						
+					}
+					break;
+					//
 				default:  break;
 					
 
