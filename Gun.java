@@ -13,8 +13,8 @@ public class Gun extends BattleFieldElement{
 	protected static int direction;
 	
 	//CONSTRUCTOR
-	public Gun(int h,int v) throws IllegalElementException{
-		super( h,v );		
+	public Gun(int v,int h) throws IllegalElementException{
+		super( v,h );		
 	    direction=1;  			//from left to right
 	}
 	

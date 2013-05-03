@@ -4,8 +4,8 @@ class GunShot extends BattleFieldElement  {
 	private static final int vDirection=-1;	 //The aliens' shots move from top to bottom (1 );  
 
 	//CONSTRUCTORs
-	public GunShot(int h, int v){
-		super(h,v);						//call the BattleFieldElemeng giving h & v parameters
+	public GunShot(int v, int h){
+		super(v,h);						//call the BattleFieldElemeng giving h & v parameters
 	}	
 	
 	//METHODS

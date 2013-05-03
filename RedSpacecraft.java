@@ -3,8 +3,8 @@ public class RedSpacecraft extends Alien{
   //FIELD
 	
 	//CONSTRUCTOR
-	public RedSpacecraft(int h, int v){ 
-		super(h,v);	
+	public RedSpacecraft(int v, int h){ 
+		super(v,h);	
 	}
 
 	//METHODS

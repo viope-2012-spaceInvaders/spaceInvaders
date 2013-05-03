@@ -10,8 +10,8 @@ public class OneStepAlien extends Alien{
   //FIELD
 	protected static int armyDirection = 1; 
 	//CONSTRUCTOR
-	public OneStepAlien(int h, int v){
-		super(h,v);
+	public OneStepAlien(int v, int h){
+		super(v,h);
 	}
 
 	//METHODS

@@ -1,13 +1,13 @@
 public abstract class BattleFieldElement{
 
 	//FIELD
-		protected int x;										
 		protected int y;		//current position of the item on the battlefield.
+		protected int x;										
 	
 	//CONSTRUCTOR
-	public BattleFieldElement(int h, int v){
-		x=h;	//horizontal 
+	public BattleFieldElement(int v,int h){
 		y=v;	//vertical
+		x=h;	//horizontal 
 	}
 	
 	//METHODS

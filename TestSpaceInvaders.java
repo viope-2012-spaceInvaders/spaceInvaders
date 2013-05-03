@@ -1,9 +1,11 @@
 public class TestSpaceInvaders { 
 	public static void main(String[] args) throws Exception { 
 		BattleField bf = new BattleField("es-in.txt"); 
-		System.out.println("at the beginning :- "+bf); 
+	//	System.out.println("at the beginning :- "+bf); 
+		System.out.println("1) act situ: "+bf); 
 		bf.move(); 
-		System.out.println("1st step :- "+ bf); 
+		System.out.println("3) act situ: "+bf); 
+	//	System.out.println("1st step :- "+ bf); 
 	/*	bf.move(); 
 		System.out.println("2nd step :- "+bf); 
 		bf.move(); 

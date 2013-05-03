@@ -7,8 +7,8 @@ public abstract class Alien extends BattleFieldElement{
 	protected final int direction=-1;	
 	
 	//CONSTRUCTOR
-	public Alien(int h, int v){
-		super(h,v);						
+	public Alien(int v, int h){
+		super(v,h);						
 	}
 	
 	//METHODs	

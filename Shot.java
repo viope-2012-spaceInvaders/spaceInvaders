@@ -11,8 +11,8 @@ abstract class Shot extends BattleFieldElement	{
 	
 	
 	//CONSTRUCTORs
-	public Shot(int h, int v){
-		super(h,v);						//call the BattleFieldElemeng giving h & v parameters
+	public Shot(int v, int h){
+		super(v,h);						//call the BattleFieldElemeng giving h & v parameters
 	}	
 	
 	//METHODS
