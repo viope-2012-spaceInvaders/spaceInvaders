@@ -253,7 +253,9 @@ public class BattleField {
 			System.out.println("String given doesn't fit enought the matrix");
 		} 
 		
-	}	void move() throws IllegalElementException, IllegalPositionException{ 
+	}	
+	
+	void move() throws IllegalElementException, IllegalPositionException{ 
 	  
 		int consecutiveRed=0;
 		for(int v=0; v<rows; v++)	{							// each row starting from 0 
@@ -290,28 +292,62 @@ public class BattleField {
 									}
 								}//end else
 								break;//end case R					//i'm not sure if this code work			
-					case "s": 
-					if(battlefield[v][h].getYOffset()<1){
-						setBattleFieldElement(v,h,new Empty(v,h));  
-					}else{
-						String elementType = battlefield[v+1][h].toString();
-						if(elementType.equals(" ")||elementType.equals("A")||elementType.equals("C")||elementType.equals("S")){
-							setBattleFieldElement(v+1,h, new GunShot(v+1,h));
-						}
+					
+					case "s": 	if(battlefield[v][h].getYOffset()<1){
+									setBattleFieldElement(v,h,new Empty(v,h));  
+								}else{
+									String elementType = battlefield[v+1][h].toString();
+									if(elementType.equals(" ")||elementType.equals("A")||elementType.equals("C")||elementType.equals("S")){
+										setBattleFieldElement(v+1,h, new GunShot(v+1,h));
+									}
 						
-					}
-					break;
-					case "S":
-					if(battlefield[v][h].getYOffset()<1){
-						setBattleFieldElement(v,h,new Empty(v,h)); 
-					}else{
-						String elementType = battlefield[v-1][h].toString();
-						if(elementType.equals(" ")||elementType.equals("A")||elementType.equals("C")||elementType.equals("S")){
-							setBattleFieldElement(v-1,h, new GunShot(v-1, h));
-						}
+								}
+								break;
+					
+					case "S":	if(battlefield[v][h].getYOffset()<1){
+									setBattleFieldElement(v,h,new Empty(v,h)); 
+								}else{
+									String elementType = battlefield[v-1][h].toString();
+									if(elementType.equals(" ")||elementType.equals("A")||elementType.equals("C")||elementType.equals("S")){
+										setBattleFieldElement(v-1,h, new GunShot(v-1, h));
+									}
 						
-					}
-					break;
+								}
+								break;
+					
+					case "G":	int toAdd=Gun.direction;
+								if(battlefield[v][h].getXOffset()!=0){				// otherway, if the offset is different from 0
+									setBattleFieldElement(v,h,new Empty(v,h));	//move it 1 step to its current direction
+									gunCounter--;
+									if(battlefield[v][h+toAdd].toString().equals(" ")){			//if is near an empty cell
+										setBattleFieldElement(v,h+toAdd,new Gun(v,h+toAdd));		//move it
+										h++;												//next pos won't move
+										break;
+									}
+									if(battlefield[v][h+toAdd].toString().equals("S")){			//if near an Alien shot
+										setBattleFieldElement(v,h,new Empty(v,h));			//replace next pos with an empty cell
+										h++;												//next pos won't move
+										break;
+									}
+								} 
+								else {									//otherway call the changeDirection before moving it
+									Gun.changeDirection();
+									toAdd=Gun.direction;
+									setBattleFieldElement(v,h,new Empty(v,h));
+									gunCounter--;
+									if(battlefield[v][h+toAdd].toString().equals(" ")){			//if is near an empty cell
+										setBattleFieldElement(v,h+toAdd,new Gun(v,h+toAdd));		//move it
+										h++;												//next pos won't move
+										break;
+									}
+									if(battlefield[v][h+toAdd].toString().equals("S")){			//if near an Alien shot
+										setBattleFieldElement(h,v,new Empty(v,h));			//replace next pos with an empty cell
+										h++;												//next pos won't move
+									}
+								break;
+								}		
+					
+					
 					//
 				default:  break;
 					
