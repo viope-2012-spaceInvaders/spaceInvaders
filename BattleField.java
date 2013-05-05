@@ -260,26 +260,29 @@ public class BattleField {
 		int consecutiveRed=0;
 		for(int v=0; v<rows; v++)	{							// each row starting from 0 
 			for(int h=0; h<columns; h++) {						// each column starting from 0
+								System.out.print("."+battlefield[v][h]);
 				switch(battlefield[v][h].toString()) {		// switch to the case returned from the toString() of the battlefield[x][y]					
 								//CaseMate & Empty
 					case " ":
+					case "A":
 					case "C": 	break;							
 					
 								//RedSpacecraft
-					case "R":   
-								if(battlefield[v][h].getXOffset()==0) {						//if near border
-									if(consecutiveRed==0)									//and before it there weren't a R
-										setBattleFieldElement(v,h,new Empty(v,h));				//replace with an empty cell
-									break;													 //just break otherwise
+					case "R":   if(battlefield[v][h].getXOffset()==0) {						//if near border
+									if(consecutiveRed==0){									//and before it there weren't a R
+										setBattleFieldElement(v,h,new Empty(v,h));			//replace with an empty cell
+									}
+									break;													 //break ( will leave it or replace with empty)
 								} 
 								else {														//if far from border instead
+									BattleFieldElement current=battlefield[v][h];			//save that item
 									if(consecutiveRed==0){									//was the item before him a R?
-										setBattleFieldElement(v,h,new Empty(v,h));			//NO: replace with an empty cell and ....
+										setBattleFieldElement(v,h,new Empty(v,h));			//if no replace with an empty cell and ....
 									}
-									consecutiveRed=0;										//nevermind the past!
+									consecutiveRed=0;										//and nevermind the past!
 									if(battlefield[v][h+1].toString().equals(" ")){			// if next is empty
-										setBattleFieldElement(v,h+1,new RedSpacecraft(v,h+1));	//...move to the next pos	
-										h++;													//and leave it the next loop 
+										setBattleFieldElement(v,h+1,new RedSpacecraft(v,h+1));			//replace with an empty cell
+										h++;												//then jump it the next loop 
 										break;
 									}
 									if(battlefield[v][h+1].toString().equals("s")){			//if next is a shot
@@ -288,29 +291,42 @@ public class BattleField {
 										break;
 									}
 									if(battlefield[v][h+1].toString().equals("R")){			//if next is a R
-										consecutiveRed=1;									//...remember to not replaced next R
+										consecutiveRed=1;									//...remember to not replace next R with empty cell!
 									}
 								}//end else
-								break;//end case R					//i'm not sure if this code work			
+								break;//end case R						
 					
-					case "s": 	if(battlefield[v][h].getYOffset()<1){
-									setBattleFieldElement(v,h,new Empty(v,h));  
-								}else{
-									String elementType = battlefield[v+1][h].toString();
-									if(elementType.equals(" ")||elementType.equals("A")||elementType.equals("C")||elementType.equals("S")){
-										setBattleFieldElement(v+1,h, new GunShot(v+1,h));
+					case "s": 	if(battlefield[v][h].getYOffset()==0){
+									setBattleFieldElement(v,h,new Empty(v,h)); 
+								}
+								else{
+									String elementType = battlefield[v-1][h].toString();
+									setBattleFieldElement(v,h, new Empty(v,h));
+									if(elementType.equals("A") || elementType.equals("R") || elementType.equals("C")||elementType.equals("S")){
+										setBattleFieldElement(v-1,h,new Empty(v-1,h));  								
 									}
+									else{
+										setBattleFieldElement(v-1,h, new GunShot(v-1,h));
+									}	
+									
 						
 								}
 								break;
 					
-					case "S":	if(battlefield[v][h].getYOffset()<1){
+					case "S":	if(battlefield[v][h].getYOffset()==0){
 									setBattleFieldElement(v,h,new Empty(v,h)); 
-								}else{
-									String elementType = battlefield[v-1][h].toString();
-									if(elementType.equals(" ")||elementType.equals("A")||elementType.equals("C")||elementType.equals("S")){
-										setBattleFieldElement(v-1,h, new GunShot(v-1, h));
+									break;
+								}
+								else{
+									String elementType = battlefield[v+1][h].toString();
+									setBattleFieldElement(v,h, new Empty(v,h));
+									if(elementType.equals("A") || elementType.equals("G") || elementType.equals("C")||elementType.equals("S")){
+										setBattleFieldElement(v+1,h,new Empty(v+1,h));  								
 									}
+									else{
+										setBattleFieldElement(v+1,h, new AlienShot(v+1,h));
+									}	
+									
 						
 								}
 								break;
