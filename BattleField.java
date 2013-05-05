@@ -315,7 +315,8 @@ public class BattleField {
 								}
 								break;
 					
-					case "G":	int toAdd=Gun.direction;
+					case "G":	
+								int toAdd=Gun.direction;
 								if(battlefield[v][h].getXOffset()!=0){				// otherway, if the offset is different from 0
 									setBattleFieldElement(v,h,new Empty(v,h));	//move it 1 step to its current direction
 									gunCounter--;

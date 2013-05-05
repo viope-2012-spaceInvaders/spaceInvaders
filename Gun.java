@@ -10,12 +10,11 @@ public class Gun extends BattleFieldElement{
 
 	//FIELD
 	
-	protected static int direction;
+	protected static int direction=1;//from left to right
 	
 	//CONSTRUCTOR
 	public Gun(int v,int h) throws IllegalElementException{
-		super( v,h );		
-	    direction=1;  			//from left to right
+		super( v,h ); 			
 	}
 	
 	//METHODS
@@ -25,7 +24,7 @@ public class Gun extends BattleFieldElement{
 			return (BattleField.columns - (this.x + 1));
 		}
 		else {
-			return -x;
+			return -this.x;
 		}
 	}
 	

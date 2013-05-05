@@ -2,68 +2,12 @@ public class TestSpaceInvaders {
 	public static void main(String[] args) throws Exception { 
 		BattleField bf = new BattleField("es-in.txt"); 
 	//	System.out.println("at the beginning :- "+bf); 
-		System.out.println("1) act situ: "+bf); 
-		bf.move(); 
-		System.out.println("2) act situ: "+bf); 
-		bf.move(); 
-		System.out.println("3) act situ: "+bf); 
-		bf.move(); 
-		System.out.println("4) act situ: "+bf); 
-		bf.move(); 
-		System.out.println("5) act situ: "+bf); 
-		bf.move(); 
-		System.out.println("6) act situ: "+bf); 
-		bf.move(); 
-		System.out.println("7) act situ: "+bf); 
-		bf.move(); 
-		System.out.println("8) act situ: "+bf);
-		bf.move(); 
-		System.out.println("9) act situ: "+bf); 
-		bf.move(); 
-		System.out.println("10) act situ: "+bf); 
-		bf.move(); 
-		System.out.println("1) act situ: "+bf); 
-		bf.move(); 
-		System.out.println("2) act situ: "+bf); 
-		bf.move(); 
-		System.out.println("3) act situ: "+bf); 
-		bf.move(); 
-		System.out.println("4) act situ: "+bf); 
-		bf.move(); 
-		System.out.println("5) act situ: "+bf); 
-		bf.move(); 
-		System.out.println("6) act situ: "+bf); 
-		bf.move(); 
-		System.out.println("7) act situ: "+bf); 
-		bf.move(); 
-		System.out.println("8) act situ: "+bf);
-		bf.move(); 
-		System.out.println("9) act situ: "+bf); 
-		bf.move(); 
-		System.out.println("10) act situ: "+bf); 
-		bf.move(); 
-		System.out.println("11) act situ: "+bf); 
-		bf.move(); 
-		System.out.println("2) act situ: "+bf); 
-		bf.move(); 
-		System.out.println("3) act situ: "+bf); 
-		bf.move(); 
-		System.out.println("4) act situ: "+bf); 
-		bf.move(); 
-		System.out.println("5) act situ: "+bf); 
-		bf.move(); 
-		System.out.println("6) act situ: "+bf); 
-		bf.move(); 
-		System.out.println("7) act situ: "+bf); 
-		bf.move(); 
-		System.out.println("8) act situ: "+bf);
-		bf.move(); 
-		System.out.println("9) act situ: "+bf); 
-		bf.move(); 
-		System.out.println("10) act situ: "+bf); 
-		bf.move(); 
-		System.out.println("11) act situ: "+bf); 
-    
+
+		for(int i=0; i<40; i++){
+			System.out.println(i+") "+bf); 
+			bf.move(); 
+		}
+		
 	//	System.out.println("1st step :- "+ bf); 
 	/*	bf.move(); 
 		System.out.println("2nd step :- "+bf); 
