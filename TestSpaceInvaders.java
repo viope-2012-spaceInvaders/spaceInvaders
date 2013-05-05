@@ -3,7 +3,7 @@ public class TestSpaceInvaders {
 		BattleField bf = new BattleField("es-in.txt"); 
 	//	System.out.println("at the beginning :- "+bf); 
 
-		for(int i=0; i<40; i++){
+		for(int i=0; i<10; i++){
 			System.out.println(i+") "+bf); 
 			bf.move(); 
 		}

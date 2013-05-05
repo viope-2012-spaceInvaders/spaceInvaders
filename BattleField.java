@@ -283,7 +283,7 @@ public class BattleField {
 										break;
 									}
 									if(battlefield[v][h+1].toString().equals("s")){			//if next is a shot
-										setBattleFieldElement(v,h,new Empty(v,h));			// ...move to the ..OoOoh noooes..BOOOM...just empty cell!
+										setBattleFieldElement(v,h+1,new Empty(v,h+1));			// ...move to the ..OoOoh noooes..BOOOM...just empty cell!
 										h++;												// leave this empty cell here, go on!
 										break;
 									}
