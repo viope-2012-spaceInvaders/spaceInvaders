@@ -257,15 +257,16 @@ public class BattleField {
 	
 	void move() throws IllegalElementException, IllegalPositionException{ 
 	  
+		AlienShot as=null;
 		int consecutiveRed=0;
 		for(int v=0; v<rows; v++)	{							// each row starting from 0 
 			for(int h=0; h<columns; h++) {						// each column starting from 0
-								System.out.print("."+battlefield[v][h]);
 				switch(battlefield[v][h].toString()) {		// switch to the case returned from the toString() of the battlefield[x][y]					
 								//CaseMate & Empty
 					case " ":
-					case "A":
 					case "C": 	break;							
+					case "A":	System.out.println(battlefield[v][h].getXOffset());
+								break;
 					
 								//RedSpacecraft
 					case "R":   if(battlefield[v][h].getXOffset()==0) {						//if near border
@@ -313,21 +314,27 @@ public class BattleField {
 								}
 								break;
 					
-					case "S":	if(battlefield[v][h].getYOffset()==0){
-									setBattleFieldElement(v,h,new Empty(v,h)); 
-									break;
-								}
-								else{
-									String elementType = battlefield[v+1][h].toString();
-									setBattleFieldElement(v,h, new Empty(v,h));
-									if(elementType.equals("A") || elementType.equals("G") || elementType.equals("C")||elementType.equals("S")){
-										setBattleFieldElement(v+1,h,new Empty(v+1,h));  								
+					case "S":	as=(AlienShot)battlefield[v][h];
+								if(as.moved==0){
+										System.out.println(as.getYOffset());
+									if(battlefield[v][h].getYOffset()==0){
+										setBattleFieldElement(v,h,new Empty(v,h)); 
+										break;
 									}
 									else{
-										setBattleFieldElement(v+1,h, new AlienShot(v+1,h));
-									}	
-									
-						
+										String elementType = battlefield[v+1][h].toString();
+										setBattleFieldElement(v,h, new Empty(v,h));
+										if(elementType.equals("A") || elementType.equals("G") || elementType.equals("C")||elementType.equals("S")){
+											setBattleFieldElement(v+1,h,new Empty(v+1,h));  								
+										}
+										else{
+											setBattleFieldElement(v+1,h, new AlienShot(v+1,h));
+											as=(AlienShot)battlefield[v+1][h];
+											as.moved=1;
+										}	
+										
+							
+									}
 								}
 								break;
 					
@@ -366,13 +373,23 @@ public class BattleField {
 					
 					
 					//
-				default:  break;
+								default:  break;
 					
 
 				}//end switch
 			}//For2
 		} //for1
+		
+		
+		for(int v=0; v<rows; v++)				// each row starting from 0 
+			for(int h=0; h<columns; h++) 			// each column starting from 0
+				if(battlefield[v][h] instanceof AlienShot){	//if it is an AlienShot
+					as=(AlienShot)battlefield[v][h];
+					as.moved=0;									//set it as "not moved"
+				}
+		
 	}//end of method
 
+	
 }//end of class
 

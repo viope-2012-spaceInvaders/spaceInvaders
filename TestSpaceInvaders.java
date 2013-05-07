@@ -1,6 +1,9 @@
 public class TestSpaceInvaders { 
 	public static void main(String[] args) throws Exception { 
 		BattleField bf = new BattleField("es-in.txt"); 
+	
+	
+	
 	//	System.out.println("at the beginning :- "+bf); 
 
 		for(int i=0; i<15; i++){
