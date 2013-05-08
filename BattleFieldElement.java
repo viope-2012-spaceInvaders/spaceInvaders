@@ -11,9 +11,9 @@ public abstract class BattleFieldElement{
 	}
 	
 	//METHODS
-	public void move(int x, int y){			//moves the current position of the item
-		this.x=x;							//to the one passed as argument. No check is made to determine if the new position
-		this.y=y;							//is correct or outside of the battlefield margins.
+	public void move(int h, int v){			//moves the current position of the item
+		this.x=h;							//to the one passed as argument. No check is made to determine if the new position
+		this.y=v;							//is correct or outside of the battlefield margins.
 	}
 
 											

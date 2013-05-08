@@ -16,7 +16,8 @@ public class BattleField {
 	protected static int rows;
 	protected static int columns;						
 	private String filename;					 //name of the file where the configurations used (saved,restored...)
-										 
+
+	
 	// CONSTRUCTOR
 	public BattleField(String filename) throws IllegalElementException, IllegalPositionException {
 		
@@ -259,14 +260,54 @@ public class BattleField {
 	  
 		AlienShot as=null;
 		int consecutiveRed=0;
+		int consecutiveGreen=0;
+		boolean alienMovement=doTheyMove();
+		//System.out.println(doTheyMove());
 		for(int v=0; v<rows; v++)	{							// each row starting from 0 
 			for(int h=0; h<columns; h++) {						// each column starting from 0
 				switch(battlefield[v][h].toString()) {		// switch to the case returned from the toString() of the battlefield[x][y]					
 								//CaseMate & Empty
 					case " ":
 					case "C": 	break;							
-					case "A":	System.out.println(battlefield[v][h].getXOffset());
-								break;
+					case "A":	if(alienMovement){
+									if(OneStepAlien.armyDirection==1){
+										if(consecutiveGreen==0){									//if before it there weren't an A
+											setBattleFieldElement(v,h,new Empty(v,h));				//replace with an empty cell
+										}
+										consecutiveGreen=0;											//nevermind the past!
+										
+										if(battlefield[v][h+1].toString().equals(" ")){				// if next is empty
+											setBattleFieldElement(v,h+1,new OneStepAlien(v,h+1));	//move the A
+											h++;													//jump it the next loop 
+											break;
+										}
+										
+										if(battlefield[v][h+1].toString().equals("s") || battlefield[v][h+1].toString().equals("S")){			//if next is a shot
+											setBattleFieldElement(v,h+1,new Empty(v,h+1));			// ...move to the ..OoOoh noooes..BOOOM...just empty cell!
+											h++;												// leave this empty cell here, go on!
+											break;
+										}
+										
+										if(battlefield[v][h+1].toString().equals("A")){			//and next is a A
+											consecutiveGreen=1;									//...remember to not replace next A with empty cell!
+										}
+									}//end IF army=1
+									else{	//if they move to the left
+										if(battlefield[v][h-1].toString().equals(" ")){				// it can't be a
+									
+											setBattleFieldElement(v,h-1,new OneStepAlien(v,h-1));	//move the A
+											setBattleFieldElement(v,h,new Empty(v,h));				//replace with an Empty
+											break;
+										}
+										if(battlefield[v][h-1].toString().equals("s") || battlefield[v][h-1].toString().equals("S")){			//if next is a shot
+											setBattleFieldElement(v,h-1,new Empty(v,h-1));			// ...move to the ..OoOoh noooes..BOOOM...just empty cell!
+										}
+										break;
+									}//end else (army=-1)
+								}//end if they move
+								else{	//if they don't move
+									break;
+								}
 					
 								//RedSpacecraft
 					case "R":   if(battlefield[v][h].getXOffset()==0) {						//if near border
@@ -316,14 +357,13 @@ public class BattleField {
 					
 					case "S":	as=(AlienShot)battlefield[v][h];
 								if(as.moved==0){
-										System.out.println(as.getYOffset());
 									if(battlefield[v][h].getYOffset()==0){
 										setBattleFieldElement(v,h,new Empty(v,h)); 
 										break;
 									}
 									else{
 										String elementType = battlefield[v+1][h].toString();
-										setBattleFieldElement(v,h, new Empty(v,h));
+											setBattleFieldElement(v,h, new Empty(v,h));
 										if(elementType.equals("A") || elementType.equals("G") || elementType.equals("C")||elementType.equals("S")){
 											setBattleFieldElement(v+1,h,new Empty(v+1,h));  								
 										}
@@ -390,6 +430,56 @@ public class BattleField {
 		
 	}//end of method
 
+	
+	
+	
+	public boolean doTheyMove(){
+		OneStepAlien osa=null;
+		boolean dirChanged=false;
+		for(int v=0; v<rows; v++){				// each row starting from 0 
+			if(dirChanged){	
+				break;
+			}	
+			for(int h=0; h<columns; h++){ 			// each column starting from 0
+				if(battlefield[v][h] instanceof OneStepAlien){	//if it is an Alien
+					osa=(OneStepAlien)battlefield[v][h];		//put it in the "osa" variable
+					if(osa.getXOffset()==0 || (osa.getXOffset()!=0 && battlefield[v][h+OneStepAlien.armyDirection] instanceof Casemate)){	//check if near border or near casemate 
+						OneStepAlien.changeDirection();
+						dirChanged=true;
+						break;
+					}
+				}
+			}//end h for
+		}//end v for
+		
+		
+		if(!dirChanged){			//if the direction hasn't been changed they will move 
+			return true;
+		}
+		else{			//if the direction has been changed
+			dirChanged=false;
+			for(int v=0; v<rows; v++){				// each row starting from 0 
+				if(dirChanged){	
+					break;
+				}	
+				for(int h=0; h<columns; h++){ 			// each column starting from 0
+					if(battlefield[v][h] instanceof OneStepAlien){	//if it is an Alien
+						osa=(OneStepAlien)battlefield[v][h];		//put it in the "osa" variable
+						if(osa.getXOffset()==0 || (osa.getXOffset()!=0 && battlefield[v][h+OneStepAlien.armyDirection] instanceof Casemate)){	//check if near border or near casemate 
+							OneStepAlien.changeDirection();
+							dirChanged=true;
+							break;
+						}
+					}
+				}//end h for
+			}//end v for
+			
+			if(!dirChanged){
+				return true;
+			}
+			return false;		//don't move if reach this instruction
+		}				
+	}//end method
 	
 }//end of class
 
