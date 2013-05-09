@@ -10,7 +10,7 @@ public class RedSpacecraft extends Alien{
 	//METHODS
 	
 	public int getXOffset(){
-		return (BattleField.columns - (this.x + 1));
+		return this.x;
 	}
 	
 	public int getYOffset(){

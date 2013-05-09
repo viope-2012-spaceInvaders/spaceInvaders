@@ -12,10 +12,10 @@ public class BattleField {
 
 	//FIELD
 	private int gunCounter=0;
-	protected BattleFieldElement[][] battlefield;  // do not have to containt any null value
+	protected BattleFieldElement[][] battlefield;  //do not have to containt any null value
 	protected static int rows;
 	protected static int columns;						
-	private String filename;					 //name of the file where the configurations used (saved,restored...)
+	private String filename;						//name of the file where the configurations used (saved,restored...)
 
 	
 	// CONSTRUCTOR
@@ -166,6 +166,16 @@ public class BattleField {
 							battlefield[v][h]= b;
 							break;
 							
+				case "s":
+				case "S":	if(battlefield[v][h]==null || battlefield[v][h].toString().equals(" ")){
+								battlefield[v][h]= b;
+								break;
+							}
+							else{
+								battlefield[v][h]=new Empty(v,h);
+								break;
+							}
+							
 				default: 	battlefield[v][h]= b;
 			}	
 			
@@ -305,38 +315,19 @@ public class BattleField {
 										break;
 									}//end else (army=-1)
 								}//end if they move
-								else{	//if they don't move
-									break;
-								}
+								
+								break;
 					
 								//RedSpacecraft
-					case "R":   if(battlefield[v][h].getXOffset()==0) {						//if near border
-									if(consecutiveRed==0){									//and before it there weren't a R
-										setBattleFieldElement(v,h,new Empty(v,h));			//replace with an empty cell
-									}
-									break;													 //break ( will leave it or replace with empty)
-								} 
-								else {														//if far from border instead
-									BattleFieldElement current=battlefield[v][h];			//save that item
-									if(consecutiveRed==0){									//was the item before him a R?
-										setBattleFieldElement(v,h,new Empty(v,h));			//if no replace with an empty cell and ....
-									}
-									consecutiveRed=0;										//and nevermind the past!
-									if(battlefield[v][h+1].toString().equals(" ")){			// if next is empty
-										setBattleFieldElement(v,h+1,new RedSpacecraft(v,h+1));			//replace with an empty cell
-										h++;												//then jump it the next loop 
-										break;
-									}
-									if(battlefield[v][h+1].toString().equals("s")){			//if next is a shot
-										setBattleFieldElement(v,h+1,new Empty(v,h+1));			// ...move to the ..OoOoh noooes..BOOOM...just empty cell!
-										h++;												// leave this empty cell here, go on!
-										break;
-									}
-									if(battlefield[v][h+1].toString().equals("R")){			//if next is a R
-										consecutiveRed=1;									//...remember to not replace next R with empty cell!
-									}
+					case "R":   if((battlefield[v][h].getXOffset()==0)|| (battlefield[v][h-1].toString().equals("s"))) { //if near left border or near a shot just break
+									setBattleFieldElement(v,h,new Empty(v,h));				//replace with an empty cell
+									break;
+								}
+								else {														//if far from border instead and not near a shot
+									setBattleFieldElement(v,h,new Empty(v,h));				//replace with an empty cell
+									setBattleFieldElement(v,h-1,new RedSpacecraft(v,h-1));	//and put the RedSpacecraft to the left
+									break;//end case R						
 								}//end else
-								break;//end case R						
 					
 					case "s": 	if(battlefield[v][h].getYOffset()==0){
 									setBattleFieldElement(v,h,new Empty(v,h)); 
