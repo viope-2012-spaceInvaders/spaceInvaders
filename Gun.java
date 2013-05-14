@@ -36,9 +36,23 @@ public class Gun extends BattleFieldElement{
 		direction *= -1;			
 	}
 	
+	public int getDirection() {
+		return this.direction;
+	}
+	
+	public void setDirection(int x) {
+		this.direction = x;
+	}
+	
 	@Override
 	public String toString() {
 		return "G";
+	}
+	
+	
+	public void move(int v, int h){
+		this.x = h;
+		
 	}
 	
 	

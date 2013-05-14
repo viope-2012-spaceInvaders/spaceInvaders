@@ -8,6 +8,10 @@ import java.util.StringTokenizer;
 import java.lang.Integer;
 import java.lang.String;
 
+import org.junit.Test;
+
+
+
 public class BattleField {
 
 	//FIELD
@@ -17,7 +21,6 @@ public class BattleField {
 	protected static int columns;						
 	private String filename;						//name of the file where the configurations used (saved,restored...)
 
-	
 	// CONSTRUCTOR
 	public BattleField(String filename) throws IllegalElementException, IllegalPositionException {
 		
@@ -266,7 +269,7 @@ public class BattleField {
 		
 	}	
 	
-	void move() throws IllegalElementException, IllegalPositionException{ 
+	public void move() throws IllegalElementException, IllegalPositionException{ 
 	  
 		AlienShot as=null;
 		int consecutiveRed=0;
@@ -274,7 +277,7 @@ public class BattleField {
 		boolean alienMovement=doTheyMove();
 		//System.out.println(doTheyMove());
 		for(int v=0; v<rows; v++)	{							// each row starting from 0 
-			for(int h=0; h<columns; h++) {						// each column starting from 0
+			for(int h=0; h<columns; h++) {
 				switch(battlefield[v][h].toString()) {		// switch to the case returned from the toString() of the battlefield[x][y]					
 								//CaseMate & Empty
 					case " ":
@@ -324,8 +327,9 @@ public class BattleField {
 									break;
 								}
 								else {														//if far from border instead and not near a shot
+									battlefield[v][h].move(v,h-1);	//and put the RedSpacecraft to the left
+									battlefield[v][h-1]=battlefield[v][h];
 									setBattleFieldElement(v,h,new Empty(v,h));				//replace with an empty cell
-									setBattleFieldElement(v,h-1,new RedSpacecraft(v,h-1));	//and put the RedSpacecraft to the left
 									break;//end case R						
 								}//end else
 					
@@ -339,7 +343,9 @@ public class BattleField {
 										setBattleFieldElement(v-1,h,new Empty(v-1,h));  								
 									}
 									else{
-										setBattleFieldElement(v-1,h, new GunShot(v-1,h));
+										battlefield[v][h].move(v-1,h);	
+										battlefield[v-1][h]=battlefield[v][h];
+										setBattleFieldElement(v,h,new Empty(v,h));
 									}	
 									
 						
@@ -347,7 +353,7 @@ public class BattleField {
 								break;
 					
 					case "S":	as=(AlienShot)battlefield[v][h];
-								if(as.moved==0){
+								if(as.getMoved()==0){
 									if(battlefield[v][h].getYOffset()==0){
 										setBattleFieldElement(v,h,new Empty(v,h)); 
 										break;
@@ -359,9 +365,11 @@ public class BattleField {
 											setBattleFieldElement(v+1,h,new Empty(v+1,h));  								
 										}
 										else{
-											setBattleFieldElement(v+1,h, new AlienShot(v+1,h));
+											battlefield[v][h].move(v+1,h);	
+											battlefield[v+1][h]=battlefield[v][h];
+											setBattleFieldElement(v,h,new Empty(v,h));
 											as=(AlienShot)battlefield[v+1][h];
-											as.moved=1;
+											as.setMoved(1);
 										}	
 										
 							
@@ -370,37 +378,19 @@ public class BattleField {
 								break;
 					
 					case "G":	
-								int toAdd=Gun.direction;
-								if(battlefield[v][h].getXOffset()!=0){				// otherway, if the offset is different from 0
-									setBattleFieldElement(v,h,new Empty(v,h));	//move it 1 step to its current direction
-									gunCounter--;
-									if(battlefield[v][h+toAdd].toString().equals(" ")){			//if is near an empty cell
-										setBattleFieldElement(v,h+toAdd,new Gun(v,h+toAdd));		//move it
-										h++;												//next pos won't move
-										break;
-									}
-									if(battlefield[v][h+toAdd].toString().equals("S")){			//if near an Alien shot
-										setBattleFieldElement(v,h,new Empty(v,h));			//replace next pos with an empty cell
-										h++;												//next pos won't move
-										break;
-									}
-								} 
-								else {									//otherway call the changeDirection before moving it
+								Gun g= (Gun)battlefield[v][h];
+								
+								
+								if (g.getXOffset() != 0) {
+									this.gunCollide(v, h, g);	
+								} else {
 									Gun.changeDirection();
-									toAdd=Gun.direction;
-									setBattleFieldElement(v,h,new Empty(v,h));
-									gunCounter--;
-									if(battlefield[v][h+toAdd].toString().equals(" ")){			//if is near an empty cell
-										setBattleFieldElement(v,h+toAdd,new Gun(v,h+toAdd));		//move it
-										h++;												//next pos won't move
-										break;
-									}
-									if(battlefield[v][h+toAdd].toString().equals("S")){			//if near an Alien shot
-										setBattleFieldElement(h,v,new Empty(v,h));			//replace next pos with an empty cell
-										h++;												//next pos won't move
-									}
+									this.gunCollide(v, h, g);
+								}
+
+						
 								break;
-								}		
+										
 					
 					
 					//
@@ -408,6 +398,7 @@ public class BattleField {
 					
 
 				}//end switch
+				
 			}//For2
 		} //for1
 		
@@ -416,12 +407,12 @@ public class BattleField {
 			for(int h=0; h<columns; h++) 			// each column starting from 0
 				if(battlefield[v][h] instanceof AlienShot){	//if it is an AlienShot
 					as=(AlienShot)battlefield[v][h];
-					as.moved=0;									//set it as "not moved"
+					as.setMoved(0);									//set it as "not moved"
 				}
 		
 	}//end of method
 
-	
+
 	
 	
 	public boolean doTheyMove(){
@@ -471,6 +462,21 @@ public class BattleField {
 			return false;		//don't move if reach this instruction
 		}				
 	}//end method
+	
+	
+	public void gunCollide(int v, int h, Gun g) throws IllegalElementException, IllegalPositionException {
+		
+		if (battlefield[v][h+g.getDirection()].equals("S")) {
+			setBattleFieldElement(v,h,new Empty(v,h));
+			setBattleFieldElement(v,h+g.getDirection(),new Empty(v,h+g.getDirection()));
+			gunCounter--;
+			setBattleFieldElement(rows-1,0,new Gun(rows-1,0));
+		} else {
+			battlefield[v][h].move(v,h+g.getDirection());	
+			battlefield[v][h+g.getDirection()]=battlefield[v][h];
+			setBattleFieldElement(v,h,new Empty(v,h));
+		}
+	}
 	
 }//end of class
 
