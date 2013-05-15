@@ -15,7 +15,7 @@ import java.lang.String;
 public class BattleField {
 
 	//FIELD
-	private int gunCounter=0;
+	protected int gunCounter=0;
 	protected BattleFieldElement[][] battlefield;  //do not have to containt any null value
 	protected static int rows;
 	protected static int columns;						
@@ -486,9 +486,9 @@ public class BattleField {
 			gunCounter--;
 			setBattleFieldElement(rows-1,0,new Gun(rows-1,0));
 		} else {
-			battlefield[v][h].move(v,h+g.getDirection());	
-			battlefield[v][h+g.getDirection()]=battlefield[v][h];
-			setBattleFieldElement(v,h,new Empty(v,h));
+			//battlefield[v][h].move(v,h+g.getDirection());	
+			//battlefield[v][h+g.getDirection()]=battlefield[v][h];
+			//setBattleFieldElement(v,h,new Empty(v,h));
 		}
 	}
 	
