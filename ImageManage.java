@@ -34,10 +34,10 @@ public class ImageManage {
 					this.image = new SingleImageCellRepresentation("/image/_.png");
 					gp.put(j,i, this.image);
 					break;
-				case "G":
-					this.image = new SingleImageCellRepresentation("/image/G.png");
-					gp.put(j,i, this.image);
-					break;
+//				case "G":
+//					this.image = new SingleImageCellRepresentation("/image/G.png");
+//					gp.put(j,i, this.image);
+//					break;
 
 
 

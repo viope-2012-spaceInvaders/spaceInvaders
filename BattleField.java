@@ -187,7 +187,9 @@ public class BattleField {
 							battlefield[v][h]= b;
 							break;
 							
-				case 's':
+				case 's':	if(battlefield[v][h].toString().equals("s"))
+								break;
+					
 				case 'S':	if(battlefield[v][h]==null || battlefield[v][h].toString().equals(" ")){
 								battlefield[v][h]= b;
 								break;
@@ -376,11 +378,17 @@ public class BattleField {
 									}
 									else{
 										String elementType = battlefield[v+1][h].toString();
-										if(elementType.equals("A") || elementType.equals("G") || elementType.equals("C")||elementType.equals("S")){
+										if(elementType.equals("A") || elementType.equals("G")  || elementType.equals("C")|| elementType.equals("s")){
 											setBattleFieldElement(v+1,h,new Empty(v+1,h));  								
 											setBattleFieldElement(v,h, new Empty(v,h));
+											if( elementType.equals("G") ) {
+												gunCounter--;
+												setBattleFieldElement(rows-1, 0, new Gun(rows-1,0));
+												
+											}
 										}
 										else{
+											
 											battlefield[v][h].move(v+1,h);	
 											battlefield[v+1][h]=battlefield[v][h];
 											setBattleFieldElement(v,h,new Empty(v,h));
@@ -393,8 +401,7 @@ public class BattleField {
 								}
 								break;
 					
-					case 'G':	
-								Gun g= (Gun)battlefield[v][h];
+				/*	case 'G':	Gun g= (Gun)battlefield[v][h];
 								
 								
 								if (g.getXOffset() != 0) {
@@ -407,7 +414,7 @@ public class BattleField {
 						
 								break;
 										
-					
+					*/
 					
 					//
 								default:  break;
@@ -477,7 +484,7 @@ public class BattleField {
 		}				
 	}//end method
 	
-
+/*
 	public void gunCollide(int v, int h, Gun g) throws IllegalElementException, IllegalPositionException {
 		
 		if (battlefield[v][h+g.getDirection()].equals("S")) {
@@ -485,12 +492,14 @@ public class BattleField {
 			setBattleFieldElement(v,h+g.getDirection(),new Empty(v,h+g.getDirection()));
 			gunCounter--;
 			setBattleFieldElement(rows-1,0,new Gun(rows-1,0));
+			System.out.println("DEAD");
 		} else {
-			//battlefield[v][h].move(v,h+g.getDirection());	
-			//battlefield[v][h+g.getDirection()]=battlefield[v][h];
-			//setBattleFieldElement(v,h,new Empty(v,h));
+//			battlefield[v][h].move(v,h+g.getDirection());	
+//			battlefield[v][h+g.getDirection()]=battlefield[v][h];
+//			setBattleFieldElement(v,h,new Empty(v,h));
 		}
 	}
+	*/
 	
 
 	public void alienCollide(int v, int h) throws IllegalElementException, IllegalPositionException {
