@@ -19,7 +19,15 @@ public abstract class BattleFieldElement{
 		return this.x;
 	}
 											
-	 public abstract int getXOffset();		
+	 public int getY() {
+		return y;
+	}
+
+	public int getX() {
+		return x;
+	}
+
+	public abstract int getXOffset();		
 	 public abstract int getYOffset();		
 	 public abstract String toString();
 	

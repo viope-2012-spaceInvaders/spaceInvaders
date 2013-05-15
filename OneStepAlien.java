@@ -18,7 +18,7 @@ public class OneStepAlien extends Alien{
 	
 	public int getXOffset(){
 		if (armyDirection == 1) {
-			return (BattleField.columns - (this.x+1));
+			return (BattleField.getColumns() - (this.x+1));
 		}
 		else {
 			return -this.x;
@@ -29,6 +29,10 @@ public class OneStepAlien extends Alien{
 		return 0;
 	}
 	
+	public static int getArmyDirection() {
+		return armyDirection;
+	}
+
 	public static void changeDirection(){
 		armyDirection *= -1;			//every call of this method change the direction	
 									// -1= right to left		1= left to right
