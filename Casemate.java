@@ -16,6 +16,10 @@ public class Casemate extends BattleFieldElement {
 		return 0;
 	}
 	
+	public void move(int v, int h){
+		System.out.println("S");
+	}
+	
 	@Override
 	public String toString() {
 		return "C";

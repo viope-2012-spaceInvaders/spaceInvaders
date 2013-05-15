@@ -21,5 +21,10 @@ public class RedSpacecraft extends Alien{
 	public String toString() {
 		return "R";
 	}
+	
+	public void move(int v, int h){
+		//System.out.println("R");
+		this.x = h;
+	}
 
 }
