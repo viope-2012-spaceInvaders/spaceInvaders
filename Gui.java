@@ -18,6 +18,7 @@ import java.awt.event.*;
 
 import javax.swing.*;
 import java.awt.SystemColor;
+import java.awt.Toolkit;
  
 
 public class Gui extends JFrame implements KeyListener {
@@ -49,6 +50,8 @@ public class Gui extends JFrame implements KeyListener {
 	 * @throws IllegalElementException 
 	 */
 	public Gui() throws IllegalElementException, IllegalPositionException {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Gui.class.getResource("/image/icon.png")));
+		setTitle("Space Invaders");
 		bf = new BattleField("es-in.txt");
 		this.addKeyListener(this);
 		
