@@ -1,9 +1,11 @@
-public class TestSpaceInvaders {
+public class TestSpaceInvaders{
 public static void main(String[] args) throws Exception {
 BattleField bf = new BattleField("es-in.txt");
 System.out.println("0st step :- "+bf);
-bf.move();
-System.out.println("1st step :- "+ bf);
+for(int i=0; i<15; i++){
+	bf.move();
+	System.out.println((i+1)+"st step :- "+ bf);
+}
 bf.move();
 System.out.println("2nd step :- "+bf);
 bf.move();

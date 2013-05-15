@@ -37,5 +37,11 @@ public class OneStepAlien extends Alien{
 	public String toString() {
 		return "A";
 	}
+	
 
+	public void move(int v, int h){
+		this.x=h;
+		this.y=v;
+		
+	}
 }
