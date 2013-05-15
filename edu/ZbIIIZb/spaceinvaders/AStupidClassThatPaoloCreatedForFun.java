@@ -7,6 +7,7 @@ public class AStupidClassThatPaoloCreatedForFun {
 	 */
 	public static void main( String[] args ) {
 		System.out.println( "The sun keeps shining over Leppavaara" ); 
+		System.out.println( "Ciao" );
 	}
 
 }
