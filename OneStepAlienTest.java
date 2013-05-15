@@ -16,7 +16,7 @@ public class OneStepAlienTest {
 		assertEquals("After move method calling the y became: 4", 4, element.getY());
 	}
 
-	@Test
+	@Test 
 	public void testGetXOffset() {
 		OneStepAlien osa = new OneStepAlien(3,2);
 		BattleField bf = null;

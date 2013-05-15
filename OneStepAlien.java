@@ -16,7 +16,7 @@ public class OneStepAlien extends Alien{
 
 	//METHODS
 	
-	public int getXOffset(){
+	public int getXOffset(){ 
 		if (armyDirection == 1) {
 			return (BattleField.getColumns() - (this.x+1));
 		}

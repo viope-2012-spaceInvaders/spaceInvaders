@@ -1,6 +1,6 @@
 public abstract class BattleFieldElement{
 
-	//FIELD
+	//FIELD 
 		protected int y;		//current position of the item on the battlefield.
 		protected int x;										
 	
