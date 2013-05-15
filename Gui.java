@@ -21,6 +21,7 @@ public class Gui extends JFrame implements KeyListener {
 	private BattleField bf;
 	private int xGun;
 	private Random ran;
+	protected static boolean shootAllowed = true;
 	
 	/**
 	 * Launch the application.
@@ -64,11 +65,10 @@ public class Gui extends JFrame implements KeyListener {
 		battlefieldGrid.setRows(bf.getRows());
 		battlefieldGrid.setColumns(bf.getColumns());	
 		contentPane.add(battlefieldGrid, BorderLayout.CENTER);
-		
+
 		xGun = 0;
 
 		for (int i = 0; i< bf.columns; i++) {
-			
 			if (bf.battlefield[bf.rows-1][i].toString().equals("G") ) {
 				xGun = i;
 				break;
@@ -82,7 +82,6 @@ public class Gui extends JFrame implements KeyListener {
 					ImageManage im = new ImageManage(bf,battlefieldGrid);
 					ImageManageGun imGun = new ImageManageGun(bf,battlefieldGrid);
 					bf.move();
-					
 					battlefieldGrid.repaint();
 				} catch (IllegalElementException e) {
 					e.printStackTrace();
@@ -93,8 +92,16 @@ public class Gui extends JFrame implements KeyListener {
 		};
 		
 		Thread novaThread = new Thread(){
-			public void run(){		
+			
+			public void run(){	
+				System.out.println("Score : ");
+				int sc = 0;
 				while (true) {
+					int newsc = bf.score;
+					if (newsc != sc) {
+						System.out.println(bf.score);
+						sc = newsc;
+					}
 					for (int i = 0; i< bf.columns; i++) {
 						if (bf.battlefield[bf.rows-1][i].toString().equals("G") ) {
 							xGun = i;
@@ -110,6 +117,18 @@ public class Gui extends JFrame implements KeyListener {
 							System.out.println("RedSPaceCraft problem in Gui.java");
 						}
 					}
+					
+					if (bf.dead) {
+						shootAllowed = false;
+						try {
+							
+							sleep(500);
+							shootAllowed = true;
+							bf.dead = false;
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+					}
 						
 					try {
 						SwingUtilities.invokeAndWait(iterator);
@@ -121,7 +140,7 @@ public class Gui extends JFrame implements KeyListener {
 					try {
 						ImageManage im = new ImageManage(bf,battlefieldGrid);
 						ImageManageGun imGun = new ImageManageGun(bf,battlefieldGrid);
-						sleep(200);
+						sleep(300);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
@@ -175,20 +194,14 @@ public class Gui extends JFrame implements KeyListener {
         	try {
         		if (bf.battlefield[bf.rows-1][xGun+1].toString().equals("S")) {
         			bf.gunCounter--;
-        			System.out.println(" jdnddh");
         			bf.setBattleFieldElement(bf.rows-1, xGun, new Empty(bf.rows-1,xGun));
         			bf.setBattleFieldElement(bf.rows-1, xGun+1, new Empty(bf.rows-1,xGun+1));
-        			System.out.println("12345");
 					bf.setBattleFieldElement(bf.rows-1, 0, new Gun(bf.rows-1,0));
-					xGun=0;
-					
-
-					
+					xGun=0;	
         		} else {
 	        		bf.battlefield[bf.rows-1][xGun].move(bf.rows-1,xGun+1);	
 	    			bf.battlefield[bf.rows-1][xGun+1]=bf.battlefield[bf.rows-1][xGun];
 	    			bf.setBattleFieldElement(bf.rows-1,xGun,new Empty(bf.rows-1,xGun));
-	    			
         		}
         		xGun++;
         		ImageManageGun imGun = new ImageManageGun(bf,battlefieldGrid);
@@ -198,10 +211,11 @@ public class Gui extends JFrame implements KeyListener {
 				System.out.println(xGun+" = "+e1);
 			}	
 			
-        } else if (keyCode == 32 && shot == false) {
+        } else if (keyCode == 32 && shot == false && shootAllowed ) {
         	shot = true;
         	try {
 				bf.setBattleFieldElement(bf.rows-2,xGun,new GunShot(bf.rows-2,xGun));
+				
 				ImageManage im = new ImageManage(bf,battlefieldGrid);
 				battlefieldGrid.repaint();
 			} catch (IllegalElementException | IllegalPositionException e1) {

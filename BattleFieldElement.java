@@ -1,6 +1,6 @@
 public abstract class BattleFieldElement{
 
-	//FIELD 
+	//FIELD
 		protected int y;		//current position of the item on the battlefield.
 		protected int x;										
 	
@@ -19,21 +19,8 @@ public abstract class BattleFieldElement{
 		return this.x;
 	}
 											
-	 public int getY() {
-		return y;
-	}
-
-	public int getX() {
-		return x;
-	}
-
-	public abstract int getXOffset();		
+	 public abstract int getXOffset();		
 	 public abstract int getYOffset();		
 	 public abstract String toString();
 	
-	
-	
-	
-	
-		
 }
