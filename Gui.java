@@ -11,15 +11,17 @@ import pt.ipleiria.estg.dei.stackemup.gridpanel.GridPanel;
 
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.*;
 
 import javax.swing.*;
+import java.awt.SystemColor;
  
 
 public class Gui extends JFrame implements KeyListener {
-
+//	public final static Color black;
 	private JPanel contentPane;
 	private GridPanel battlefieldGrid;
 	private BattleField bf;
@@ -53,13 +55,18 @@ public class Gui extends JFrame implements KeyListener {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 50*bf.getColumns(),30+50*bf.getRows());
 		contentPane = new JPanel();
+		contentPane.setBackground(Color.BLACK);
 		contentPane.setBorder(new EmptyBorder(0, 0, 0, 0));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
 		
 		battlefieldGrid = new GridPanel();
+		battlefieldGrid.setForeground(Color.BLACK);
+		battlefieldGrid.setBackground(new Color(0, 0, 0));
+		battlefieldGrid.setShowGridLines(false);
 		battlefieldGrid.setRows(bf.getRows());
 		battlefieldGrid.setColumns(bf.getColumns());
+		
 		contentPane.add(battlefieldGrid, BorderLayout.CENTER);
 		
 		xGun = 0;
