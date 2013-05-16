@@ -1,7 +1,9 @@
-/*BattleField is a class describing the battlefield (that is to say, the game screen). It
-can be broadly described as a matrix: every element of this matrix will contain an alien,
-a gun, a shot, a casemate or will be empty. An instance of BattleField represents a
-snapshot of the current battlefield configuration.*/
+/**
+ * BattleField is a class describing the battlefield (that is to say, the game screen). It
+ * can be broadly described as a matrix: every element of this matrix will contain an alien,
+ * a gun, a shot, a casemate or will be empty. An instance of BattleField represents a
+ * snapshot of the current battlefield configuration.
+ */
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -20,6 +22,7 @@ import java.util.StringTokenizer;
 public class BattleField {
 
 	//FIELD
+	
 	protected int gunCounter=0;
 	protected BattleFieldElement[][] battlefield;  //do not have to containt any null value
 	protected static int rows;
@@ -29,6 +32,11 @@ public class BattleField {
 	protected static int life;
 	protected static boolean dead =	false;
 	// CONSTRUCTOR
+	/**
+	 * Constructor for the BattleField element
+	 * 
+	 * @throws IllegalElementException, IllegalPositionException
+	 */
 	public BattleField(String filename) throws IllegalElementException, IllegalPositionException {
 		score = 0;
 		life = 3;
@@ -38,40 +46,85 @@ public class BattleField {
 	}
 	
 	//METHODS
+	/**
+	 * getFilename method.  A method to get the filename.
+	 * 
+	 * @return filename - the filename
+	 */
 	public String getFilename() {				
 		return this.filename;					
 	}
-										 
+					
+	/**
+	 * setFilename method.  A method to set the filename
+	 * 
+	 * @param s - a String for the filename
+	 */
 	public void setFilename(String s) {			
 		this.filename= s;						
 	}
-	
-	
-		  
+	 
+	/*
+	 *getRows method.  A method to return the rows
+	 *
+	 * @return rows - returns the number of rows
+	 */
 	public static int getRows() {
 		return rows;
 	}
 
+	/**
+	 * setRows method.  A method to set the Rows.
+	 * 
+	 * @param rows - int for the number of rows
+	 */
 	public static void setRows(int rows) {
 		BattleField.rows = rows;
 	}
 
+	/**
+	 * getColumns method. Method to get the Columns.
+	 * 
+	 * @return columns - returns the number of columns.
+	 */
 	public static int getColumns() {
 		return columns;
 	}
 
+	/**
+	 * setColumns method - Method to set the columns.
+	 * 
+	 * @param columns - int for the number of columns.
+	 */
 	public static void setColumns(int columns) {
 		BattleField.columns = columns;
 	}
 
+	/**
+	 * getBattleFieldElement method.  Gets the vertical and horizontal position.
+	 * 
+	 * @param v - int for vertical
+	 * @param h - int for horizontal
+	 * @return battlefield - returns the vertical and horizontal position of the BattleFieldElement
+	 */
 	public BattleFieldElement getBattleFieldElement(int v, int h){
 		return battlefield[v][h];						//what if the position has been forced to null before the call? Manage it here or somewhere else?
 	}										
 
+	/**
+	 * toString method.  Returns getbattleField
+	 * 
+	 * @return getBattleField - returns the Battlefield
+	 */
 	public String toString(){	
 		return getBattleField();									
 	}									
 
+	/**
+	 * backup method.  Attempts to backup the file.
+	 * 
+	 * @param file - String of the filename.
+	 */
 	public void backup(String file) {
 		File f = new File (file); 
 			try {
@@ -84,6 +137,10 @@ public class BattleField {
 			}
 	}										
 
+	/**
+	 * getBattleField method.  Returns Encode+itemCounter + item + "$"
+	 * @return Encode+itemCounter + item + "$"
+	 */
 	public String getBattleField() {
 		int itemCounter=0; 
 		String item = this.battlefield[0][0].toString();												
@@ -113,6 +170,9 @@ public class BattleField {
 		return Encode+itemCounter + item + "$";
 	}
 
+	/**
+	 * write method.  Appends the current configuration to the current content of the file.
+	 */
 	public void write() {					// append the current configuration to the current content of the file;
 		
 		BufferedWriter bw = null;
@@ -127,7 +187,13 @@ public class BattleField {
 		} 
 
 	}
-	
+
+	/**
+	 * reload method.  Loads the last battlefield configuration.
+	 * 
+	 * @throws IllegalElementException
+	 * @throws IllegalPositionException
+	 */
 	public void reload() throws IllegalElementException, IllegalPositionException {		// read again from filename the last-configuration of the battlefield 																									
 		FileReader fr = null;
 		BufferedReader bf = null;
@@ -151,6 +217,11 @@ public class BattleField {
 		} 
 	}
 		
+	/**
+	 * clone method. Clones an object
+	 * 
+	 * @throw CloneNotSupportedException
+	 */
 	public Object clone() throws CloneNotSupportedException {			//it should be modified, it returns an Object, not just a BattleFieldElement (e.g. clone a whole battlefield)
 		 BattleFieldElement bf = null;
 		    try {
@@ -162,7 +233,15 @@ public class BattleField {
 	        return bf;
 	}											
 
-	
+	/**
+	 * setBattleFieldElement.  Checks that only the red spacecraft is in the top row
+	 * and the gun in the bottom row, or that they are empty
+	 * @param v - int vertical
+	 * @param h - int horizontal
+	 * @param b - BattleFieldElement
+	 * @throws IllegalElementException
+	 * @throws IllegalPositionException
+	 */
 	void setBattleFieldElement(int v, int h, BattleFieldElement b) throws IllegalElementException, IllegalPositionException {
 		
 		//check if something different from a Gun is placed in the bottom row
@@ -216,7 +295,13 @@ public class BattleField {
 			}	
 			
 	}
-		
+		/**
+		 * setBattleField method.  Initialises the battlefield configuration as specified by the parameters.
+		 * 
+		 * @param s - String 
+		 * @throws IllegalElementException
+		 * @throws IllegalPositionException
+		 */
 	public void setBattleField(String s) throws IllegalElementException, IllegalPositionException {   // a method initializing the battle-field configuration as specified in the parameter: 
 		try{
 			String config_line = s;
@@ -302,6 +387,11 @@ public class BattleField {
 		
 	}	
 	
+	/**
+	 * move method. 
+	 * @throws IllegalElementException
+	 * @throws IllegalPositionException
+	 */
 	public void move() throws IllegalElementException, IllegalPositionException{ 
 	  
 		AlienShot as=null;
@@ -329,7 +419,7 @@ public class BattleField {
 											break;
 										}
 										else
-											if(cA==0){						//if there weren´t consecutive		
+											if(cA==0){						//if they werenÂ´t consecutive		
 												alienCollide(v,h);			//we move it
 												h++;
 												break;
@@ -472,7 +562,11 @@ public class BattleField {
 
 
 	
-	
+	/**
+	 * doTheyMove method.  Method to determine if they move
+	 * 
+	 * @return boolean - True or false
+	 */
 	public boolean doTheyMove(){
 		OneStepAlien osa=null;
 		boolean dirChanged=false;
@@ -538,7 +632,9 @@ public class BattleField {
 	*/
 	
 
-
+/**
+ * doTheyShot method.  A method to determine it they shoot.
+ */
 	public void doTheyShot(){
 		OneStepAlien osa = null;
 		boolean bALien = false;
@@ -569,7 +665,14 @@ public class BattleField {
 	}
 	
 	
-	
+	/**
+	 * alienCollide method.  Determines what happens when an alien collides with another object.
+	 * 
+	 * @param v - int vertical position
+	 * @param h - int horizontal position
+	 * @throws IllegalElementException
+	 * @throws IllegalPositionException
+	 */
 	public void alienCollide(int v, int h) throws IllegalElementException, IllegalPositionException {
 	
 		if (battlefield[v][h+OneStepAlien.armyDirection].toString().equals(" ") ) {
