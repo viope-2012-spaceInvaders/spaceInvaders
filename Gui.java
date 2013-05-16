@@ -13,7 +13,11 @@ import java.awt.Toolkit;
 
 
 
-
+/**
+ * 
+ * Grafical interface class 
+ *
+ */
 public class Gui extends JFrame implements KeyListener {
 
 	private JPanel contentPane;
