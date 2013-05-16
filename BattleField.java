@@ -3,10 +3,15 @@ can be broadly described as a matrix: every element of this matrix will contain 
 a gun, a shot, a casemate or will be empty. An instance of BattleField represents a
 snapshot of the current battlefield configuration.*/
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Random;
 import java.util.StringTokenizer;
-import java.lang.Integer;
-import java.lang.String;
 
 //import org.junit.Test;
 
@@ -20,10 +25,11 @@ public class BattleField {
 	protected static int rows;
 	protected static int columns;						
 	private String filename;						//name of the file where the configurations used (saved,restored...)
-
+	protected static int score;
+	protected static boolean dead =	false;
 	// CONSTRUCTOR
 	public BattleField(String filename) throws IllegalElementException, IllegalPositionException {
-		
+		score = 0;
 		setFilename(filename);
 		reload();
 		
@@ -187,7 +193,14 @@ public class BattleField {
 							battlefield[v][h]= b;
 							break;
 							
-				case 's':
+				case 's':	if(battlefield[v][h].toString().equals("s")) {
+								break;
+							}
+							
+							if(battlefield[v][h].toString().equals("S")) {
+								score += 10;
+								break;
+							}
 				case 'S':	if(battlefield[v][h]==null || battlefield[v][h].toString().equals(" ")){
 								battlefield[v][h]= b;
 								break;
@@ -357,6 +370,16 @@ public class BattleField {
 									if(elementType.equals("A") || elementType.equals("R") || elementType.equals("C")||elementType.equals("S")){
 										setBattleFieldElement(v-1,h,new Empty(v-1,h));
 										setBattleFieldElement(v,h, new Empty(v,h));
+										if (elementType.equals("A")) {
+											score += 50;
+										} 
+										if (elementType.equals("R")) {
+											score += 350;
+										}
+										if (elementType.equals("S")) {
+											score += 10;
+										}
+										
 									}
 									else{
 										battlefield[v][h].move(v-1,h);	
@@ -376,11 +399,24 @@ public class BattleField {
 									}
 									else{
 										String elementType = battlefield[v+1][h].toString();
-										if(elementType.equals("A") || elementType.equals("G") || elementType.equals("C")||elementType.equals("S")){
+										if(elementType.equals("A") || elementType.equals("G")  || elementType.equals("C")|| elementType.equals("s")){
+											if( elementType.equals("G") ) {
+												Gui.shootAllowed = false;
+												gunCounter--;
+												setBattleFieldElement(rows-1, 0, new Gun(rows-1,0));
+												dead = true;
+											}
+											
 											setBattleFieldElement(v+1,h,new Empty(v+1,h));  								
 											setBattleFieldElement(v,h, new Empty(v,h));
+											
+											
+											if (elementType.equals("s")) {
+												score += 10;
+											}
 										}
 										else{
+											
 											battlefield[v][h].move(v+1,h);	
 											battlefield[v+1][h]=battlefield[v][h];
 											setBattleFieldElement(v,h,new Empty(v,h));
@@ -393,8 +429,7 @@ public class BattleField {
 								}
 								break;
 					
-					case 'G':	
-								Gun g= (Gun)battlefield[v][h];
+				/*	case 'G':	Gun g= (Gun)battlefield[v][h];
 								
 								
 								if (g.getXOffset() != 0) {
@@ -407,7 +442,7 @@ public class BattleField {
 						
 								break;
 										
-					
+					*/
 					
 					//
 								default:  break;
@@ -419,12 +454,16 @@ public class BattleField {
 		} //for1
 		
 		
-		for(int v=0; v<rows; v++)				// each row starting from 0 
-			for(int h=0; h<columns; h++) 			// each column starting from 0
+		for(int v=0; v<rows; v++){ 			// each row starting from 0 
+			for(int h=0; h<columns; h++) { 			// each column starting from 0
 				if(battlefield[v][h] instanceof AlienShot){	//if it is an AlienShot
 					as=(AlienShot)battlefield[v][h];
 					as.setMoved(0);									//set it as "not moved"
 				}
+			}
+		}
+		
+		doTheyShot();
 		
 	}//end of method
 
@@ -448,15 +487,16 @@ public class BattleField {
 				}//end h for
 			}
 		}//end v for
+	
+		
 		
 		
 		if(!dirChanged){			//if the direction hasn't been changed they will move 
 			return true;
-		}
-		else{			//if the direction has been changed
+		} else{			//if the direction has been changed
 			dirChanged=false;
 			for(int v=0; v<rows; v++){				// each row starting from 0 
-				if(!dirChanged){	
+				if(!dirChanged) {	
 					for(int h=0; h<columns; h++){ 			// each column starting from 0
 						if(battlefield[v][h] instanceof OneStepAlien){	//if it is an Alien
 							osa=(OneStepAlien)battlefield[v][h];		//put it in the "osa" variable
@@ -477,7 +517,7 @@ public class BattleField {
 		}				
 	}//end method
 	
-
+/*
 	public void gunCollide(int v, int h, Gun g) throws IllegalElementException, IllegalPositionException {
 		
 		if (battlefield[v][h+g.getDirection()].equals("S")) {
@@ -485,14 +525,48 @@ public class BattleField {
 			setBattleFieldElement(v,h+g.getDirection(),new Empty(v,h+g.getDirection()));
 			gunCounter--;
 			setBattleFieldElement(rows-1,0,new Gun(rows-1,0));
+			System.out.println("DEAD");
 		} else {
-			//battlefield[v][h].move(v,h+g.getDirection());	
-			//battlefield[v][h+g.getDirection()]=battlefield[v][h];
-			//setBattleFieldElement(v,h,new Empty(v,h));
+//			battlefield[v][h].move(v,h+g.getDirection());	
+//			battlefield[v][h+g.getDirection()]=battlefield[v][h];
+//			setBattleFieldElement(v,h,new Empty(v,h));
 		}
 	}
+	*/
 	
 
+
+	public void doTheyShot(){
+		OneStepAlien osa = null;
+		boolean bALien = false;
+		for(int h=0; h<columns-1; h++){				// each row starting from 0 
+
+				for(int v=0; v<rows-1; v++){ 			// each column starting from 0
+					if(battlefield[v][h] instanceof OneStepAlien){	//if it is an Alien
+						osa=(OneStepAlien)battlefield[v][h];		//put it in the "osa" variable
+						bALien = true;
+					}
+				}//end h for
+				Random ran = new Random();
+				int numRand = ran.nextInt(100)+1;
+				if (numRand < 3 && bALien == true ) {
+				
+						try {
+							setBattleFieldElement(osa.y+1,osa.x,new AlienShot(osa.y+1,osa.x));
+							
+						} catch (IllegalElementException
+								| IllegalPositionException e) {
+						
+						}
+						bALien = false;
+				}
+		}//end v for
+
+				
+	}
+	
+	
+	
 	public void alienCollide(int v, int h) throws IllegalElementException, IllegalPositionException {
 	
 		if (battlefield[v][h+OneStepAlien.armyDirection].toString().equals(" ") ) {

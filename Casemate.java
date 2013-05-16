@@ -3,7 +3,7 @@ public class Casemate extends BattleFieldElement {
 	//FIELD
 	
 	//CONSTRUCTOR
-	  public Casemate(int v,int h) {
+	public Casemate(int v,int h) {
 			super(v,h);			
 	}
 	

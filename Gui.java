@@ -1,22 +1,18 @@
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.EventQueue;
 import java.lang.reflect.InvocationTargetException;
-
+import java.util.Random;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
-
 import pt.ipleiria.estg.dei.stackemup.gridpanel.GridPanel;
-
-
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.Dimension;
 import java.awt.event.*;
+import java.awt.Toolkit;
 
-import javax.swing.*;
- 
+
+
 
 public class Gui extends JFrame implements KeyListener {
 
@@ -24,6 +20,9 @@ public class Gui extends JFrame implements KeyListener {
 	private GridPanel battlefieldGrid;
 	private BattleField bf;
 	private int xGun;
+	private Random ran;
+	protected static boolean shootAllowed = true;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -47,75 +46,102 @@ public class Gui extends JFrame implements KeyListener {
 	 * @throws IllegalElementException 
 	 */
 	public Gui() throws IllegalElementException, IllegalPositionException {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Gui.class.getResource("/image/icon.png")));
+		setTitle("Space Invaders - Erasmus Project 2013");
 		bf = new BattleField("es-in.txt");
 		this.addKeyListener(this);
-		
+		ran = new Random(0);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 50*bf.getColumns(),30+50*bf.getRows());
 		contentPane = new JPanel();
+		contentPane.setBackground(Color.BLACK);
 		contentPane.setBorder(new EmptyBorder(0, 0, 0, 0));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
-		
 		battlefieldGrid = new GridPanel();
+		battlefieldGrid.setForeground(Color.BLACK);
+		battlefieldGrid.setBackground(new Color(0, 0, 0));
+		battlefieldGrid.setShowGridLines(false);
 		battlefieldGrid.setRows(bf.getRows());
-		battlefieldGrid.setColumns(bf.getColumns());
+		battlefieldGrid.setColumns(bf.getColumns());	
 		contentPane.add(battlefieldGrid, BorderLayout.CENTER);
-		
+
 		xGun = 0;
-		System.out.println(bf.rows-1 +"k");
-		
-		
+
 		for (int i = 0; i< bf.columns; i++) {
-			
 			if (bf.battlefield[bf.rows-1][i].toString().equals("G") ) {
 				xGun = i;
-				
-				//System.out.println( bf.battlefield[bf.rows-1][xGun].getXOffset());
 				break;
 			}
 		}
-		
-		//bf.setBattleFieldElement(bf.rows-1,xGun,new Gun(bf.rows-1,xGun));
-		
+
 		final Runnable iterator = new Runnable(){
-			
-			
+				
 			public void run() {
-//	we put the move stuff here
 				try {
 					ImageManage im = new ImageManage(bf,battlefieldGrid);
+					ImageManageGun imGun = new ImageManageGun(bf,battlefieldGrid);
 					bf.move();
 					battlefieldGrid.repaint();
 				} catch (IllegalElementException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (IllegalPositionException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
-				}
-				
-				
+				}			
 			}
 		};
 		
 		Thread novaThread = new Thread(){
-			public void run(){
-				
+			
+			public void run(){	
+				System.out.println("Score : ");
+				int sc = 0;
 				while (true) {
+					int newsc = bf.score;
+					if (newsc != sc) {
+						System.out.println(bf.score);
+						sc = newsc;
+					}
+					for (int i = 0; i< bf.columns; i++) {
+						if (bf.battlefield[bf.rows-1][i].toString().equals("G") ) {
+							xGun = i;
+							break;
+						}
+					}
+					
+					int numRand = ran.nextInt(100)+1;
+					if (numRand < 7) {
+						try {
+							bf.setBattleFieldElement(0,bf.columns-1,new RedSpacecraft(0,bf.columns-1));
+						} catch (Exception e ) {
+							System.out.println("RedSPaceCraft problem in Gui.java");
+						}
+					}
+					
+					if (bf.dead) {
+						shootAllowed = false;
+						try {
+							
+							sleep(500);
+							shootAllowed = true;
+							bf.dead = false;
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+					}
+						
 					try {
 						SwingUtilities.invokeAndWait(iterator);
 					} catch (InvocationTargetException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					try {
-						sleep(1000);
+						ImageManage im = new ImageManage(bf,battlefieldGrid);
+						ImageManageGun imGun = new ImageManageGun(bf,battlefieldGrid);
+						sleep(300);
 					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
@@ -136,57 +162,69 @@ public class Gui extends JFrame implements KeyListener {
 		
 		int keyCode = e.getKeyCode();
         
-        if (keyCode == 37 && left == false && xGun > 0) {
-        	System.out.println("<-");
-        	left=true;
-        	
+        if (keyCode == 37 && left == false && xGun > 0) {	
+        	left=true;		
         	try {
-        		bf.setBattleFieldElement(bf.rows-1,xGun,new Empty(bf.rows-1,xGun));
-        		bf.gunCounter--;
-        		bf.setBattleFieldElement(bf.rows-1,xGun-1,new Gun(bf.rows-1,xGun-1));
+        		if (bf.battlefield[bf.rows-1][xGun-1].toString().equals("S")) {
+        			bf.gunCounter--;
+        			bf.setBattleFieldElement(bf.rows-1, xGun, new Empty(bf.rows-1,xGun));
+					bf.setBattleFieldElement(bf.rows-1, 0, new Gun(bf.rows-1,0));
+					bf.setBattleFieldElement(bf.rows-1, xGun-1, new Empty(bf.rows-1,xGun-1));
+					xGun=0;
+					
+        		} else {
+        			//System.out.println("Move" + bf.battlefield[bf.rows-1][xGun-1].toString());
+        			bf.battlefield[bf.rows-1][xGun].move(bf.rows-1,xGun-1);	
+        			bf.battlefield[bf.rows-1][xGun-1]=bf.battlefield[bf.rows-1][xGun];
+        			bf.setBattleFieldElement(bf.rows-1,xGun,new Empty(bf.rows-1,xGun));
+        			
+        		}
         		
-        		
-        		ImageManage im = new ImageManage(bf,battlefieldGrid);
         		xGun--;
-        		System.out.println(xGun);
+    			ImageManageGun imGun = new ImageManageGun(bf,battlefieldGrid);
         		battlefieldGrid.repaint();
 
 			} catch (IllegalElementException | IllegalPositionException | ArrayIndexOutOfBoundsException e1) {
-				// TODO Auto-generated catch block
 				System.out.println("ArrayIndexOutOfBoundsException exception in Gui.java");
 			}
         	
         } else if (keyCode == 39 && right == false && xGun < bf.columns-1) {
-        	System.out.println("->");
         	right=true;
 
         	try {
-        		
-        		bf.setBattleFieldElement(bf.rows-1,xGun,new Empty(bf.rows-1,xGun));
-        		bf.gunCounter--;
-        		bf.setBattleFieldElement(bf.rows-1,xGun+1,new Gun(bf.rows-1,xGun+1));
-        		
+        		if (bf.battlefield[bf.rows-1][xGun+1].toString().equals("S")) {
+        			bf.gunCounter--;
+        			bf.setBattleFieldElement(bf.rows-1, xGun, new Empty(bf.rows-1,xGun));
+        			bf.setBattleFieldElement(bf.rows-1, xGun+1, new Empty(bf.rows-1,xGun+1));
+					bf.setBattleFieldElement(bf.rows-1, 0, new Gun(bf.rows-1,0));
+					xGun=0;	
+        		} else {
+	        		bf.battlefield[bf.rows-1][xGun].move(bf.rows-1,xGun+1);	
+	    			bf.battlefield[bf.rows-1][xGun+1]=bf.battlefield[bf.rows-1][xGun];
+	    			bf.setBattleFieldElement(bf.rows-1,xGun,new Empty(bf.rows-1,xGun));
+        		}
         		xGun++;
-        		System.out.println(xGun);
-        		ImageManage im = new ImageManage(bf,battlefieldGrid);
+        		ImageManageGun imGun = new ImageManageGun(bf,battlefieldGrid);
         		battlefieldGrid.repaint();
         		
 			} catch (IllegalElementException | IllegalPositionException | ArrayIndexOutOfBoundsException e1) {
-				// TODO Auto-generated catch block
-				System.out.println("ArrayIndexOutOfBoundsException exception in Gui.java");
-			}		//move it
-				//h++;												//next pos won't move
-			//	break;
-			//}
+				System.out.println(xGun+" = "+e1);
+			}	
 			
-        } else if (keyCode == 32 && shot == false) {
-        	System.out.println("|");
+        } else if (keyCode == 32 && shot == false && shootAllowed ) {
         	shot = true;
-        	
+        	try {
+				bf.setBattleFieldElement(bf.rows-2,xGun,new GunShot(bf.rows-2,xGun));
+				
+				ImageManage im = new ImageManage(bf,battlefieldGrid);
+				battlefieldGrid.repaint();
+			} catch (IllegalElementException | IllegalPositionException e1) {
+				System.out.println("Probel shot inside the Gui.java");
+			} 
         }
-
 	}
 
+	
 	public void keyReleased(KeyEvent e) {
 		
 

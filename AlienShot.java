@@ -7,7 +7,7 @@ class AlienShot extends BattleFieldElement	{
 	//CONSTRUCTORs
 	public AlienShot(int v, int h){
 		super(v,h);	
-		moved=0;
+		this.moved=0;
 	}	
 	
 	//METHODS
@@ -16,7 +16,7 @@ class AlienShot extends BattleFieldElement	{
 	}
 
 	public int getYOffset() {
-		return (BattleField.rows - (this.y + 1));
+		return (BattleField.getRows() - (this.y + 1));
 	}	
 	
 	public int getMoved() {

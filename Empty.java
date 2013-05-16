@@ -18,7 +18,7 @@ public class Empty extends BattleFieldElement{
 	}
 	
 	public void move(int v, int h){
-		System.out.println(" ");	
+			
 	}
 	
 	@Override

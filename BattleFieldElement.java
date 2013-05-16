@@ -18,14 +18,25 @@ public abstract class BattleFieldElement{
 	public int getXcoords(){
 		return this.x;
 	}
-											
-	 public abstract int getXOffset();		
+	
+	 public int getY() {
+		return y;
+	}
+
+	public void setY(int y) {
+		this.y = y;
+	}
+
+	public int getX() {
+		return x;
+	}
+
+	public void setX(int x) {
+		this.x = x;
+	}
+
+	public abstract int getXOffset();		
 	 public abstract int getYOffset();		
 	 public abstract String toString();
 	
-	
-	
-	
-	
-		
 }
