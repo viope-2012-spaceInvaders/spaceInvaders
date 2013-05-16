@@ -58,7 +58,7 @@ public class RedSpacecraft extends Alien {
 
 	@Override
 	public boolean equals(Object o){
-		if(o instanceof RedSpacecraft) return false;
+		if(!(o instanceof RedSpacecraft)) return false;
 		RedSpacecraft as = (RedSpacecraft) o;
 		return (as.x == x)&&(as.y == y);
 	}

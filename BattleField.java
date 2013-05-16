@@ -130,6 +130,10 @@ public class BattleField {
 		return battlefield[v][h];						//what if the position has been forced to null before the call? Manage it here or somewhere else?
 	}										
 
+	public BattleFieldElement[][] getBattlefieldMatrix() {
+		return battlefield;
+	}
+
 	/**
 	 * toString method.  Returns getbattleField
 	 * 
@@ -241,7 +245,7 @@ public class BattleField {
 	 * 
 	 * @throw CloneNotSupportedException
 	 */
-	public Object clone() throws CloneNotSupportedException {			//it should be modified, it returns an Object, not just a BattleFieldElement (e.g. clone a whole battlefield)
+	/*public Object clone() throws CloneNotSupportedException {			//it should be modified, it returns an Object, not just a BattleFieldElement (e.g. clone a whole battlefield)
 		 BattleFieldElement bf = null;
 		    try {
 	        	bf = (BattleFieldElement) super.clone();
@@ -250,7 +254,7 @@ public class BattleField {
 	        }
 	        bf = (BattleFieldElement)this.clone();
 	        return bf;
-	}											
+	}*/											
 
 	/**
 	 * setBattleFieldElement.  Checks that only the red spacecraft is in the top row

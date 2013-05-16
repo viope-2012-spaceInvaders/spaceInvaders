@@ -74,5 +74,12 @@ public class Gun extends BattleFieldElement{
 		
 	}
 	
+	@Override
+	public boolean equals(Object o){
+		if(!(o instanceof Gun)) return false;
+		Gun g = (Gun)o;
+		return (g.x == x)&&(g.y == y)&&(g.direction == direction);
+	}
+	
 	
 }
