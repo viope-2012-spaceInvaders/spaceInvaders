@@ -1,5 +1,6 @@
 /**
- * AlienShot class extends the BattleFieldElement.  It represents all alienShot elements during the game.
+ * AlienShot class extends the BattleFieldElement.  
+ * It represents all alienShot elements during the game.
  */
 class AlienShot extends BattleFieldElement	{
 
