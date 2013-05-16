@@ -39,7 +39,7 @@ public class BattleField {
 	 */
 	public BattleField(String filename) throws IllegalElementException, IllegalPositionException {
 		score = 0;
-		life = 3;
+		life = 10;
 		setFilename(filename);
 		reload();
 		
@@ -245,11 +245,14 @@ public class BattleField {
 	void setBattleFieldElement(int v, int h, BattleFieldElement b) throws IllegalElementException, IllegalPositionException {
 		
 		//check if something different from a Gun is placed in the bottom row
-	    if ((v == rows-1) && (!b.toString().equals("G")) && (!b.toString().equals(" ")) && (!b.toString().equals("S")) ) 
+	    if ((v == rows-2) && (!b.toString().equals("G")) && (!b.toString().equals(" ")) && (!b.toString().equals("S")) ) 
 	  		throw new IllegalElementException("Only Gun, AlienShot or Empty cells can be placed in the bottom row");
 		//check if something different from a RedSpacecraft is placed in the top row
 		if ((v == 0) && (!b.toString().equals("R"))  && ((!b.toString().equals(" "))) && (!b.toString().equals("s")) ) 
 	  		throw new IllegalElementException("Only a RedSpacecraft, Gunshot or Empty Cells can be placed in the top row");
+		
+	//	if ((v == rows-1) && (!b.toString().equals("G") ) )
+	  //		throw new IllegalElementException("Only casemate there");
 			
 			switch(b.toString().charAt(0)){
 				case 'R':	if(v != 0) {
@@ -261,15 +264,15 @@ public class BattleField {
 				case 'G':	 if(gunCounter>0) {
 								throw new IllegalElementException("Only one Gun per BattleField");
 							}
-							if(v != rows-1) {
+							if(v != rows-2) {
 								throw new IllegalPositionException("The Gun must be placed in the bottom line of the BattleField");
 							}
 							gunCounter++;
 							battlefield[v][h]= b;
 							break;
 						
-				case 'C': 	if((v==0)||(v==rows-1)) {
-								throw new IllegalPositionException("Casemates can't be placed in bottom or top line");
+				case 'C': 	if(v!=rows-1) {
+								throw new IllegalPositionException("Casemates can just be placed in bottom line");
 							}
 							battlefield[v][h]= b;
 							break;
@@ -419,7 +422,8 @@ public class BattleField {
 											break;
 										}
 										else
-											if(cA==0){						//if they weren´t consecutive		
+											if(cA==0){						//if there weren´t consecutive		
+
 												alienCollide(v,h);			//we move it
 												h++;
 												break;
@@ -492,16 +496,18 @@ public class BattleField {
 									else{
 										String elementType = battlefield[v+1][h].toString();
 										if(elementType.equals("A") || elementType.equals("G")  || elementType.equals("C")|| elementType.equals("s")){
+											setBattleFieldElement(v+1,h,new Empty(v+1,h));							
+											setBattleFieldElement(v,h, new Empty(v,h));
 											if( elementType.equals("G") ) {
 												Gui.shootAllowed = false;
 												gunCounter--;
 												life--;
-												setBattleFieldElement(rows-1, 0, new Gun(rows-1,0));
+												
+												setBattleFieldElement(rows-2, 0, new Gun(rows-2,0));
 												dead = true;
 											}
 											
-											setBattleFieldElement(v+1,h,new Empty(v+1,h));  								
-											setBattleFieldElement(v,h, new Empty(v,h));
+											
 											
 											
 											if (elementType.equals("s")) {
@@ -638,7 +644,7 @@ public class BattleField {
 	public void doTheyShot(){
 		OneStepAlien osa = null;
 		boolean bALien = false;
-		for(int h=0; h<columns-1; h++){				// each row starting from 0 
+		for(int h=0; h<columns; h++){				// each row starting from 0 
 
 				for(int v=0; v<rows-1; v++){ 			// each column starting from 0
 					if(battlefield[v][h] instanceof OneStepAlien){	//if it is an Alien
