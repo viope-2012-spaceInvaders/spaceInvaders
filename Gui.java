@@ -58,6 +58,7 @@ public class Gui extends JFrame implements KeyListener {
 	 * @throws IllegalPositionException
 	 */
 	public Gui() throws IllegalElementException, IllegalPositionException {
+		
 		Color col = new Color(4210752);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Gui.class.getResource("/image/icon.png")));
 		setTitle("Space Invaders - Erasmus Project 2013");
@@ -71,7 +72,7 @@ public class Gui extends JFrame implements KeyListener {
 		contentPane.setBackground(col);
 		contentPane.setBorder(new EmptyBorder(0, 0, 0, 0));
 		contentPane.setLayout(new BorderLayout(0, 0));
-	
+		bf.playSound("music.wav");
 		setContentPane(contentPane);
 		
 		battlefieldGrid = new GridPanel();
@@ -101,6 +102,7 @@ public class Gui extends JFrame implements KeyListener {
 				
 			public void run() {
 				try {
+					
 					ImageManage im = new ImageManage(bf,battlefieldGrid);
 					ImageManageGun imGun = new ImageManageGun(bf,battlefieldGrid);
 					bf.move();
@@ -230,8 +232,8 @@ public class Gui extends JFrame implements KeyListener {
         		if (bf.battlefield[bf.rows-2][xGun-1].toString().equals("S")) {
         			bf.gunCounter--;
         			//bf.life--;
+        			bf.playSound("explosion.wav");
         			bf.setBattleFieldElement(bf.rows-2, xGun, new Empty(bf.rows-2,xGun));
-	        		System.out.println("asdasdasda");
 	        		bf.dead = true;
 					bf.setBattleFieldElement(bf.rows-2, xGun-1, new Empty(bf.rows-2,xGun-1));
 					bf.setBattleFieldElement(bf.rows-2, bf.columns/2, new Gun(bf.rows-2,bf.columns/2));
@@ -261,6 +263,7 @@ public class Gui extends JFrame implements KeyListener {
         		if (bf.battlefield[bf.rows-2][xGun+1].toString().equals("S")) {
         			bf.gunCounter--;
         			//bf.life--;
+        			bf.playSound("explosion.wav");
         			bf.dead = true;
         			bf.setBattleFieldElement(bf.rows-2, xGun, new Empty(bf.rows-2,xGun));
         			bf.setBattleFieldElement(bf.rows-2, xGun+1, new Empty(bf.rows-2,xGun+1));
@@ -281,6 +284,7 @@ public class Gui extends JFrame implements KeyListener {
 			
         } else if (keyCode == 32 && shot == false && shootAllowed && gameOver==false) {
         	shot = true;
+        	bf.playSound("shoot.wav");
         	try {
 				bf.setBattleFieldElement(bf.rows-3,xGun,new GunShot(bf.rows-3,xGun));
 				

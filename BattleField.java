@@ -14,9 +14,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Random;
 import java.util.StringTokenizer;
-
-//import org.junit.Test;
-
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 
 
 public class BattleField {
@@ -45,14 +45,19 @@ public class BattleField {
 		
 	}
 	
-	public static int getScore() {
-		return score;
-	}
-
-	public static int getLife() {
-		return life;
-	}
-
+	 public void playSound(String s) {
+		    try {
+		        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("./src/sounds/"+s).getAbsoluteFile());
+		        Clip clip = AudioSystem.getClip();
+		        clip.open(audioInputStream);
+		        clip.start();
+		    } catch(Exception e){
+		        System.out.println("Error sound in BattleField.java");
+		        e.printStackTrace();
+		    }
+		}
+	
+	
 	//METHODS
 	/**
 	 * getFilename method.  A method to get the filename.
@@ -69,7 +74,7 @@ public class BattleField {
 	 * @param s - a String for the filename
 	 */
 	public void setFilename(String s) {			
-		this.filename= s;					
+		this.filename= s;						
 	}
 	 
 	/*
@@ -475,10 +480,12 @@ public class BattleField {
 										setBattleFieldElement(v-1,h,new Empty(v-1,h));
 										setBattleFieldElement(v,h, new Empty(v,h));
 										if (elementType.equals("A")) {
+											playSound("invaderkilled.wav");
 											score += 50;
 										} 
 										if (elementType.equals("R")) {
 											score += 350;
+											playSound("invaderkilled.wav");
 										}
 										if (elementType.equals("S")) {
 											score += 10;
@@ -510,6 +517,7 @@ public class BattleField {
 											if( elementType.equals("G") ) {
 												Gui.shootAllowed = false;
 												gunCounter--;
+												playSound("explosion.wav");
 												//life--;
 												
 												setBattleFieldElement(rows-2, columns/2, new Gun(rows-2,columns/2));
@@ -663,7 +671,7 @@ public class BattleField {
 				}//end h for
 				Random ran = new Random();
 				int numRand = ran.nextInt(100)+1;
-				if (numRand < 10 && bALien == true ) {
+				if (numRand < 3 && bALien == true ) {
 				
 						try {
 							setBattleFieldElement(osa.y+1,osa.x,new AlienShot(osa.y+1,osa.x));
