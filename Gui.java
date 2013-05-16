@@ -22,7 +22,7 @@ public class Gui extends JFrame implements KeyListener {
 	private int xGun;
 	private Random ran;
 	protected static boolean shootAllowed = true;
-	
+	protected static boolean gameOver = false;
 	/**
 	 * Launch the application.
 	 */
@@ -94,9 +94,29 @@ public class Gui extends JFrame implements KeyListener {
 		Thread novaThread = new Thread(){
 			
 			public void run(){	
+				System.out.println ("Life : " + bf.life);
 				System.out.println("Score : ");
 				int sc = 0;
-				while (true) {
+				int li = 3;
+				while (gameOver == false) {
+					int newli = bf.life;
+					if (newli != li) {
+						switch (bf.life) {
+						case 1: 
+							System.out.println("You lose a life ! \n"+bf.life+" life left");
+							break;
+						case 0:
+							System.out.println("You lose the game !\nYour score is : "+bf.score);
+							gameOver = true;
+							break;
+						default:
+							System.out.println("You lose a life ! \n"+bf.life+" lifes left");
+							break;
+						}
+						
+						li = newli;
+					}
+				
 					int newsc = bf.score;
 					if (newsc != sc) {
 						System.out.println(bf.score);
@@ -145,6 +165,7 @@ public class Gui extends JFrame implements KeyListener {
 						e.printStackTrace();
 					}
 				}
+
 			}
 		};
 		novaThread.start();
@@ -162,11 +183,12 @@ public class Gui extends JFrame implements KeyListener {
 		
 		int keyCode = e.getKeyCode();
         
-        if (keyCode == 37 && left == false && xGun > 0) {	
+        if (keyCode == 37 && left == false && xGun > 0 && gameOver==false) {	
         	left=true;		
         	try {
         		if (bf.battlefield[bf.rows-1][xGun-1].toString().equals("S")) {
         			bf.gunCounter--;
+        			bf.life--;
         			bf.setBattleFieldElement(bf.rows-1, xGun, new Empty(bf.rows-1,xGun));
 					bf.setBattleFieldElement(bf.rows-1, 0, new Gun(bf.rows-1,0));
 					bf.setBattleFieldElement(bf.rows-1, xGun-1, new Empty(bf.rows-1,xGun-1));
@@ -188,12 +210,13 @@ public class Gui extends JFrame implements KeyListener {
 				System.out.println("ArrayIndexOutOfBoundsException exception in Gui.java");
 			}
         	
-        } else if (keyCode == 39 && right == false && xGun < bf.columns-1) {
+        } else if (keyCode == 39 && right == false && xGun < bf.columns-1 && gameOver==false) {
         	right=true;
 
         	try {
         		if (bf.battlefield[bf.rows-1][xGun+1].toString().equals("S")) {
         			bf.gunCounter--;
+        			bf.life--;
         			bf.setBattleFieldElement(bf.rows-1, xGun, new Empty(bf.rows-1,xGun));
         			bf.setBattleFieldElement(bf.rows-1, xGun+1, new Empty(bf.rows-1,xGun+1));
 					bf.setBattleFieldElement(bf.rows-1, 0, new Gun(bf.rows-1,0));
@@ -211,7 +234,7 @@ public class Gui extends JFrame implements KeyListener {
 				System.out.println(xGun+" = "+e1);
 			}	
 			
-        } else if (keyCode == 32 && shot == false && shootAllowed ) {
+        } else if (keyCode == 32 && shot == false && shootAllowed && gameOver==false) {
         	shot = true;
         	try {
 				bf.setBattleFieldElement(bf.rows-2,xGun,new GunShot(bf.rows-2,xGun));

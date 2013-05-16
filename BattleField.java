@@ -26,10 +26,12 @@ public class BattleField {
 	protected static int columns;						
 	private String filename;						//name of the file where the configurations used (saved,restored...)
 	protected static int score;
+	protected static int life;
 	protected static boolean dead =	false;
 	// CONSTRUCTOR
 	public BattleField(String filename) throws IllegalElementException, IllegalPositionException {
 		score = 0;
+		life = 3;
 		setFilename(filename);
 		reload();
 		
@@ -403,6 +405,7 @@ public class BattleField {
 											if( elementType.equals("G") ) {
 												Gui.shootAllowed = false;
 												gunCounter--;
+												life--;
 												setBattleFieldElement(rows-1, 0, new Gun(rows-1,0));
 												dead = true;
 											}
