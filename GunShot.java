@@ -25,4 +25,12 @@ class GunShot extends BattleFieldElement  {
 	public void move(int v, int h){
 		this.y = v;
 	}
+	
+	@Override
+	public boolean equals(Object o){
+		if(o instanceof GunShot) return false;
+		GunShot as = (GunShot)o;
+		return (as.x == x)&&(as.y == y);
+	}
+
 }

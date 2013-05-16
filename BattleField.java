@@ -37,13 +37,21 @@ public class BattleField {
 		
 	}
 	
+	public static int getScore() {
+		return score;
+	}
+
+	public static int getLife() {
+		return life;
+	}
+
 	//METHODS
 	public String getFilename() {				
 		return this.filename;					
 	}
 										 
 	public void setFilename(String s) {			
-		this.filename= s;						
+		this.filename= s;					
 	}
 	
 	
