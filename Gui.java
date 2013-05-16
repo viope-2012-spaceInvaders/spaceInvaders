@@ -14,6 +14,7 @@ import pt.ipleiria.estg.dei.stackemup.gridpanel.GridPanel;
 import java.awt.event.*;
 import java.awt.Toolkit;
 import java.awt.BorderLayout;
+import javax.swing.ImageIcon;
 
 
 
@@ -31,14 +32,17 @@ public class Gui extends JFrame implements KeyListener {
 	private Random ran;
 	protected static boolean shootAllowed = true;
 	protected static boolean gameOver = false;
+	protected static boolean gameStart = false;
 	protected JLabel lblScore;
 	protected JLabel lblGameOver;
+	protected JLabel lblGameStart;
 	protected String info;
 	
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -58,14 +62,15 @@ public class Gui extends JFrame implements KeyListener {
 	 * @throws IllegalPositionException
 	 */
 	public Gui() throws IllegalElementException, IllegalPositionException {
-		
+		this.addKeyListener(this);
 		Color col = new Color(4210752);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Gui.class.getResource("/image/icon.png")));
 		setTitle("Space Invaders - Erasmus Project 2013");
 		bf = new BattleField("es-in.txt");
-		this.addKeyListener(this);
+		
 		ran = new Random(0);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//setBounds(100, 100,694,691);
 		setBounds(100, 100,50*bf.getColumns(),30+50*bf.getRows());
 		contentPane = new JPanel();
 		info = (" Earth life : " +bf.life +"     Score : "+bf.score+" ");
@@ -87,6 +92,11 @@ public class Gui extends JFrame implements KeyListener {
 		lblScore.setHorizontalAlignment(SwingConstants.LEFT);
 		lblScore.setForeground(Color.WHITE);
 		contentPane.add(lblScore, BorderLayout.NORTH);
+		
+		lblNewLabel = new JLabel();
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel.setIcon(new ImageIcon(Gui.class.getResource("/image/startScreen1.png")));
+		contentPane.add(lblNewLabel, BorderLayout.CENTER);
 
 		
 		xGun = 0;
@@ -117,7 +127,24 @@ public class Gui extends JFrame implements KeyListener {
 		
 		Thread novaThread = new Thread(){
 			
-			public void run(){	
+			public void run(){
+				lblScore.setVisible(false);
+				lblNewLabel = new JLabel();
+				lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+				lblNewLabel.setIcon(new ImageIcon(Gui.class.getResource("/image/startScreen.png")));
+				contentPane.add(lblNewLabel, BorderLayout.CENTER);
+				while (gameStart==false) {
+					try {
+						sleep(1000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					
+				}
+				lblNewLabel.setVisible(false);
+				battlefieldGrid.setVisible(true);
+				lblScore.setVisible(true);
+				contentPane.add(battlefieldGrid, BorderLayout.CENTER);
 				int sc = 0;
 				int li = 3;
 				while (gameOver == false) {
@@ -217,13 +244,19 @@ public class Gui extends JFrame implements KeyListener {
 	static boolean left= false;
 	static boolean right= false;
 	static boolean shot= false;
+	private JLabel lblNewLabel;
 	
 
 	/**
 	 * Key Detection
 	 */
 	public void keyPressed(KeyEvent e) {
-		
+		if (gameStart == false) {
+			int keyCode = e.getKeyCode();
+			if (keyCode == 32) {
+				gameStart = true;
+			}
+		} else {
 		int keyCode = e.getKeyCode();
         
         if (keyCode == 37 && left == false && xGun > 0 && gameOver==false) {	
@@ -294,6 +327,7 @@ public class Gui extends JFrame implements KeyListener {
 				System.out.println("Probel shot inside the Gui.java");
 			} 
         }
+		}
 	}
 
 	/**
@@ -317,7 +351,8 @@ public class Gui extends JFrame implements KeyListener {
 	 * Key Typed (Not used in this case)
 	 */
 	public void keyTyped(KeyEvent e) {
-
+		
+		
 	}
 
 }
