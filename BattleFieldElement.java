@@ -14,10 +14,7 @@ public abstract class BattleFieldElement{
 	public abstract void move(int v, int h);			//moves the current position of the item
 									//to the one passed as argument. No check is made to determine if the new position
 								//is correct or outside of the battlefield margins.
-	
-	public int getXcoords(){
-		return this.x;
-	}
+
 	
 	 public int getY() {
 		return y;
