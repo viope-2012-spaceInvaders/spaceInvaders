@@ -51,6 +51,15 @@
 		return " ";
 	}
 	
+	@Override
+	public boolean equals(Object o){
+		if (! ( o instanceof Empty) ) return false;
+		Empty e = (Empty)o;
+		return e.x == x && e.y == y; 
+	}
+	
+	
+	
 	
 	
 }

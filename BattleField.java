@@ -45,6 +45,14 @@ public class BattleField {
 		
 	}
 	
+	public static int getScore() {
+		return score;
+	}
+
+	public static int getLife() {
+		return life;
+	}
+
 	//METHODS
 	/**
 	 * getFilename method.  A method to get the filename.
@@ -61,7 +69,7 @@ public class BattleField {
 	 * @param s - a String for the filename
 	 */
 	public void setFilename(String s) {			
-		this.filename= s;						
+		this.filename= s;					
 	}
 	 
 	/*

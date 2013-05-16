@@ -79,4 +79,10 @@ class AlienShot extends BattleFieldElement	{
 		return "S";
 	}
 	
+	@Override
+	public boolean equals(Object o){
+		if(o instanceof AlienShot) return false;
+		AlienShot as = (AlienShot)o;
+		return (as.x == x)&&(as.y == y)&&(as.vDirection == vDirection)&&(as.moved == moved);
+	}
 }

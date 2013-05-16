@@ -56,4 +56,11 @@ public class RedSpacecraft extends Alien {
 		this.x = h;
 	}
 
+	@Override
+	public boolean equals(Object o){
+		if(o instanceof RedSpacecraft) return false;
+		RedSpacecraft as = (RedSpacecraft) o;
+		return (as.x == x)&&(as.y == y);
+	}
+
 }

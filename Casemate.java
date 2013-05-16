@@ -52,4 +52,11 @@
 	public String toString() {
 		return "C";
 	}
+	
+	@Override
+	public boolean equals(Object o){
+		if(o instanceof Casemate) return false;
+		Casemate as = (Casemate)o;
+		return (as.x == x)&&(as.y == y);
+	}
 }

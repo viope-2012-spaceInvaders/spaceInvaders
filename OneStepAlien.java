@@ -78,4 +78,12 @@ public class OneStepAlien extends Alien{
 		this.y=v;
 		
 	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if (! ( o instanceof OneStepAlien) ) return false;
+		OneStepAlien osa = (OneStepAlien)o;
+		return (osa.x == x && osa.y == y && osa.direction == direction);
+	}
+	
 }
