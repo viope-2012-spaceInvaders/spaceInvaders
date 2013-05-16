@@ -2,12 +2,10 @@
 elements at play in the game. */
 public abstract class Alien extends BattleFieldElement{
 
-	/** This field blablablabla and its values mean bla
-	 *  blablabla bar babr bar */
-	protected final int direction=-1;	
+		protected final int direction=-1;	
 	
-	/** This constructor will construct a new alien that blablabla
-	 * 
+	/** Alien constructor.  Creates an alien with parameters v and h for the location.
+	 *  
 	 * @param v is the vertical position of the new alien. 
 	 * @param h is the horizontal position of the new alien.
 	 */
@@ -15,7 +13,7 @@ public abstract class Alien extends BattleFieldElement{
 		super(v,h);						
 	}
 	
-	//METHODs	
+	//METHODS	
 	
 	/** This method is abstract: it must be implemented by all
 	 * concrete subclasses. It returns the horizontal offset of the
