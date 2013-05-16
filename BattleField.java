@@ -46,8 +46,8 @@ public class BattleField {
 	}
 	
 	 public void playSound(String s) {
-		    try {
-		        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("./src/sounds/"+s).getAbsoluteFile());
+		    try {        
+		        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("./sounds/"+s).getAbsoluteFile());
 		        Clip clip = AudioSystem.getClip();
 		        clip.open(audioInputStream);
 		        clip.start();
@@ -57,7 +57,13 @@ public class BattleField {
 		    }
 		}
 	
+	public int getScore(){
+		return this.score;
+	}
 	
+	public int getLife(){
+		return this.life;
+	}
 	//METHODS
 	/**
 	 * getFilename method.  A method to get the filename.
