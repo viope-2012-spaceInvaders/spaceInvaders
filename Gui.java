@@ -65,6 +65,7 @@ public class Gui extends JFrame implements KeyListener {
 		this.addKeyListener(this);
 		Color col = new Color(4210752);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Gui.class.getResource("/image/icon.png")));
+		//System.out.println("test");
 		setTitle("Space Invaders - Erasmus Project 2013");
 		bf = new BattleField("es-in.txt");
 		
@@ -163,6 +164,7 @@ public class Gui extends JFrame implements KeyListener {
 							contentPane.add(lblGameOver, BorderLayout.CENTER);
 							battlefieldGrid.setVisible(false);
 							lblScore.setVisible(false);
+							this.interrupt();
 							break;
 						default:
 							
@@ -223,7 +225,7 @@ public class Gui extends JFrame implements KeyListener {
 					} catch (InvocationTargetException e) {
 						e.printStackTrace();
 					} catch (InterruptedException e) {
-						e.printStackTrace();
+						System.out.println("Thread Stoped");
 					}
 					try {
 						ImageManage im = new ImageManage(bf,battlefieldGrid);

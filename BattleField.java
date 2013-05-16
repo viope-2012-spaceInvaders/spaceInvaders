@@ -47,7 +47,7 @@ public class BattleField {
 	
 	 public void playSound(String s) {
 		    try {        
-		        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("./sounds/"+s).getAbsoluteFile());
+		        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("./src/sounds/"+s).getAbsoluteFile());
 		        Clip clip = AudioSystem.getClip();
 		        clip.open(audioInputStream);
 		        clip.start();
