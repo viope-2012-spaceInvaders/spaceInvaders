@@ -1,5 +1,5 @@
 
-/* OneStepAlien a concrete subclass of Alien representing aliens; all
+/** OneStepAlien a concrete subclass of Alien representing aliens; all
 aliens of this type move like a single entity from right to left or from
 left to right (they never go up or down, and at the beginning they move
 from right to left). When an alien of this type reaches the border, the
