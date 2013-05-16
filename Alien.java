@@ -1,10 +1,11 @@
-/**Alien is an abstract class extending BattleFieldElement, and represents all alien
-elements that are played in the game. */
+/**Alien is an abstract class extending BattleFieldElement, and representing all alien
+elements at play in the game. */
 public abstract class Alien extends BattleFieldElement{
 
 		protected final int direction=-1;	
 	
-	/** Alien constructor. Creates an alien with parameters v and h for the location.
+	/** Alien constructor.  Creates an alien with parameters v and h for the location.
+	 *  
 	 * @param v is the vertical position of the new alien. 
 	 * @param h is the horizontal position of the new alien.
 	 */

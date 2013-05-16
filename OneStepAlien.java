@@ -1,10 +1,9 @@
 
-/** OneStepAlien a concrete subclass of Alien representing aliens; all
-* aliens of this type move in a single entity from right to left and from
-* left to right. They are not able to go up or down, at the beginning they move
-* from right to left. When an alien of this type reaches the border of the game area 
-* the whole army changes its direction of movement. 
-* */
+/* OneStepAlien a concrete subclass of Alien representing aliens; all
+aliens of this type move like a single entity from right to left or from
+left to right (they never go up or down, and at the beginning they move
+from right to left). When an alien of this type reaches the border, the
+whole army changes its direction of movement. */
 
 public class OneStepAlien extends Alien{ 
 
@@ -33,11 +32,8 @@ public class OneStepAlien extends Alien{
 	}
 	
 	public static void changeDirection(){
-		armyDirection *= -1;			
-		
-/** Every call to this method changes the direction of the aliens.	
- * -1 makes them move from right to left and 1 makes them move from left to right. 
- */
+		armyDirection *= -1;			//every call of this method change the direction	
+									// -1= right to left		1= left to right
 	}
 
 	public String toString() {
