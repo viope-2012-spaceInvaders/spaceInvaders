@@ -21,7 +21,7 @@ public class Gun extends BattleFieldElement{
 
 	public int getXOffset(){
 		if (direction == 1) {
-			return (BattleField.columns - (this.x + 1));
+			return (BattleField.getColumns() - (this.x + 1));
 		}
 		else {
 			return -this.x;

@@ -1,56 +1,66 @@
 import static org.junit.Assert.*;
 
+import org.junit.Before;
 import org.junit.Test;
 
 
 public class GunTest {
 
-	@Test
-	public void testMove() {
-		Gun G = null; 
+	Gun G = null;
+	
+	@Before
+	public void init(){ 
 		try {
 			G = new Gun(3,6);
 		} catch (IllegalElementException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	@Test
+	public void testMove() {
 		assertEquals("Battlefieldelement must have x set to: 6", 6, G.getX());
 		assertEquals("Battlefieldelement must have y set to: 3", 3, G.getY());
 	}
 
 	@Test
 	public void testGetXOffset() {
-		fail("Not yet implemented");
-	}
-  
-	@Test
-	public void testGetYOffset() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testToString() {
-		Gun G = null;
+		/*Gun G = null; 
 		try {
 			G = new Gun(3,6);
 		} catch (IllegalElementException e) {
 			e.printStackTrace();
 		}
+		BattleField bf = new BattleField("es-in.txt");
+		bf.setColumns(5);
+		assertEquals("At start direction must be 1, so enter in first if",bf.getColumns()-,));*/
+		
+	}
+
+	@Test
+	public void testGetYOffset() {
+		assertEquals("Y offset return always 0", 0,G.getYOffset());
+	}
+
+	@Test
+	public void testToString() {
 		assertEquals("toString must return G", "G", G.toString());
 	}
 
 	@Test
 	public void testGun() {
-		fail("Not yet implemented");
+		BattleFieldElement element = null;
+		try {
+			element = new Gun(5,6);
+		} catch (IllegalElementException e) {
+			e.printStackTrace();
+		}
+		assertEquals("The v must be: 5", 5, element.getY());
+		assertEquals("The h must be: 6", 6, element.getX());
 	}
 
 	@Test
 	public void testChangeDirection() {
-		Gun G = null;
-		try {
-			G = new Gun(3,6);
-		} catch (IllegalElementException e) {
-			e.printStackTrace();
-		}
 		assertEquals("at start must have direction = 1", 1, G.getDirection());
 		G.changeDirection();
 		assertEquals("after call method direction become -1", -1, G.getDirection());
@@ -60,21 +70,11 @@ public class GunTest {
 	}
 
 	@Test
-	public void testGetDirection() {
-		Gun G = null;
-		try {
-			G = new Gun(3,6);
-		} catch (IllegalElementException e) {
-			e.printStackTrace();
-		}
+	public void testGetSetDirection() {
 		assertEquals("at start must have direction = 1", 1, G.getDirection());
 		G.changeDirection();
 		assertEquals("at start must have direction = -1", -1, G.getDirection());
 	}
-
-	@Test
-	public void testSetDirection() {
-		fail("Not yet implemented");
-	}
+	
 
 }

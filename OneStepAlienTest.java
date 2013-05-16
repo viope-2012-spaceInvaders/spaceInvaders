@@ -1,13 +1,21 @@
 import static org.junit.Assert.*;
+
+import org.junit.Before;
 import org.junit.Test;
 
 
 public class OneStepAlienTest {
 
+	OneStepAlien osa;
+	BattleFieldElement element;
+	@Before
+	public void init(){
+		osa = new OneStepAlien(3,2);
+		element = new OneStepAlien(3,2);
+	}
 	
 	@Test
 	public void testMove() {
-		BattleFieldElement element = new OneStepAlien(3,2);
 		assertEquals("At the start the x: 2", 2, element.getX());
 		assertEquals("At the start the y: 3", 3, element.getY());
 		element.move(4, 5);
@@ -17,7 +25,6 @@ public class OneStepAlienTest {
 
 	@Test 
 	public void testGetXOffset() {
-		OneStepAlien osa = new OneStepAlien(3,2);
 		BattleField bf = null;
 		try {
 			bf = new BattleField("es-in.txt");
@@ -36,26 +43,22 @@ public class OneStepAlienTest {
 
 	@Test
 	public void testGetYOffset() {
-		OneStepAlien osa = new OneStepAlien(3,2);
 		assertEquals("Y of one step alien must return 0", 0, osa.getYOffset());
 	}
 
 	@Test
 	public void testToString() {
-		OneStepAlien osa = new OneStepAlien(3,2);
 		assertEquals("String returned must be: A", "A", osa.toString());
 	}
 
 	@Test
 	public void testOneStepAlien() {
-		BattleFieldElement element = new OneStepAlien(3,2);
 		assertEquals("The v must be: 3", 3, element.getY());
 		assertEquals("The h must be: 2", 2, element.getX());
 	}
 
 	@Test
 	public void testChangeDirection() {
-		OneStepAlien osa = new OneStepAlien(3,2);
 		assertEquals("armyDirection must be 1", 1, osa.getArmyDirection());
 		osa.changeDirection();
 		assertEquals("armyDirection (after call of change direction method) must be -1", -1, osa.getArmyDirection());
