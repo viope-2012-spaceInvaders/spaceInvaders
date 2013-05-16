@@ -19,7 +19,7 @@ import java.awt.BorderLayout;
 
 /**
  * 
- * Grafical interface class 
+ * Graphical interface class 
  *
  */
 public class Gui extends JFrame implements KeyListener {
@@ -53,9 +53,9 @@ public class Gui extends JFrame implements KeyListener {
 	
 
 	/**
-	 * Create the frame.
-	 * @throws IllegalPositionException 
-	 * @throws IllegalElementException 
+	 * Create the Graphical interface 
+	 * @throws IllegalElementException
+	 * @throws IllegalPositionException
 	 */
 	public Gui() throws IllegalElementException, IllegalPositionException {
 		Color col = new Color(4210752);
@@ -169,7 +169,7 @@ public class Gui extends JFrame implements KeyListener {
 						shootAllowed = false;
 						try {
 							
-							sleep(650);
+							//sleep(650);
 							shootAllowed = true;
 							bf.dead = false;
 							/*for(int v=0;v<bf.rows;v++){
@@ -184,7 +184,7 @@ public class Gui extends JFrame implements KeyListener {
 								}
 							}*/
 							
-						} catch (InterruptedException e) {
+						} catch (Exception e) {
 							e.printStackTrace();
 						}
 					}
@@ -212,12 +212,14 @@ public class Gui extends JFrame implements KeyListener {
 
 	}
 
-	
 	static boolean left= false;
 	static boolean right= false;
 	static boolean shot= false;
 	
 
+	/**
+	 * Key Detection
+	 */
 	public void keyPressed(KeyEvent e) {
 		
 		int keyCode = e.getKeyCode();
@@ -290,7 +292,9 @@ public class Gui extends JFrame implements KeyListener {
         }
 	}
 
-	
+	/**
+	 * Key Released
+	 */
 	public void keyReleased(KeyEvent e) {
 		
 
@@ -305,7 +309,9 @@ public class Gui extends JFrame implements KeyListener {
 		
 	}
 
-
+	/**
+	 * Key Typed (Not used in this case)
+	 */
 	public void keyTyped(KeyEvent e) {
 
 	}

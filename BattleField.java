@@ -663,7 +663,7 @@ public class BattleField {
 				}//end h for
 				Random ran = new Random();
 				int numRand = ran.nextInt(100)+1;
-				if (numRand < 3 && bALien == true ) {
+				if (numRand < 10 && bALien == true ) {
 				
 						try {
 							setBattleFieldElement(osa.y+1,osa.x,new AlienShot(osa.y+1,osa.x));
