@@ -5,8 +5,10 @@ import org.junit.Test;
 
 
 public class GunShotTest {
+	
 	GunShot gs;
 	BattleFieldElement element;
+	
 	@Before
 	public void init(){
 		element = new GunShot(3,1);

@@ -34,7 +34,15 @@ public class GunTest {
 		BattleField bf = new BattleField("es-in.txt");
 		bf.setColumns(5);
 		assertEquals("At start direction must be 1, so enter in first if",bf.getColumns()-,));*/
-		
+		Gun G = null; 
+		try {
+			G = new Gun(3,6);
+		} catch (IllegalElementException e) {
+			e.printStackTrace();
+		}
+		G.move(3, 7);
+		assertEquals("Battlefieldelement must have x set to: 7", 7, G.getX());
+		G.move(3, 6); //back to 6
 	}
 
 	@Test
