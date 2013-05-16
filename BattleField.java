@@ -491,6 +491,7 @@ public class BattleField {
 								if(as.getMoved()==0){
 									if(battlefield[v][h].getYOffset()==0){
 										setBattleFieldElement(v,h,new Empty(v,h)); 
+										life--;
 										break;
 									}
 									else{
@@ -501,9 +502,9 @@ public class BattleField {
 											if( elementType.equals("G") ) {
 												Gui.shootAllowed = false;
 												gunCounter--;
-												life--;
+												//life--;
 												
-												setBattleFieldElement(rows-2, 0, new Gun(rows-2,0));
+												setBattleFieldElement(rows-2, columns/2, new Gun(rows-2,columns/2));
 												dead = true;
 											}
 											

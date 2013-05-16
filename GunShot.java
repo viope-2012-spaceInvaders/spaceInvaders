@@ -1,20 +1,14 @@
-/**
- * The GunShot class is an extending of the BattleFieldElement Class.
- */
 class GunShot extends BattleFieldElement  {
-		
-	/**
-	 * This class includes constructors and methods for the gunshot.
-	 * @param v is the vertical integer for the gun.
-	 * @param h is the horizontal integer for the gun.
-	 * The alien's shout moves from top of the game area to the bottom(1)
-	 * private static final int vDirection=-1;	  
-	 */
-	
+
+	//FIELD
+	//private static final int vDirection=-1;	 //The aliens' shots move from top to bottom (1 );  
+
+	//CONSTRUCTORs
 	public GunShot(int v, int h){
-		super(v,h);						
+		super(v,h);						//call the BattleFieldElemeng giving h & v parameters
 	}	
 	
+	//METHODS
 	public int getXOffset() {
 		return 0;
 	}
