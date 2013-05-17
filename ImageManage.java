@@ -34,6 +34,10 @@ public class ImageManage {
 					this.image = new SingleImageCellRepresentation("/image/_.png");
 					gp.put(j,i, this.image);
 					break;
+				case "E":
+					this.image = new SingleImageCellRepresentation("/image/e.png");
+					gp.put(j,i, this.image);
+					break;
 //				case "G":
 //					this.image = new SingleImageCellRepresentation("/image/G.png");
 //					gp.put(j,i, this.image);
@@ -49,6 +53,11 @@ public class ImageManage {
 	}
 
 
-	
+	public ImageManage(GridPanel gp, int v, int h ) {
+		this.image = new SingleImageCellRepresentation("/image/e.png");
+		gp.put(h,v, this.image);
+
+	}
+
 	
 }

@@ -26,7 +26,7 @@ import javax.swing.ImageIcon;
 public class Gui extends JFrame implements KeyListener {
 
 	private JPanel contentPane;
-	private GridPanel battlefieldGrid;
+	protected static GridPanel battlefieldGrid;
 	private BattleField bf;
 	private int xGun;
 	private Random ran;
@@ -37,6 +37,7 @@ public class Gui extends JFrame implements KeyListener {
 	protected JLabel lblGameOver;
 	protected JLabel lblGameStart;
 	protected String info;
+	protected static Thread novaThread;
 	
 	/**
 	 * Launch the application.
@@ -122,11 +123,14 @@ public class Gui extends JFrame implements KeyListener {
 					e.printStackTrace();
 				} catch (IllegalPositionException e) {
 					e.printStackTrace();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}			
 			}
 		};
 		
-		Thread novaThread = new Thread(){
+		 novaThread = new Thread(){
 			
 			public void run(){
 				lblScore.setVisible(false);

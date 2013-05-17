@@ -306,7 +306,7 @@ public class BattleField {
 							
 							if(battlefield[v][h].toString().equals("S")) {
 								score += 10;
-								battlefield[v][h]  = new Empty(v, h);
+								battlefield[v][h]  = new Explosion(v, h);
 								break;
 							}
 				case 'S':	if(battlefield[v][h]==null || battlefield[v][h].toString().equals(" ")){
@@ -317,8 +317,11 @@ public class BattleField {
 								battlefield[v][h]=new Empty(v,h);
 								break;
 							}
-							
+				case 'E':	
+							battlefield[v][h]= b;
+							break;			
 				default: 	battlefield[v][h]= b;
+							break;
 			}	
 			
 	}
@@ -370,10 +373,14 @@ public class BattleField {
 				else {									//it isn't!
 					for(int k=0;k<numberOfItem;k++){		//set "numberOfItem" element in the battlefield 
 						switch (result.charAt(i)) { 
+							case 'E': 	b=new Explosion(v,h);
+										setBattleFieldElement(v, h, b);
+										break; 
+								
 							case ' ': 	b=new Empty(v,h);
 										setBattleFieldElement(v, h, b);
 										break; 
-										
+											
 							case 'R':	b=new RedSpacecraft(v,h);
 										setBattleFieldElement(v, h, b);
 										break;
@@ -418,13 +425,22 @@ public class BattleField {
 	 * move method. 
 	 * @throws IllegalElementException
 	 * @throws IllegalPositionException
+	 * @throws InterruptedException 
 	 */
-	public void move() throws IllegalElementException, IllegalPositionException{ 
+	public void move() throws IllegalElementException, IllegalPositionException, InterruptedException{ 
 	  
 		AlienShot as=null;
 		int consecutiveRed=0;
 		int cA=0;
 		boolean theyMove= doTheyMove();
+		
+		for(int v=0; v<rows; v++){ 			// each row starting from 0 
+			for(int h=0; h<columns; h++) { 			// each column starting from 0
+				if(battlefield[v][h] instanceof Explosion){	//if it is an AlienShot
+					setBattleFieldElement(v,h,new Empty(v,h));								//set it as "not moved"
+				}
+			}
+		}
 		
 		//System.out.println(doTheyMove());
 		for(int v=0; v<rows; v++)	{							// each row starting from 0 
@@ -432,6 +448,8 @@ public class BattleField {
 			for(int h=0; h<columns; h++) {
 				switch(battlefield[v][h].toString().charAt(0)) {		// switch to the case returned from the toString() of the battlefield[x][y]					
 								//CaseMate & Empty
+					case 'E':	
+								break;
 					case ' ':
 					case 'C': 	break;							
 					case 'A':	if(theyMove){
@@ -500,6 +518,7 @@ public class BattleField {
 										}
 										if (elementType.equals("S")) {
 											score += 10;
+											setBattleFieldElement(v-1,h, new Explosion(v-1,h));
 										}
 										
 									}
@@ -540,6 +559,7 @@ public class BattleField {
 											
 											if (elementType.equals("s")) {
 												score += 10;
+												setBattleFieldElement(v+1,h, new Explosion(v+1,h));
 											}
 										}
 										else{
