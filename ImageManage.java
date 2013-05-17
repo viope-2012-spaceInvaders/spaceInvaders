@@ -10,10 +10,11 @@ public class ImageManage {
 	private SingleImageCellRepresentation image;
 	
 	/**
-	 * ImageManage method.
+	 * ImageManage method.  This method determines the location of the image file for each image requested
+	 * depending on the letter called.
 	 * 
-	 * @param bf
-	 * @param gp
+	 * @param bf - the BattleField object
+	 * @param gp - the GridPanel object
 	 */
 	public ImageManage(BattleField bf, GridPanel gp ) {
 		for (int i = 0; i < bf.getRows(); i++) {
@@ -61,7 +62,13 @@ public class ImageManage {
 		}
 	}
 
-
+/**
+ * ImageManage method.  manages the image for single cell representations.
+ * 
+ * @param gp - the GridPanel
+ * @param v - the vertical position
+ * @param h - the horizontal position
+ */
 	public ImageManage(GridPanel gp, int v, int h ) {
 		this.image = new SingleImageCellRepresentation("/image/e.png");
 		gp.put(h,v, this.image);
