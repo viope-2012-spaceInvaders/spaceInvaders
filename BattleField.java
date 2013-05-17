@@ -306,6 +306,7 @@ public class BattleField {
 							
 							if(battlefield[v][h].toString().equals("S")) {
 								score += 10;
+								battlefield[v][h]  = new Empty(v, h);
 								break;
 							}
 				case 'S':	if(battlefield[v][h]==null || battlefield[v][h].toString().equals(" ")){

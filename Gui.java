@@ -157,7 +157,7 @@ public class Gui extends JFrame implements KeyListener {
 							break;
 						case 0:
 							gameOver = true;
-							lblGameOver = new JLabel("The Earth have been destroyed ! - Score : "+bf.score);
+							lblGameOver = new JLabel("The Earth has been destroyed ! - Score : "+bf.score);
 							lblGameOver.setFont(new Font("Monospaced", Font.PLAIN, 25));
 							lblGameOver.setHorizontalAlignment(SwingConstants.CENTER);
 							lblGameOver.setForeground(Color.WHITE);
