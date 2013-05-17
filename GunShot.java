@@ -1,3 +1,6 @@
+/**
+ * The GunShot class extends the BattleFieldElement class.
+ */
 class GunShot extends BattleFieldElement  {
 
 	//FIELD

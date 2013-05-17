@@ -1,7 +1,7 @@
 /**
  * Instances of the Gun class (extending BattleFieldElement) represent a gun. 
  * There cannot be more than one gun at a time in the configuration
- * (an IllegalElementEx-ception should be raised upon attempting to create more than one gun). 
+ * (an IllegalElementException should be raised upon attempting to create more than one gun). 
  * When a gun gets destroyed (either because it is hit by a shot or because it has 
  * collided with an alien), it gets replaced by another gun, whose initial position is the 
  * first entry on the left on the bottom line of the battlefield. At every step, the gun

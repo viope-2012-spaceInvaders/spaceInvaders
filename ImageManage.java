@@ -1,3 +1,6 @@
+/**
+ * The ImageManage class manages the images used in the game.
+ */
 import pt.ipleiria.estg.dei.stackemup.gridpanel.GridPanel;
 import pt.ipleiria.estg.dei.stackemup.gridpanel.SingleImageCellRepresentation;
 
@@ -6,6 +9,12 @@ public class ImageManage {
 
 	private SingleImageCellRepresentation image;
 	
+	/**
+	 * ImageManage method.
+	 * 
+	 * @param bf
+	 * @param gp
+	 */
 	public ImageManage(BattleField bf, GridPanel gp ) {
 		for (int i = 0; i < bf.getRows(); i++) {
 			for (int j = 0; j < bf.columns; j++) {
