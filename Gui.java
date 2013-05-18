@@ -234,7 +234,7 @@ public class Gui extends JFrame implements KeyListener {
 					try {
 						ImageManage im = new ImageManage(bf,battlefieldGrid);
 						ImageManageGun imGun = new ImageManageGun(bf,battlefieldGrid);
-						sleep(300);
+						sleep(250);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
@@ -323,10 +323,10 @@ public class Gui extends JFrame implements KeyListener {
 			
         } else if (keyCode == 32 && shot == false && shootAllowed && gameOver==false) {
         	shot = true;
-        	bf.playSound("shoot.wav");
+        	
         	try {
 				bf.setBattleFieldElement(bf.rows-3,xGun,new GunShot(bf.rows-3,xGun));
-				
+				//bf.playSound("shoot.wav");
 				ImageManage im = new ImageManage(bf,battlefieldGrid);
 				battlefieldGrid.repaint();
 			} catch (IllegalElementException | IllegalPositionException e1) {

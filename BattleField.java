@@ -39,7 +39,7 @@ public class BattleField {
 	 */
 	public BattleField(String filename) throws IllegalElementException, IllegalPositionException {
 		score = 0;
-		life = 10;
+		life = 100;
 		setFilename(filename);
 		reload();
 		
@@ -268,10 +268,10 @@ public class BattleField {
 	void setBattleFieldElement(int v, int h, BattleFieldElement b) throws IllegalElementException, IllegalPositionException {
 		
 		//check if something different from a Gun is placed in the bottom row
-	    if ((v == rows-2) && (!b.toString().equals("G")) && (!b.toString().equals(" ")) && (!b.toString().equals("S")) ) 
+	    if ((v == rows-2) && (!b.toString().equals("G")) && (!b.toString().equals("g")) && (!b.toString().equals(" ")) && (!b.toString().equals("S")) ) 
 	  		throw new IllegalElementException("Only Gun, AlienShot or Empty cells can be placed in the bottom row");
 		//check if something different from a RedSpacecraft is placed in the top row
-		if ((v == 0) && (!b.toString().equals("R"))  && ((!b.toString().equals(" "))) && (!b.toString().equals("s")) ) 
+		if ((v == 0) && (!b.toString().equals("R")) && (!b.toString().equals("r")) && ((!b.toString().equals(" "))) && (!b.toString().equals("s")) ) 
 	  		throw new IllegalElementException("Only a RedSpacecraft, Gunshot or Empty Cells can be placed in the top row");
 		
 	//	if ((v == rows-1) && (!b.toString().equals("G") ) )
@@ -294,14 +294,17 @@ public class BattleField {
 							battlefield[v][h]= b;
 							break;
 						
-				case 'C': 	if(v!=rows-1) {
-								throw new IllegalPositionException("Casemates can just be placed in bottom line");
-							}
+				case 'C': 	//if(v!=rows-1) {
+							//	throw new IllegalPositionException("Casemates can just be placed in bottom line");
+							//}
 							battlefield[v][h]= b;
 							break;
 							
 				case 's':	if(battlefield[v][h].toString().equals("s")) {
+								
 								break;
+							} else {
+								playSound("shoot.wav");
 							}
 							
 							if(battlefield[v][h].toString().equals("S")) {
@@ -319,7 +322,10 @@ public class BattleField {
 							}
 				case 'E':	
 							battlefield[v][h]= b;
-							break;			
+							break;		
+				case 'B':	
+							battlefield[v][h]= b;
+							break;	
 				default: 	battlefield[v][h]= b;
 							break;
 			}	
@@ -373,9 +379,25 @@ public class BattleField {
 				else {									//it isn't!
 					for(int k=0;k<numberOfItem;k++){		//set "numberOfItem" element in the battlefield 
 						switch (result.charAt(i)) { 
+							case 'a': 	b=new AlienExplosion(v,h);
+										setBattleFieldElement(v, h, b);
+										break;	
+										
 							case 'E': 	b=new Explosion(v,h);
 										setBattleFieldElement(v, h, b);
 										break; 
+							
+							case 'c': 	b=new CasemateExplosion(v,h);
+										setBattleFieldElement(v, h, b);
+										break;
+										
+							case 'g': 	b=new GunExplosion(v,h);
+										setBattleFieldElement(v, h, b);
+										break;
+							
+							case 'r': 	b=new RedExplosion(v,h);
+										setBattleFieldElement(v, h, b);
+										break;
 								
 							case ' ': 	b=new Empty(v,h);
 										setBattleFieldElement(v, h, b);
@@ -439,6 +461,18 @@ public class BattleField {
 				if(battlefield[v][h] instanceof Explosion){	//if it is an AlienShot
 					setBattleFieldElement(v,h,new Empty(v,h));								//set it as "not moved"
 				}
+				if(battlefield[v][h] instanceof AlienExplosion){	//if it is an AlienShot
+					setBattleFieldElement(v,h,new Empty(v,h));								//set it as "not moved"
+				}
+				if(battlefield[v][h] instanceof GunExplosion){	//if it is an AlienShot
+					setBattleFieldElement(v,h,new Empty(v,h));								//set it as "not moved"
+				}
+				if(battlefield[v][h] instanceof CasemateExplosion){	//if it is an AlienShot
+					setBattleFieldElement(v,h,new Empty(v,h));								//set it as "not moved"
+				}
+				if(battlefield[v][h] instanceof RedExplosion){	//if it is an AlienShot
+					setBattleFieldElement(v,h,new Empty(v,h));								//set it as "not moved"
+				}
 			}
 		}
 		
@@ -489,10 +523,13 @@ public class BattleField {
 				
 					
 								//RedSpacecraft
-					case 'R':   if((battlefield[v][h].getXOffset()==0)|| (battlefield[v][h-1].toString().equals("s"))) { //if near left border or near a shot just break
+					case 'R':   if((battlefield[v][h].getXOffset()==0)  ) { //if near left border or near a shot just break
 									setBattleFieldElement(v,h,new Empty(v,h));				//replace with an empty cell
 									break;
+								} else if ((battlefield[v][h].getXOffset()!=0) && battlefield[v][h-1].toString().equals("s")) {
+									setBattleFieldElement(v,h,new RedExplosion(v,h));
 								}
+					
 								else {														//if far from border instead and not near a shot
 									battlefield[v][h].move(v,h-1);	//and put the RedSpacecraft to the left
 									battlefield[v][h-1]=battlefield[v][h];
@@ -510,11 +547,14 @@ public class BattleField {
 										setBattleFieldElement(v,h, new Empty(v,h));
 										if (elementType.equals("A")) {
 											playSound("invaderkilled.wav");
+											setBattleFieldElement(v-1,h, new AlienExplosion(v-1,h));
 											score += 50;
+											
 										} 
 										if (elementType.equals("R")) {
 											score += 350;
 											playSound("invaderkilled.wav");
+											setBattleFieldElement(v-1,h,new RedExplosion(v-1,h));
 										}
 										if (elementType.equals("S")) {
 											score += 10;
@@ -549,12 +589,14 @@ public class BattleField {
 												gunCounter--;
 												playSound("explosion.wav");
 												//life--;
-												
+												setBattleFieldElement(v+1,h, new GunExplosion(v+1,h));
 												setBattleFieldElement(rows-2, columns/2, new Gun(rows-2,columns/2));
 												dead = true;
 											}
 											
-											
+											if (elementType.equals("C")) {
+												setBattleFieldElement(v+1,h, new CasemateExplosion(v+1,h));
+											}
 											
 											
 											if (elementType.equals("s")) {
@@ -736,8 +778,8 @@ public class BattleField {
 			
 		} 
 		else {
-				setBattleFieldElement(v,h,new Empty(v,h));
-				setBattleFieldElement(v,h+OneStepAlien.armyDirection,new Empty(v,h));				
+				setBattleFieldElement(v,h,new AlienExplosion(v,h));
+				setBattleFieldElement(v,h+OneStepAlien.armyDirection,new AlienExplosion(v,h));				
 		}
 	}
 	
