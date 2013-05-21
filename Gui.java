@@ -188,8 +188,7 @@ public class Gui extends JFrame implements KeyListener {
 							lblEarthDestroyed.setForeground(Color.BLACK);
 							lblEarthDestroyed
 									.setHorizontalAlignment(SwingConstants.CENTER);
-							lblEarthDestroyed.setIcon(new ImageIcon(Gui.class
-									.getResource("image/earthDestroyed.png")));
+							lblEarthDestroyed.setIcon(new ImageIcon(Gui.class.getResource("image/earthDestroyed.png")));
 							contentPane.add(lblEarthDestroyed,
 									BorderLayout.CENTER);
 
@@ -337,13 +336,10 @@ public class Gui extends JFrame implements KeyListener {
 						bf.gunCounter--;
 						// bf.life--;
 						Sound.explosion.play();
-						bf.setBattleFieldElement(bf.rows - 2, xGun, new Empty(
-								bf.rows - 2, xGun));
+						bf.setBattleFieldElement(bf.rows - 2, xGun, new Empty(bf.rows - 2, xGun));
 						bf.dead = true;
-						bf.setBattleFieldElement(bf.rows - 2, xGun - 1,
-								new Empty(bf.rows - 2, xGun - 1));
-						bf.setBattleFieldElement(bf.rows - 2, bf.columns / 2,
-								new Gun(bf.rows - 2, bf.columns / 2));
+						bf.setBattleFieldElement(bf.rows - 2, xGun - 1,new GunExplosion(bf.rows - 2, xGun - 1));
+						bf.setBattleFieldElement(bf.rows - 2, bf.columns / 2,new Gun(bf.rows - 2, bf.columns / 2));
 						xGun = 0;
 
 					} else {
@@ -379,19 +375,15 @@ public class Gui extends JFrame implements KeyListener {
 						// bf.life--;
 						Sound.explosion.play();
 						bf.dead = true;
-						bf.setBattleFieldElement(bf.rows - 2, xGun, new Empty(
-								bf.rows - 2, xGun));
-						bf.setBattleFieldElement(bf.rows - 2, xGun + 1,
-								new Empty(bf.rows - 2, xGun + 1));
-						bf.setBattleFieldElement(bf.rows - 2, bf.columns / 2,
-								new Gun(bf.rows - 2, bf.columns / 2));
+						bf.setBattleFieldElement(bf.rows - 2, xGun, new Empty(bf.rows - 2, xGun));
+						bf.setBattleFieldElement(bf.rows - 2, xGun + 1,new GunExplosion(bf.rows - 2, xGun + 1));
+						bf.setBattleFieldElement(bf.rows - 2, bf.columns / 2,new Gun(bf.rows - 2, bf.columns / 2));
 						xGun = 0;
 					} else {
 						bf.battlefield[bf.rows - 2][xGun].move(bf.rows - 2,
 								xGun + 1);
 						bf.battlefield[bf.rows - 2][xGun + 1] = bf.battlefield[bf.rows - 2][xGun];
-						bf.setBattleFieldElement(bf.rows - 2, xGun, new Empty(
-								bf.rows - 2, xGun));
+						bf.setBattleFieldElement(bf.rows - 2, xGun, new Empty(bf.rows - 2, xGun));
 					}
 					xGun++;
 					ImageManageGun imGun = new ImageManageGun(bf,
