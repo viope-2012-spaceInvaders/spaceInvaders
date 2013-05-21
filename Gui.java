@@ -328,11 +328,10 @@ public class Gui extends JFrame implements KeyListener {
 		} else {
 			int keyCode = e.getKeyCode();
 
-			if (keyCode == 37 && left == false && xGun > 0 && gameOver == false) {
+			if (keyCode == 37 && left == false && xGun > 0 && gameOver == false && bf.dead == false) {
 				left = true;
 				try {
-					if (bf.battlefield[bf.rows - 2][xGun - 1].toString()
-							.equals("S")) {
+					if (bf.battlefield[bf.rows - 2][xGun - 1].toString().equals("S")) {
 						bf.gunCounter--;
 						// bf.life--;
 						Sound.explosion.play();
@@ -354,23 +353,18 @@ public class Gui extends JFrame implements KeyListener {
 					}
 
 					xGun--;
-					ImageManageGun imGun = new ImageManageGun(bf,
-							battlefieldGrid);
+					ImageManageGun imGun = new ImageManageGun(bf,battlefieldGrid);
 					battlefieldGrid.repaint();
 
-				} catch (IllegalElementException | IllegalPositionException
-						| ArrayIndexOutOfBoundsException e1) {
-					System.out
-							.println("ArrayIndexOutOfBoundsException exception in Gui.java");
+				} catch (IllegalElementException | IllegalPositionException	| ArrayIndexOutOfBoundsException e1) {
+					System.out.println("ArrayIndexOutOfBoundsException exception in Gui.java");
 				}
 
-			} else if (keyCode == 39 && right == false && xGun < bf.columns - 1
-					&& gameOver == false) {
+			} else if (keyCode == 39 && right == false && xGun < bf.columns - 1&& gameOver == false && bf.dead == false ) {
 				right = true;
 
 				try {
-					if (bf.battlefield[bf.rows - 2][xGun + 1].toString()
-							.equals("S")) {
+					if (bf.battlefield[bf.rows - 2][xGun + 1].toString().equals("S")) {
 						bf.gunCounter--;
 						// bf.life--;
 						Sound.explosion.play();
@@ -380,23 +374,19 @@ public class Gui extends JFrame implements KeyListener {
 						bf.setBattleFieldElement(bf.rows - 2, bf.columns / 2,new Gun(bf.rows - 2, bf.columns / 2));
 						xGun = 0;
 					} else {
-						bf.battlefield[bf.rows - 2][xGun].move(bf.rows - 2,
-								xGun + 1);
+						bf.battlefield[bf.rows - 2][xGun].move(bf.rows - 2,xGun + 1);
 						bf.battlefield[bf.rows - 2][xGun + 1] = bf.battlefield[bf.rows - 2][xGun];
 						bf.setBattleFieldElement(bf.rows - 2, xGun, new Empty(bf.rows - 2, xGun));
 					}
 					xGun++;
-					ImageManageGun imGun = new ImageManageGun(bf,
-							battlefieldGrid);
+					ImageManageGun imGun = new ImageManageGun(bf,battlefieldGrid);
 					battlefieldGrid.repaint();
 
-				} catch (IllegalElementException | IllegalPositionException
-						| ArrayIndexOutOfBoundsException e1) {
+				} catch (IllegalElementException | IllegalPositionException | ArrayIndexOutOfBoundsException e1) {
 					System.out.println(xGun + " = " + e1);
 				}
 
-			} else if (keyCode == 32 && shot == false && shootAllowed
-					&& gameOver == false) {
+			} else if (keyCode == 32 && shot == false && shootAllowed && gameOver == false  && bf.dead == false ) {
 				shot = true;
 
 				try {

@@ -291,17 +291,24 @@ public class BattleField {
 							battlefield[v][h]= b;
 							break;
 							
-				case 's':	if(battlefield[v][h].toString().equals("s")) {
+				case 's':	try{
+					
+				
+								if(battlefield[v][h].toString().equals("s")) {
+									
+									break;
+								} else {
+									Sound.shoot.play();
+								}
 								
-								break;
-							} else {
-								Sound.shoot.play();
+								if(battlefield[v][h].toString().equals("S")) {
+									score += 10;
+									battlefield[v][h]  = new missileExplosion(v, h);
+									break;
+								}
 							}
-							
-							if(battlefield[v][h].toString().equals("S")) {
-								score += 10;
-								battlefield[v][h]  = new missileExplosion(v, h);
-								break;
+							catch(ArrayIndexOutOfBoundsException e){
+								System.out.println(h+" "+v);
 							}
 							
 							
@@ -569,11 +576,11 @@ public class BattleField {
 										break;
 									}
 									else{
-										String elementType = battlefield[v+1][h].toString();
-										if(elementType.equals("A") || elementType.equals("G")  || elementType.equals("C")|| elementType.equals("s")){
+										String bottomElement = battlefield[v+1][h].toString();
+										if(bottomElement.equals("A") || bottomElement.equals("G")  || bottomElement.equals("C")|| bottomElement.equals("s")){
 											setBattleFieldElement(v+1,h,new Empty(v+1,h));							
 											setBattleFieldElement(v,h, new Empty(v,h));
-											if( elementType.equals("G") ) {
+											if( bottomElement.equals("G") ) {
 												Gui.shootAllowed = false;
 												gunCounter--;
 												Sound.explosion.play();
@@ -583,12 +590,12 @@ public class BattleField {
 												dead = true;
 											}
 											
-											if (elementType.equals("C")) {
+											if (bottomElement.equals("C")) {
 												setBattleFieldElement(v+1,h, new CasemateExplosion(v+1,h));
 											}
 											
 											
-											if (elementType.equals("s")) {
+											if (bottomElement.equals("s")) {
 												score += 10;
 												setBattleFieldElement(v+1,h, new missileExplosion(v+1,h));
 											}
@@ -819,8 +826,6 @@ public class BattleField {
 			}
 			
 		}
-		System.out.println(newLvl);
-
 		gunCounter--;
 		setFilename(newLvl);
 		setBattleField(filename);
