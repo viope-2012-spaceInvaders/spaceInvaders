@@ -482,7 +482,7 @@ public class BattleField {
 											break;
 										}
 										else
-											if(cA==0){						//if there weren´t consecutive		
+											if(cA==0){						//if there weren't consecutive		
 
 												alienCollide(v,h);			//we move it
 												h++;

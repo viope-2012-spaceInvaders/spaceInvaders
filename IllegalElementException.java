@@ -1,6 +1,6 @@
 /**
- * This class is an extension from Exception.
- * This class gives an notification letting the game know an illegal element exception has occurred.
+ * This class is an extending from Exception.
+ * This class gives an notification letting the game know an illegal exception has been made.
  */
 public class IllegalElementException extends Exception {
 	public IllegalElementException(String msg) {

@@ -116,9 +116,14 @@ public class BattleFieldTest {
 	}
 
 	@Test
-	public void testGetBattleField() throws IllegalElementException, IllegalPositionException, InterruptedException {
+	public void testGetBattleField() throws IllegalElementException, IllegalPositionException {
 		assertEquals("4|4|4 $2A2 $1G3 $4 $", BF.toString());
-		BF.move();
+		try {
+			BF.move();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		assertEquals("4|4|4 $2A2 $1G3 $4 $",BF.toString());
 		
 	}
@@ -149,8 +154,13 @@ public class BattleFieldTest {
 	}
 
 	@Test
-	public void testMoveAS() throws IllegalElementException, IllegalPositionException, InterruptedException {
-		BF.move();
+	public void testMoveAS() throws IllegalElementException, IllegalPositionException {
+		try {
+			BF.move();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		BattleFieldElement BFTest[][] = new BattleFieldElement[BF.getRows()][BF.getColumns()];
 		BFTest[0][0] = new Empty(0,0);
 		BFTest[0][1] = new Empty(0,1);
@@ -181,7 +191,7 @@ public class BattleFieldTest {
 	}
 	@Test
 	
-	public void testMoveR() throws IllegalElementException, IllegalPositionException, IOException, InterruptedException {
+	public void testMoveR() throws IllegalElementException, IllegalPositionException, IOException {
 		File tmp = File.createTempFile("MoveRTest", ".txt");
 		tmp.deleteOnExit();
 		try {
@@ -193,7 +203,12 @@ public class BattleFieldTest {
 			System.out.println("IOException in the write method !");
 		} 
 		BattleField BFR = new BattleField(tmp.getName());
-		BF.move();
+		try {
+			BFR.move();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		BattleFieldElement BFTest[][] = new BattleFieldElement[BFR.getRows()][BFR.getColumns()];
 		BFTest[0][0] = new Empty(0,0);
 		BFTest[0][1] = new Empty(0,1);
