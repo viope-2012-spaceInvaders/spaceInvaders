@@ -150,7 +150,7 @@ public class Gui extends JFrame implements KeyListener {
 				contentPane.add(lblStartLevel, BorderLayout.CENTER);
 				repaint();
 				try {
-					sleep(10000);
+					sleep(5000);
 				} catch (InterruptedException e1) {
 					e1.printStackTrace();
 				}
