@@ -12,8 +12,10 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Random;
 import java.util.StringTokenizer;
+
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -31,6 +33,7 @@ public class BattleField {
 	protected static int score;
 	protected static int life;
 	protected static boolean dead =	false;
+	
 	// CONSTRUCTOR
 	/**
 	 * Constructor for the BattleField element
@@ -39,23 +42,11 @@ public class BattleField {
 	 */
 	public BattleField(String filename) throws IllegalElementException, IllegalPositionException {
 		score = 0;
-		life = 100;
+		life = 50;
 		setFilename(filename);
 		reload();
 		
 	}
-	
-	 public void playSound(String s) {
-		    try {        
-		        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("./src/sounds/"+s).getAbsoluteFile());
-		        Clip clip = AudioSystem.getClip();
-		        clip.open(audioInputStream);
-		        clip.start();
-		    } catch(Exception e){
-		        System.out.println("Error sound in BattleField.java");
-		        e.printStackTrace();
-		    }
-		}
 	
 	public int getScore(){
 		return this.score;
@@ -304,14 +295,17 @@ public class BattleField {
 								
 								break;
 							} else {
-								playSound("shoot.wav");
+								Sound.shoot.play();
 							}
 							
 							if(battlefield[v][h].toString().equals("S")) {
 								score += 10;
-								battlefield[v][h]  = new Explosion(v, h);
+								battlefield[v][h]  = new missileExplosion(v, h);
 								break;
 							}
+							
+							
+							
 				case 'S':	if(battlefield[v][h]==null || battlefield[v][h].toString().equals(" ")){
 								battlefield[v][h]= b;
 								break;
@@ -383,7 +377,7 @@ public class BattleField {
 										setBattleFieldElement(v, h, b);
 										break;	
 										
-							case 'E': 	b=new Explosion(v,h);
+							case 'E': 	b=new missileExplosion(v,h);
 										setBattleFieldElement(v, h, b);
 										break; 
 							
@@ -456,23 +450,13 @@ public class BattleField {
 		int cA=0;
 		boolean theyMove= doTheyMove();
 		
+		
 		for(int v=0; v<rows; v++){ 			// each row starting from 0 
 			for(int h=0; h<columns; h++) { 			// each column starting from 0
 				if(battlefield[v][h] instanceof Explosion){	//if it is an AlienShot
 					setBattleFieldElement(v,h,new Empty(v,h));								//set it as "not moved"
 				}
-				if(battlefield[v][h] instanceof AlienExplosion){	//if it is an AlienShot
-					setBattleFieldElement(v,h,new Empty(v,h));								//set it as "not moved"
-				}
-				if(battlefield[v][h] instanceof GunExplosion){	//if it is an AlienShot
-					setBattleFieldElement(v,h,new Empty(v,h));								//set it as "not moved"
-				}
-				if(battlefield[v][h] instanceof CasemateExplosion){	//if it is an AlienShot
-					setBattleFieldElement(v,h,new Empty(v,h));								//set it as "not moved"
-				}
-				if(battlefield[v][h] instanceof RedExplosion){	//if it is an AlienShot
-					setBattleFieldElement(v,h,new Empty(v,h));								//set it as "not moved"
-				}
+				
 			}
 		}
 		
@@ -545,21 +529,26 @@ public class BattleField {
 									if(elementType.equals("A") || elementType.equals("R") || elementType.equals("C")||elementType.equals("S")){
 										setBattleFieldElement(v-1,h,new Empty(v-1,h));
 										setBattleFieldElement(v,h, new Empty(v,h));
+										if (elementType.equals("C")) {
+											setBattleFieldElement(v-1,h, new CasemateExplosion(v-1,h));
+										}
 										if (elementType.equals("A")) {
-											playSound("invaderkilled.wav");
+											Sound.invaderkilled.play();
 											setBattleFieldElement(v-1,h, new AlienExplosion(v-1,h));
 											score += 50;
 											
 										} 
 										if (elementType.equals("R")) {
 											score += 350;
-											playSound("invaderkilled.wav");
+											Sound.invaderkilled.play();
 											setBattleFieldElement(v-1,h,new RedExplosion(v-1,h));
 										}
 										if (elementType.equals("S")) {
 											score += 10;
-											setBattleFieldElement(v-1,h, new Explosion(v-1,h));
+											setBattleFieldElement(v-1,h, new missileExplosion(v-1,h));
 										}
+										
+										
 										
 									}
 									else{
@@ -587,7 +576,7 @@ public class BattleField {
 											if( elementType.equals("G") ) {
 												Gui.shootAllowed = false;
 												gunCounter--;
-												playSound("explosion.wav");
+												Sound.explosion.play();
 												//life--;
 												setBattleFieldElement(v+1,h, new GunExplosion(v+1,h));
 												setBattleFieldElement(rows-2, columns/2, new Gun(rows-2,columns/2));
@@ -601,7 +590,7 @@ public class BattleField {
 											
 											if (elementType.equals("s")) {
 												score += 10;
-												setBattleFieldElement(v+1,h, new Explosion(v+1,h));
+												setBattleFieldElement(v+1,h, new missileExplosion(v+1,h));
 											}
 										}
 										else{
@@ -778,10 +767,72 @@ public class BattleField {
 			
 		} 
 		else {
-				setBattleFieldElement(v,h,new AlienExplosion(v,h));
+				setBattleFieldElement(v,h,new Empty(v,h));
 				setBattleFieldElement(v,h+OneStepAlien.armyDirection,new AlienExplosion(v,h));				
 		}
 	}
+	
+	
+	
+	public void newLevel() throws IllegalElementException, IllegalPositionException{
+		
+		
+		for(int v=0; v<rows; v++){ 			// each row starting from 0 
+			for(int h=0; h<columns; h++) { 			// each column starting from 0
+				if(battlefield[v][h] instanceof GunShot || battlefield[v][h] instanceof AlienShot || battlefield[v][h] instanceof Explosion ){	//if it is an AlienShot
+					setBattleFieldElement(v,h,new Empty(v,h));								//set it as "not moved"
+				}	
+			}
+		}
+		
+		
+		String actLevel=getBattleField();
+		String newLvl="";
+		String temp;
+		int Alien1to9;
+		int col;
+		StringTokenizer nl = new StringTokenizer(actLevel,"$");
+		for(int k=0;nl.hasMoreTokens();k++){
+			temp=nl.nextToken();
+			if(k==1 || k==2 || k==3){ //for line 1-2-3 place some alien
+				Alien1to9=0;
+				col=getColumns()-6;
+				newLvl=newLvl+"3 ";
+				while(col>0){
+					if(Alien1to9==9){
+						newLvl=newLvl+"9A";
+						Alien1to9=1;
+					}
+					else{
+						Alien1to9++;
+					}
+					col--;
+				}
+				if(Alien1to9!=0)
+					newLvl=newLvl+Alien1to9+"A"+"3 $";
+				else
+					newLvl=newLvl+Alien1to9+"A"+"3 $";
+				
+			}
+			else{
+				newLvl=newLvl+temp+"$";
+			}
+			
+		}
+		System.out.println(newLvl);
+
+		gunCounter--;
+		setFilename(newLvl);
+		setBattleField(filename);
+		
+	}
+		
+		
+		
+		
+		
+		
+	
 	
 }//end of class
 

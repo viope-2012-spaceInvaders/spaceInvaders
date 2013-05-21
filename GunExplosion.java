@@ -1,4 +1,4 @@
-public class GunExplosion extends BattleFieldElement {
+public class GunExplosion extends Explosion {
 
 	public GunExplosion(int v, int h) {
 		super(v, h);

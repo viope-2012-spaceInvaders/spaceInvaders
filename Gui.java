@@ -36,8 +36,13 @@ public class Gui extends JFrame implements KeyListener {
 	protected JLabel lblScore;
 	protected JLabel lblGameOver;
 	protected JLabel lblGameStart;
+	protected JLabel lblLevelFinished;
+	protected JLabel lblEarthDestroyed;
 	protected String info;
 	protected static Thread novaThread;
+	protected static int levelNumber = 0;
+	protected static boolean levelFinished = false;
+	
 	
 	/**
 	 * Launch the application.
@@ -64,7 +69,7 @@ public class Gui extends JFrame implements KeyListener {
 	 */
 	public Gui() throws IllegalElementException, IllegalPositionException {
 		this.addKeyListener(this);
-		Color col = new Color(4210752);
+		Color col = new Color(000000);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Gui.class.getResource("/image/icon.png")));
 		//System.out.println("test");
 		setTitle("Space Invaders - Erasmus Project 2013");
@@ -73,13 +78,13 @@ public class Gui extends JFrame implements KeyListener {
 		ran = new Random(0);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//setBounds(100, 100,694,691);
-		setBounds(100, 100,50*bf.getColumns(),30+50*bf.getRows());
+		setBounds(100, 100,50*bf.getColumns(),50+50*bf.getRows());
 		contentPane = new JPanel();
 		info = (" Earth life : " +bf.life +"     Score : "+bf.score+" ");
 		contentPane.setBackground(col);
 		contentPane.setBorder(new EmptyBorder(0, 0, 0, 0));
 		contentPane.setLayout(new BorderLayout(0, 0));
-		bf.playSound("music.wav");
+		Sound.setCurrentMusic(Sound.music);
 		setContentPane(contentPane);
 		
 		battlefieldGrid = new GridPanel();
@@ -91,13 +96,17 @@ public class Gui extends JFrame implements KeyListener {
 		contentPane.add(battlefieldGrid, BorderLayout.CENTER);
 		
 		lblScore = new JLabel(info);
+		lblScore.setFont(new Font("Space Invaders", Font.PLAIN, 16));
 		lblScore.setHorizontalAlignment(SwingConstants.LEFT);
+		
 		lblScore.setForeground(Color.WHITE);
 		contentPane.add(lblScore, BorderLayout.NORTH);
 		
 		lblNewLabel = new JLabel();
+		lblNewLabel.setFont(new Font("Space Invaders", Font.PLAIN, 16));
+		lblNewLabel.setForeground(Color.BLACK);
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel.setIcon(new ImageIcon(Gui.class.getResource("/image/startScreen1.png")));
+		lblNewLabel.setIcon(new ImageIcon(Gui.class.getResource("image/startScreen1.png")));
 		contentPane.add(lblNewLabel, BorderLayout.CENTER);
 
 		
@@ -136,8 +145,10 @@ public class Gui extends JFrame implements KeyListener {
 				lblScore.setVisible(false);
 				lblNewLabel = new JLabel();
 				lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-				lblNewLabel.setIcon(new ImageIcon(Gui.class.getResource("/image/startScreen.png")));
+				lblNewLabel.setIcon(new ImageIcon(Gui.class.getResource("/image/start1.png")));
 				contentPane.add(lblNewLabel, BorderLayout.CENTER);
+				repaint();
+				repaint();
 				while (gameStart==false) {
 					try {
 						sleep(1000);
@@ -156,26 +167,66 @@ public class Gui extends JFrame implements KeyListener {
 					info = (" Earth life : " +bf.life +"     Score : "+bf.score+" ");
 					int newli = bf.life;
 					if (newli != li) {
-						switch (bf.life) {
-						case 1: 
-							break;
-						case 0:
+						if (bf.life <=0 ) {
 							gameOver = true;
-							lblGameOver = new JLabel("The Earth has been destroyed ! - Score : "+bf.score);
-							lblGameOver.setFont(new Font("Monospaced", Font.PLAIN, 25));
+							
+							//////////////////
+							
+							
+							lblEarthDestroyed = new JLabel();
+							lblEarthDestroyed.setFont(new Font("Space Invaders", Font.PLAIN, 16));
+							lblEarthDestroyed.setForeground(Color.BLACK);
+							lblEarthDestroyed.setHorizontalAlignment(SwingConstants.CENTER);
+							lblEarthDestroyed.setIcon(new ImageIcon(Gui.class.getResource("image/earthDestroyed.png")));
+							contentPane.add(lblEarthDestroyed, BorderLayout.CENTER);
+							
+							
+							////////////////
+							
+							lblGameOver = new JLabel("Score : "+bf.score);
+							lblGameOver.setFont(new Font("Space Invaders", Font.PLAIN, 25));
 							lblGameOver.setHorizontalAlignment(SwingConstants.CENTER);
 							lblGameOver.setForeground(Color.WHITE);
-							contentPane.add(lblGameOver, BorderLayout.CENTER);
+							contentPane.add(lblGameOver, BorderLayout.SOUTH);
 							battlefieldGrid.setVisible(false);
 							lblScore.setVisible(false);
 							this.interrupt();
-							break;
-						default:
-							
-							break;
+
 						}
 						lblScore.setText(info);
 						li = newli;
+					}
+					
+					if (levelFinished == true) {
+						if(levelNumber!=10){
+							
+							try {
+
+								sleep(2000);
+								bf.newLevel();
+								
+								levelFinished=false;
+							} catch (IllegalElementException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} catch (IllegalPositionException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+						else{
+							lblLevelFinished = new JLabel("You saved the earth ! - Score : "+bf.score);
+							lblLevelFinished.setFont(new Font("Space Invaders", Font.PLAIN, 25));
+							lblLevelFinished.setHorizontalAlignment(SwingConstants.CENTER);
+							lblLevelFinished.setForeground(Color.WHITE);
+							contentPane.add(lblLevelFinished, BorderLayout.CENTER);
+							battlefieldGrid.setVisible(false);
+							lblScore.setVisible(false);
+							this.interrupt();
+						}
 					}
 				
 					int newsc = bf.score;
@@ -185,6 +236,7 @@ public class Gui extends JFrame implements KeyListener {
 						lblScore.setText(info);
 					}
 					for (int i = 0; i< bf.columns; i++) {
+
 						if (bf.battlefield[bf.rows-2][i].toString().equals("G") ) {
 							xGun = i;
 							break;
@@ -192,7 +244,7 @@ public class Gui extends JFrame implements KeyListener {
 					}
 					
 					int numRand = ran.nextInt(100)+1;
-					if (numRand < 7) {
+					if (numRand < 3) {
 						try {
 							bf.setBattleFieldElement(0,bf.columns-1,new RedSpacecraft(0,bf.columns-1));
 						} catch (Exception e ) {
@@ -223,6 +275,8 @@ public class Gui extends JFrame implements KeyListener {
 							e.printStackTrace();
 						}
 					}
+					
+					
 						
 					try {
 						SwingUtilities.invokeAndWait(iterator);
@@ -271,7 +325,7 @@ public class Gui extends JFrame implements KeyListener {
         		if (bf.battlefield[bf.rows-2][xGun-1].toString().equals("S")) {
         			bf.gunCounter--;
         			//bf.life--;
-        			bf.playSound("explosion.wav");
+        			Sound.explosion.play();
         			bf.setBattleFieldElement(bf.rows-2, xGun, new Empty(bf.rows-2,xGun));
 	        		bf.dead = true;
 					bf.setBattleFieldElement(bf.rows-2, xGun-1, new Empty(bf.rows-2,xGun-1));
@@ -302,7 +356,7 @@ public class Gui extends JFrame implements KeyListener {
         		if (bf.battlefield[bf.rows-2][xGun+1].toString().equals("S")) {
         			bf.gunCounter--;
         			//bf.life--;
-        			bf.playSound("explosion.wav");
+        			Sound.explosion.play();
         			bf.dead = true;
         			bf.setBattleFieldElement(bf.rows-2, xGun, new Empty(bf.rows-2,xGun));
         			bf.setBattleFieldElement(bf.rows-2, xGun+1, new Empty(bf.rows-2,xGun+1));
@@ -325,6 +379,7 @@ public class Gui extends JFrame implements KeyListener {
         	shot = true;
         	
         	try {
+        		System.out.println(xGun);
 				bf.setBattleFieldElement(bf.rows-3,xGun,new GunShot(bf.rows-3,xGun));
 				//bf.playSound("shoot.wav");
 				ImageManage im = new ImageManage(bf,battlefieldGrid);

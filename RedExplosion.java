@@ -1,5 +1,5 @@
 
-public class RedExplosion extends BattleFieldElement {
+public class RedExplosion extends Explosion {
 
 	public RedExplosion(int v, int h) {
 		super(v, h);

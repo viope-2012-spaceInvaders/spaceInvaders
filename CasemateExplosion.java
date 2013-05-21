@@ -1,5 +1,5 @@
 
-public class CasemateExplosion extends BattleFieldElement {
+public class CasemateExplosion extends Explosion {
 
 	public CasemateExplosion(int v, int h) {
 		super(v, h);

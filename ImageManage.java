@@ -7,12 +7,14 @@ public class ImageManage {
 	private SingleImageCellRepresentation image;
 	
 	public ImageManage(BattleField bf, GridPanel gp ) {
+		int nbA = 0;
 		for (int i = 0; i < bf.getRows(); i++) {
 			for (int j = 0; j < bf.columns; j++) {
 				switch (bf.battlefield[i][j].toString()) {
 				case "A":
 					this.image = new SingleImageCellRepresentation("/image/A.png");
 					gp.put(j,i, this.image);
+					nbA++;
 					break;
 				case "R":
 					this.image = new SingleImageCellRepresentation("/image/R.png");
@@ -65,6 +67,11 @@ public class ImageManage {
 					break;
 				}
 			}
+		}
+		if (nbA == 0) {
+			Gui.levelNumber++;
+			Gui.levelFinished = true;
+			
 		}
 	}
 
