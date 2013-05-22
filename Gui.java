@@ -324,15 +324,25 @@ public class Gui extends JFrame implements KeyListener {
 	 * Key Detection
 	 */
 	public void keyPressed(KeyEvent e) {
-		if (gameStart == false) {
+		while (gameStart == false) {
 			int keyCode = e.getKeyCode();
-			if (keyCode == 32) {
+			switch (keyCode) {
+			case KeyEvent.VK_SPACE:
 				gameStart = true;
+				break;
+			default:
+				break;
 			}
-		} else {
-			int keyCode = e.getKeyCode();
-
-			if (keyCode == 37 && left == false && xGun > 0 && gameOver == false && bf.dead == false) {
+			
+		}
+		
+		
+		int keyCode = e.getKeyCode();
+		switch (keyCode) {
+		
+		case KeyEvent.VK_LEFT :
+			
+			if (left == false && xGun > 0 && gameOver == false && bf.dead == false) {
 				left = true;
 				try {
 					if (bf.battlefield[bf.rows - 2][xGun - 1].toString().equals("S")) {
@@ -363,48 +373,64 @@ public class Gui extends JFrame implements KeyListener {
 				} catch (IllegalElementException | IllegalPositionException	| ArrayIndexOutOfBoundsException e1) {
 					System.out.println("ArrayIndexOutOfBoundsException exception in Gui.java");
 				}
-
-			} else if (keyCode == 39 && right == false && xGun < bf.columns - 1&& gameOver == false && bf.dead == false ) {
-				right = true;
-
-				try {
-					if (bf.battlefield[bf.rows - 2][xGun + 1].toString().equals("S")) {
-						bf.gunCounter--;
-						// bf.life--;
-						Sound.explosion.play();
-						bf.dead = true;
-						bf.setBattleFieldElement(bf.rows - 2, xGun, new Empty(bf.rows - 2, xGun));
-						bf.setBattleFieldElement(bf.rows - 2, xGun + 1,new GunExplosion(bf.rows - 2, xGun + 1));
-						bf.setBattleFieldElement(bf.rows - 2, bf.columns / 2,new Gun(bf.rows - 2, bf.columns / 2));
-						xGun = 0;
-					} else {
-						bf.battlefield[bf.rows - 2][xGun].move(bf.rows - 2,xGun + 1);
-						bf.battlefield[bf.rows - 2][xGun + 1] = bf.battlefield[bf.rows - 2][xGun];
-						bf.setBattleFieldElement(bf.rows - 2, xGun, new Empty(bf.rows - 2, xGun));
-					}
-					xGun++;
-					ImageManageGun imGun = new ImageManageGun(bf,battlefieldGrid);
-					battlefieldGrid.repaint();
-
-				} catch (IllegalElementException | IllegalPositionException | ArrayIndexOutOfBoundsException e1) {
-					System.out.println(xGun + " = " + e1);
-				}
-
-			} else if (keyCode == 32 && shot == false && shootAllowed && gameOver == false  && bf.dead == false ) {
-				shot = true;
-
-				try {
-					bf.setBattleFieldElement(bf.rows - 3, xGun, new GunShot(
-							bf.rows - 3, xGun));
-					// bf.playSound("shoot.wav");
-					ImageManage im = new ImageManage(bf, battlefieldGrid);
-					battlefieldGrid.repaint();
-				} catch (IllegalElementException | IllegalPositionException e1) {
-					System.out.println("Probel shot inside the Gui.java");
-				}
+			
 			}
+			break;
+		case KeyEvent.VK_RIGHT :
+				
+				if ( right == false && xGun < bf.columns - 1 && gameOver == false && bf.dead == false ) {
+					right = true;
+
+					try {
+						if (bf.battlefield[bf.rows - 2][xGun + 1].toString().equals("S")) {
+							bf.gunCounter--;
+							// bf.life--;
+							Sound.explosion.play();
+							bf.dead = true;
+							bf.setBattleFieldElement(bf.rows - 2, xGun, new Empty(bf.rows - 2, xGun));
+							bf.setBattleFieldElement(bf.rows - 2, xGun + 1,new GunExplosion(bf.rows - 2, xGun + 1));
+							bf.setBattleFieldElement(bf.rows - 2, bf.columns / 2,new Gun(bf.rows - 2, bf.columns / 2));
+							xGun = 0;
+						} else {
+							bf.battlefield[bf.rows - 2][xGun].move(bf.rows - 2,xGun + 1);
+							bf.battlefield[bf.rows - 2][xGun + 1] = bf.battlefield[bf.rows - 2][xGun];
+							bf.setBattleFieldElement(bf.rows - 2, xGun, new Empty(bf.rows - 2, xGun));
+						}
+						xGun++;
+						ImageManageGun imGun = new ImageManageGun(bf,battlefieldGrid);
+						battlefieldGrid.repaint();
+
+					} catch (IllegalElementException | IllegalPositionException | ArrayIndexOutOfBoundsException e1) {
+						System.out.println(xGun + " = " + e1);
+					}
+				
+		
+				
+				}
+		
+				break;
+
+			case KeyEvent.VK_SPACE :
+				if (shot == false && shootAllowed && gameOver == false  && bf.dead == false ) {
+					shot = true;
+
+					try {
+						bf.setBattleFieldElement(bf.rows - 3, xGun, new GunShot(
+								bf.rows - 3, xGun));
+						// bf.playSound("shoot.wav");
+						ImageManage im = new ImageManage(bf, battlefieldGrid);
+						battlefieldGrid.repaint();
+					} catch (IllegalElementException | IllegalPositionException e1) {
+						System.out.println("Probel shot inside the Gui.java");
+					}
+				}
+				
+				break;
+			default:
+				break;
 		}
 	}
+	
 
 	/**
 	 * Key Released
@@ -412,13 +438,23 @@ public class Gui extends JFrame implements KeyListener {
 	public void keyReleased(KeyEvent e) {
 
 		int keyCode = e.getKeyCode();
-		if (keyCode == 37) {
+		switch (keyCode) {
+		
+		case KeyEvent.VK_LEFT: 
 			left = false;
-		} else if (keyCode == 39) {
+			
+			break;
+		case KeyEvent.VK_RIGHT: 
 			right = false;
-		} else if (keyCode == 32) {
+			break;
+		case KeyEvent.VK_SPACE: 
 			shot = false;
+			break;
+		default:
+			break;
 		}
+		
+		
 
 	}
 
