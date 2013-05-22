@@ -278,7 +278,7 @@ public class BattleField {
 							}
 							gunCounter++;
 							battlefield[v][h]= b;
-							dead = false;
+							
 							break;
 						
 				case 'C': 	//if(v!=rows-1) {
@@ -288,15 +288,11 @@ public class BattleField {
 							break;
 							
 				case 's':	try{
-					
-				
 								if(battlefield[v][h].toString().equals("s")) {
-									
 									break;
 								} else {
 									Sound.shoot.play();
 								}
-								
 								if(battlefield[v][h].toString().equals("S")) {
 									score += 10;
 									battlefield[v][h]  = new missileExplosion(v, h);
@@ -452,13 +448,13 @@ public class BattleField {
 		int consecutiveRed=0;
 		int cA=0;
 		boolean theyMove= doTheyMove();
-		
+		dead = false;
 		
 		for(int v=0; v<rows; v++){ 			// each row starting from 0 
 			for(int h=0; h<columns; h++) { 			// each column starting from 0
 				if (battlefield[v][h] instanceof GunExplosion){	//if it is an AlienShot
 					setBattleFieldElement(v,h,new Empty(v,h));
-					dead = false;
+					
 				} else if(battlefield[v][h] instanceof Explosion){	//if it is an AlienShot
 					setBattleFieldElement(v,h,new Empty(v,h));								//set it as "not moved"
 				}
@@ -747,7 +743,6 @@ public class BattleField {
 			}
 			
 			switch(battlefield[v+upOrDown][h].toString()){
-			
 				case " ":	//move it
 							battlefield[v][h].move(v+upOrDown,h);	
 							battlefield[v+upOrDown][h]=battlefield[v][h];
@@ -794,7 +789,7 @@ public class BattleField {
 							
 							
 				
-				default: System.out.println("test");
+				default: System.out.println("test"+battlefield[v+upOrDown][h].toString());
 			
 			}//end Switch
 			

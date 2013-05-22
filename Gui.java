@@ -371,6 +371,10 @@ public class Gui extends JFrame implements KeyListener {
 				left = true;
 				try {
 					if (bf.battlefield[bf.rows - 2][xGun - 1].toString().equals("S")) {
+						BattleField.score-=250; 
+						if(BattleField.score<0){
+							BattleField.score=0;
+						}
 						bf.gunCounter--;
 						
 						Sound.explosion.play();
@@ -404,6 +408,10 @@ public class Gui extends JFrame implements KeyListener {
 
 				try {
 					if (bf.battlefield[bf.rows - 2][xGun + 1].toString().equals("S")) {
+						BattleField.score-=250; 
+						if(BattleField.score<0){
+							BattleField.score=0;
+						}
 						bf.gunCounter--;
 						// bf.life--;
 						Sound.explosion.play();
