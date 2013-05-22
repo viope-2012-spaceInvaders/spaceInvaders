@@ -149,7 +149,7 @@ public class Gui extends JFrame implements KeyListener {
 				lblScore.setVisible(false);
 				lblStartLevel = new JLabel();
 				lblStartLevel.setHorizontalAlignment(SwingConstants.CENTER);
-				lblStartLevel.setIcon(new ImageIcon(Gui.class.getResource("/image/start4.gif")));
+				lblStartLevel.setIcon(new ImageIcon(Gui.class.getResource("/image/start3.gif")));
 				contentPane.add(lblStartLevel, BorderLayout.CENTER);
 				repaint();
 				pause = true;
