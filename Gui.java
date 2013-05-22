@@ -411,6 +411,7 @@ public class Gui extends JFrame implements KeyListener {
 						bf.setBattleFieldElement(bf.rows - 2, xGun, new Empty(bf.rows - 2, xGun));
 						bf.setBattleFieldElement(bf.rows - 2, xGun + 1,new GunExplosion(bf.rows - 2, xGun + 1));
 						bf.setBattleFieldElement(bf.rows - 2, bf.columns / 2,new Gun(bf.rows - 2, bf.columns / 2));
+						
 						xGun = 0;
 					} else {
 						bf.battlefield[bf.rows - 2][xGun].move(bf.rows - 2,xGun + 1);

@@ -270,7 +270,7 @@ public class BattleField {
 							battlefield[v][h] = b;
 							break;
 						  
-				case 'G':	 if(gunCounter>0) {
+				case 'G':	if(gunCounter>0) {
 								throw new IllegalElementException("Only one Gun per BattleField");
 							}
 							if(v != rows-2) {
@@ -278,6 +278,7 @@ public class BattleField {
 							}
 							gunCounter++;
 							battlefield[v][h]= b;
+							dead = false;
 							break;
 						
 				case 'C': 	//if(v!=rows-1) {
@@ -771,7 +772,6 @@ public class BattleField {
 					
 					
 				case "G":	//kill it, give sound, show explosion, create a new one.
-
 							dead = true;
 							Sound.explosion.play();
 							setBattleFieldElement(v+upOrDown,h, new GunExplosion(v+upOrDown,h));
