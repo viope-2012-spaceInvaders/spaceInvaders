@@ -43,6 +43,7 @@ public class Gui extends JFrame implements KeyListener {
 	protected static int levelNumber = 0;
 	protected static boolean levelFinished = false;
 	protected static boolean pause = false;
+	protected static boolean gameLoad = true;
 	/**
 	 * Launch the application.
 	 */
@@ -69,8 +70,7 @@ public class Gui extends JFrame implements KeyListener {
 	public Gui() throws IllegalElementException, IllegalPositionException {
 		this.addKeyListener(this);
 		Color col = new Color(000000);
-		setIconImage(Toolkit.getDefaultToolkit().getImage(
-				Gui.class.getResource("/image/icon.png")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Gui.class.getResource("/image/icon.png")));
 		// System.out.println("test");
 		setTitle("Space Invaders - Erasmus Project 2013");
 		bf = new BattleField("es-in.txt");
@@ -154,6 +154,7 @@ public class Gui extends JFrame implements KeyListener {
 				} catch (InterruptedException e1) {
 					e1.printStackTrace();
 				}
+				gameLoad = false;
 				lblStartLevel.setIcon(new ImageIcon(Gui.class
 						.getResource("/image/startBar.gif")));
 				repaint();
@@ -183,8 +184,7 @@ public class Gui extends JFrame implements KeyListener {
 					} else {
 						
 					
-					info = (" Earth life : " + bf.life + "     Score : "
-							+ bf.score + " ");
+					info = (" Earth life : " + bf.life + "     Score : " + bf.score + "     Level : " + levelNumber);
 					int newli = bf.life;
 					if (newli != li) {
 						if (bf.life <= 0) {
@@ -343,6 +343,12 @@ public class Gui extends JFrame implements KeyListener {
 	 */
 	public void keyPressed(KeyEvent e) {
 		
+		if (gameLoad == true) {
+			
+		} else {
+			 
+		
+		
 		while (gameStart == false) {
 			int keyCode = e.getKeyCode();
 			switch (keyCode) {
@@ -350,6 +356,7 @@ public class Gui extends JFrame implements KeyListener {
 				gameStart = true;
 				break;
 			default:
+				gameStart = true;
 				break;
 			}
 			
@@ -361,7 +368,7 @@ public class Gui extends JFrame implements KeyListener {
 		
 		case KeyEvent.VK_LEFT :
 			
-			if (left == false && shootAllowed && xGun > 0 && gameOver == false && bf.dead == false) {
+			if (left == false && shootAllowed && xGun > 0 && gameOver == false && bf.dead == false && pause==false) {
 				left = true;
 				try {
 					if (bf.battlefield[bf.rows - 2][xGun - 1].toString().equals("S")) {
@@ -396,7 +403,7 @@ public class Gui extends JFrame implements KeyListener {
 			}
 			break;
 		case KeyEvent.VK_RIGHT :
-			if ( right == false && shootAllowed && xGun < bf.columns - 1 && gameOver == false && bf.dead == false ) {
+			if ( right == false && shootAllowed && xGun < bf.columns - 1 && gameOver == false && bf.dead == false && pause==false) {
 				
 				right = true;
 
@@ -431,7 +438,7 @@ public class Gui extends JFrame implements KeyListener {
 			break;
 
 		case KeyEvent.VK_SPACE :
-			if (shot == false && shootAllowed && gameOver == false  && bf.dead == false ) {
+			if (shot == false && shootAllowed && gameOver == false  && bf.dead == false && pause==false) {
 				shot = true;
 
 				try {
@@ -462,6 +469,7 @@ public class Gui extends JFrame implements KeyListener {
 		default:
 			break;
 		}
+		}
 	}
 	
 
@@ -469,24 +477,26 @@ public class Gui extends JFrame implements KeyListener {
 	 * Key Released
 	 */
 	public void keyReleased(KeyEvent e) {
-
-		int keyCode = e.getKeyCode();
-		switch (keyCode) {
-		
-		case KeyEvent.VK_LEFT: 
-			left = false;
+		if (gameLoad == true) {
 			
-			break;
-		case KeyEvent.VK_RIGHT: 
-			right = false;
-			break;
-		case KeyEvent.VK_SPACE: 
-			shot = false;
-			break;
-		default:
-			break;
+		} else {
+			int keyCode = e.getKeyCode();
+			switch (keyCode) {
+			
+			case KeyEvent.VK_LEFT: 
+				left = false;
+				
+				break;
+			case KeyEvent.VK_RIGHT: 
+				right = false;
+				break;
+			case KeyEvent.VK_SPACE: 
+				shot = false;
+				break;
+			default:
+				break;
+			}
 		}
-		
 		
 
 	}
@@ -495,7 +505,9 @@ public class Gui extends JFrame implements KeyListener {
 	 * Key Typed (Not used in this case)
 	 */
 	public void keyTyped(KeyEvent e) {
-
+		if (gameLoad == true) {
+			
+		} 
 	}
 
 }
