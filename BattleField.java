@@ -12,13 +12,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.net.URL;
 import java.util.Random;
 import java.util.StringTokenizer;
-
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
 
 
 public class BattleField {
@@ -34,7 +29,6 @@ public class BattleField {
 	protected static int life;
 	protected static boolean dead =	false;
 	
-	// CONSTRUCTOR
 	/**
 	 * Constructor for the BattleField element
 	 * 
@@ -42,7 +36,7 @@ public class BattleField {
 	 */
 	public BattleField(String filename) throws IllegalElementException, IllegalPositionException {
 		score = 0;
-		life = 50;
+		life = 1;
 		setFilename(filename);
 		reload();
 		
@@ -55,7 +49,8 @@ public class BattleField {
 	public int getLife(){
 		return this.life;
 	}
-	//METHODS
+	
+	
 	/**
 	 * getFilename method.  A method to get the filename.
 	 * 
@@ -74,7 +69,7 @@ public class BattleField {
 		this.filename= s;						
 	}
 	 
-	/*
+	/**
 	 *getRows method.  A method to return the rows
 	 *
 	 * @return rows - returns the number of rows
@@ -814,47 +809,26 @@ public class BattleField {
 			System.out.println("There is no fucking lvl");;
 			break;
 		}
-//		String actLevel=getBattleField();
-//		String newLvl="";
-//		String temp;
-//		int Alien1to9;
-//		int col;
-//		StringTokenizer nl = new StringTokenizer(actLevel,"$");
-//		for(int k=0;nl.hasMoreTokens();k++){
-//			temp=nl.nextToken();
-//			if(k==1 || k==2 || k==3){ //for line 1-2-3 place some alien
-//				Alien1to9=0;
-//				col=getColumns()-6;
-//				newLvl=newLvl+"3 ";
-//				while(col>0){
-//					if(Alien1to9==9){
-//						newLvl=newLvl+"9A";
-//						Alien1to9=1;
-//					}
-//					else{
-//						Alien1to9++;
-//					}
-//					col--;
-//				}
-//				if(Alien1to9!=0)
-//					newLvl=newLvl+Alien1to9+"A"+"3 $";
-//				else
-//					newLvl=newLvl+Alien1to9+"A"+"3 $";
-//				
-//			}
-//			else{
-//				newLvl=newLvl+temp+"$";
-//			}
-//			
-//		}
+		
 		gunCounter--;
 		setFilename(newLvl);
 		setBattleField(filename);
 		
 	}
+	
+	
 		
 		
+	public void clearShot() throws IllegalElementException, IllegalPositionException {
+		for(int v=0; v<rows; v++){ 			// each row starting from 0 
+			for(int h=0; h<columns; h++) { 			// each column starting from 0
+				if(battlefield[v][h] instanceof GunShot || battlefield[v][h] instanceof AlienShot || battlefield[v][h] instanceof Explosion ){	//if it is an AlienShot
+					setBattleFieldElement(v,h,new Empty(v,h));								//set it as "not moved"
+				}	
+			}
+		}
 		
+	}
 		
 		
 		
