@@ -17,6 +17,10 @@ private SingleImageCellRepresentation image;
 					this.image = new SingleImageCellRepresentation("/image/G.png");
 					gp.put(j,bf.rows-2, this.image);
 					break;
+				case "g":
+					this.image = new SingleImageCellRepresentation("/image/ge.png");
+					gp.put(j,bf.rows-2, this.image);
+					break;
 
 				default:
 					break;

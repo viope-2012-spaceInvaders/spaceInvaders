@@ -582,12 +582,13 @@ public class BattleField {
 											setBattleFieldElement(v,h, new Empty(v,h));
 											if( bottomElement.equals("G") ) {
 												Gui.shootAllowed = false;
+												dead = true;
 												gunCounter--;
 												Sound.explosion.play();
 												//life--;
 												setBattleFieldElement(v+1,h, new GunExplosion(v+1,h));
 												setBattleFieldElement(rows-2, columns/2, new Gun(rows-2,columns/2));
-												dead = true;
+												
 											}
 											
 											if (bottomElement.equals("C")) {
