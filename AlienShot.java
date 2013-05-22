@@ -6,7 +6,8 @@ class AlienShot extends BattleFieldElement	{
 
 	//FIELD
 	private static final int vDirection=1;	 //from top to bottom;  
-	private int moved;
+	
+	protected int moved;
 
 	//CONSTRUCTORS
 	/**
@@ -30,6 +31,14 @@ class AlienShot extends BattleFieldElement	{
 		return 0; 
 	}
 
+	
+	public static int getVdirection() {
+		return vDirection;
+	}
+	
+	
+	
+	
 	/**
 	 * getYOffset method.  Returns the Y-offset.
 	 * 

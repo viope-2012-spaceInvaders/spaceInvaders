@@ -1,8 +1,9 @@
 class GunShot extends BattleFieldElement  {
 
 	//FIELD
-	//private static final int vDirection=-1;	 //The aliens' shots move from top to bottom (1 );  
+	private static final int vDirection=-1;	 //The aliens' shots move from top to bottom (1 );  
 
+	
 	//CONSTRUCTORs
 	public GunShot(int v, int h){
 		super(v,h);						//call the BattleFieldElemeng giving h & v parameters
@@ -17,6 +18,10 @@ class GunShot extends BattleFieldElement  {
 		return (this.y)*-1;
 	}	
 	
+	public static int getVdirection() {
+		return vDirection;
+	}
+
 	@Override
 	public String toString() {
 		return "s";

@@ -36,7 +36,7 @@ public class BattleField {
 	 */
 	public BattleField(String filename) throws IllegalElementException, IllegalPositionException {
 		score = 0;
-		life = 1;
+		life = 30;
 		setFilename(filename);
 		reload();
 		
@@ -455,7 +455,10 @@ public class BattleField {
 		
 		for(int v=0; v<rows; v++){ 			// each row starting from 0 
 			for(int h=0; h<columns; h++) { 			// each column starting from 0
-				if(battlefield[v][h] instanceof Explosion){	//if it is an AlienShot
+				if (battlefield[v][h] instanceof GunExplosion){	//if it is an AlienShot
+					setBattleFieldElement(v,h,new Empty(v,h));
+					dead = false;
+				} else if(battlefield[v][h] instanceof Explosion){	//if it is an AlienShot
 					setBattleFieldElement(v,h,new Empty(v,h));								//set it as "not moved"
 				}
 				
@@ -467,11 +470,7 @@ public class BattleField {
 			
 			for(int h=0; h<columns; h++) {
 				switch(battlefield[v][h].toString().charAt(0)) {		// switch to the case returned from the toString() of the battlefield[x][y]					
-								//CaseMate & Empty
-					case 'E':	
-								break;
-					case ' ':
-					case 'C': 	break;							
+								//CaseMate & Empty						
 					case 'A':	if(theyMove){
 									if(OneStepAlien.armyDirection==-1){					//they go left no problem
 										alienCollide(v,h);
@@ -523,110 +522,18 @@ public class BattleField {
 									break;//end case R						
 								}//end else
 					
-					case 's': 	if(battlefield[v][h].getYOffset()==0){
-									setBattleFieldElement(v,h,new Empty(v,h)); 
-								}
-								else{
-									String elementType = battlefield[v-1][h].toString();
-									if(elementType.equals("A") || elementType.equals("R") || elementType.equals("C")||elementType.equals("S")){
-										setBattleFieldElement(v-1,h,new Empty(v-1,h));
-										setBattleFieldElement(v,h, new Empty(v,h));
-										if (elementType.equals("C")) {
-											setBattleFieldElement(v-1,h, new CasemateExplosion(v-1,h));
-										}
-										if (elementType.equals("A")) {
-											Sound.invaderkilled.play();
-											setBattleFieldElement(v-1,h, new AlienExplosion(v-1,h));
-											score += 50;
-											
-										} 
-										if (elementType.equals("R")) {
-											score += 350;
-											Sound.invaderkilled.play();
-											setBattleFieldElement(v-1,h,new RedExplosion(v-1,h));
-										}
-										if (elementType.equals("S")) {
-											score += 10;
-											setBattleFieldElement(v-1,h, new missileExplosion(v-1,h));
-										}
-										
-										
-										
-									}
-									else{
-										battlefield[v][h].move(v-1,h);	
-										battlefield[v-1][h]=battlefield[v][h];
-										setBattleFieldElement(v,h,new Empty(v,h));
-									}	
-									
-						
-								}
+					case 's': 	shotMovement(battlefield[v][h],v,h);
 								break;
 					
 					case 'S':	as=(AlienShot)battlefield[v][h];
 								if(as.getMoved()==0){
-									if(battlefield[v][h].getYOffset()==0){
-										setBattleFieldElement(v,h,new Empty(v,h)); 
-										life--;
-										break;
-									}
-									else{
-										String bottomElement = battlefield[v+1][h].toString();
-										if(bottomElement.equals("A") || bottomElement.equals("G")  || bottomElement.equals("C")|| bottomElement.equals("s")){
-											setBattleFieldElement(v+1,h,new Empty(v+1,h));							
-											setBattleFieldElement(v,h, new Empty(v,h));
-											if( bottomElement.equals("G") ) {
-												Gui.shootAllowed = false;
-												dead = true;
-												gunCounter--;
-												Sound.explosion.play();
-												//life--;
-												setBattleFieldElement(v+1,h, new GunExplosion(v+1,h));
-												setBattleFieldElement(rows-2, columns/2, new Gun(rows-2,columns/2));
-												
-											}
-											
-											if (bottomElement.equals("C")) {
-												setBattleFieldElement(v+1,h, new CasemateExplosion(v+1,h));
-											}
-											
-											
-											if (bottomElement.equals("s")) {
-												score += 10;
-												setBattleFieldElement(v+1,h, new missileExplosion(v+1,h));
-											}
-										}
-										else{
-											
-											battlefield[v][h].move(v+1,h);	
-											battlefield[v+1][h]=battlefield[v][h];
-											setBattleFieldElement(v,h,new Empty(v,h));
-											as=(AlienShot)battlefield[v+1][h];
-											as.setMoved(1);
-										}	
-										
-							
-									}
+									shotMovement(battlefield[v][h],v,h);
 								}
 								break;
 					
-				/*	case 'G':	Gun g= (Gun)battlefield[v][h];
+													
 								
-								
-								if (g.getXOffset() != 0) {
-									this.gunCollide(v, h, g);	
-								} else {
-									Gun.changeDirection();
-									this.gunCollide(v, h, g);
-								}
-
-						
-								break;
-										
-					*/
-					
-					//
-								default:  break;
+					default:  break;
 					
 
 				}//end switch
@@ -815,6 +722,91 @@ public class BattleField {
 		setBattleField(filename);
 		
 	}
+	
+	
+	
+	
+	public void shotMovement(BattleFieldElement b, int v, int h) throws IllegalElementException, IllegalPositionException{
+		
+		AlienShot as;
+		if(battlefield[v][h].getYOffset()==0){
+			if(b instanceof AlienShot){
+				life--;
+			}
+			//always replace the past position with empty cell
+			setBattleFieldElement(v,h,new Empty(v,h));
+		}
+		else{
+			int upOrDown;
+			if(b instanceof AlienShot){
+				upOrDown= AlienShot.getVdirection();
+			}
+			else{
+				upOrDown= GunShot.getVdirection();
+			}
+			
+			switch(battlefield[v+upOrDown][h].toString()){
+			
+				case " ":	//move it
+							battlefield[v][h].move(v+upOrDown,h);	
+							battlefield[v+upOrDown][h]=battlefield[v][h];
+							if(b instanceof AlienShot){
+								as=(AlienShot)battlefield[v+upOrDown][h];
+								as.setMoved(1);
+							}
+							break;
+					
+					
+				case "A":	//destroy it
+							setBattleFieldElement(v+upOrDown,h,new AlienExplosion(v+upOrDown,h));
+							Sound.invaderkilled.play();
+							score += 50;
+							break;
+					
+				case "R":	//destroy it
+							setBattleFieldElement(v+upOrDown,h,new RedExplosion(v+upOrDown,h));
+							Sound.invaderkilled.play();
+							score += 350;
+							break;
+					
+					
+				case "G":	//kill it, give sound, show explosion, create a new one.
+
+							dead = true;
+							Sound.explosion.play();
+							setBattleFieldElement(v+upOrDown,h, new GunExplosion(v+upOrDown,h));
+							gunCounter--;
+							setBattleFieldElement(rows-2, columns/2, new Gun(rows-2,columns/2));
+							
+							break;
+					
+					
+					
+				case "C":	//destroy it
+							setBattleFieldElement(v+upOrDown,h, new CasemateExplosion(v+1,h));
+							break;
+				
+				case "S":
+				case "s":	//destroy and give score plz
+							score += 10;
+							setBattleFieldElement(v+upOrDown,h, new missileExplosion(v+upOrDown,h));
+							break;
+							
+							
+				
+				default: System.out.println("test");
+			
+			}//end Switch
+			
+			//always replace the past position with empty cell
+			setBattleFieldElement(v,h,new Empty(v,h));
+		
+		}//end Else
+		
+		
+		
+	}
+	
 	
 	
 		

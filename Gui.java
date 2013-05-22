@@ -29,7 +29,6 @@ public class Gui extends JFrame implements KeyListener {
 	private int xGun;
 	private Random ran;
 	protected int lvl=1;
-	protected static boolean shootAllowed = true;
 	protected static boolean gameOver = false;
 	protected static boolean gameStart = false;
 	protected JLabel lblScore;
@@ -128,9 +127,10 @@ public class Gui extends JFrame implements KeyListener {
 			public void run() {
 				try {
 
+					
+					bf.move();
 					im = new ImageManage(bf,battlefieldGrid);
 					imGun = new ImageManageGun(bf,battlefieldGrid);
-					bf.move();
 					battlefieldGrid.repaint();
 				} catch (IllegalElementException e) {
 					e.printStackTrace();
@@ -286,12 +286,11 @@ public class Gui extends JFrame implements KeyListener {
 
 					
 					if (BattleField.dead) {
-						shootAllowed = false;
 						try {
-							BattleField.score -= 100;
-							// sleep(650);
-							shootAllowed = true;
-							BattleField.dead = false;
+							BattleField.score-=250;
+							if(BattleField.score<0)
+								BattleField.score=0;
+							
 
 						} catch (Exception e) {
 							e.printStackTrace();
@@ -368,7 +367,7 @@ public class Gui extends JFrame implements KeyListener {
 		
 		case KeyEvent.VK_LEFT :
 			
-			if (left == false && shootAllowed && xGun > 0 && gameOver == false && BattleField.dead == false && pause==false) {
+			if (left == false && xGun > 0 && gameOver == false && BattleField.dead == false && pause==false) {
 				left = true;
 				try {
 					if (bf.battlefield[bf.rows - 2][xGun - 1].toString().equals("S")) {
@@ -399,7 +398,7 @@ public class Gui extends JFrame implements KeyListener {
 			}
 			break;
 		case KeyEvent.VK_RIGHT :
-			if ( right == false && shootAllowed && xGun < bf.columns - 1 && gameOver == false && BattleField.dead == false && pause==false) {
+			if ( right == false && xGun < bf.columns - 1 && gameOver == false && BattleField.dead == false && pause==false) {
 				
 				right = true;
 
@@ -434,13 +433,13 @@ public class Gui extends JFrame implements KeyListener {
 
 		case KeyEvent.VK_SPACE :
 			
-			if (shot == false && shootAllowed && gameOver == false  && BattleField.dead == false && pause==false) {
+			if (shot == false && gameOver == false  && BattleField.dead == false && pause==false) {
 				shot = true;
 
 				try {
 					bf.setBattleFieldElement(bf.rows - 3, xGun, new GunShot(bf.rows - 3, xGun));
-					im = new ImageManage(bf, battlefieldGrid);
-					battlefieldGrid.repaint();
+//					im = new ImageManage(bf, battlefieldGrid);
+//					battlefieldGrid.repaint();
 				} catch (IllegalElementException | IllegalPositionException e1) {
 					System.out.println("Probel shot inside the Gui.java");
 				}
