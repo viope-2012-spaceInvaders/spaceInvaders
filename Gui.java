@@ -149,7 +149,7 @@ public class Gui extends JFrame implements KeyListener {
 				lblScore.setVisible(false);
 				lblStartLevel = new JLabel();
 				lblStartLevel.setHorizontalAlignment(SwingConstants.CENTER);
-				lblStartLevel.setIcon(new ImageIcon(Gui.class.getResource("/image/start3.gif")));
+				lblStartLevel.setIcon(new ImageIcon(Gui.class.getResource("/image/start4.gif")));
 				contentPane.add(lblStartLevel, BorderLayout.CENTER);
 				repaint();
 				pause = true;
@@ -165,7 +165,7 @@ public class Gui extends JFrame implements KeyListener {
 				repaint();
 				while (gameStart == false) {
 					try {
-						sleep(1000);
+						sleep(10);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
