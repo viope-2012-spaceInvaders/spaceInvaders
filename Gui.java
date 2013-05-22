@@ -254,16 +254,6 @@ public class Gui extends JFrame implements KeyListener {
 						}
 					}
 
-					int numRand = ran.nextInt(100) + 1;
-					if (numRand < 3) {
-						try {
-							bf.setBattleFieldElement(0, bf.columns - 1,
-									new RedSpacecraft(0, bf.columns - 1));
-						} catch (Exception e) {
-							System.out
-									.println("RedSPaceCraft problem in Gui.java");
-						}
-					}
 
 					if (bf.dead) {
 						shootAllowed = false;
@@ -296,6 +286,20 @@ public class Gui extends JFrame implements KeyListener {
 					} catch (InterruptedException e) {
 						System.out.println("Thread Stoped");
 					}
+					
+
+					int numRand = ran.nextInt(100) + 1;
+					if (numRand < 3) {
+						try {
+							bf.setBattleFieldElement(0, bf.columns - 1,
+									new RedSpacecraft(0, bf.columns - 1));
+						} catch (Exception e) {
+							System.out
+									.println("RedSPaceCraft problem in Gui.java");
+						}
+					}
+					
+					
 					try {
 						ImageManage im = new ImageManage(bf, battlefieldGrid);
 						ImageManageGun imGun = new ImageManageGun(bf,
