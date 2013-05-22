@@ -438,8 +438,8 @@ public class Gui extends JFrame implements KeyListener {
 
 				try {
 					bf.setBattleFieldElement(bf.rows - 3, xGun, new GunShot(bf.rows - 3, xGun));
-//					im = new ImageManage(bf, battlefieldGrid);
-//					battlefieldGrid.repaint();
+					im = new ImageManage(bf, battlefieldGrid);
+					battlefieldGrid.repaint();
 				} catch (IllegalElementException | IllegalPositionException e1) {
 					System.out.println("Probel shot inside the Gui.java");
 				}
