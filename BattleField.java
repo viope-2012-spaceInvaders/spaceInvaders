@@ -36,7 +36,7 @@ public class BattleField {
 	 */
 	public BattleField(String filename) throws IllegalElementException, IllegalPositionException {
 		score = 0;
-		life = 530;
+		life = 20;
 		setFilename(filename);
 		reload();
 		
@@ -385,7 +385,7 @@ public class BattleField {
 				}
 				else {									//it isn't!
 					for(int k=0;k<numberOfItem;k++){		//set "numberOfItem" element in the battlefield 
-						System.out.println(v+" "+h+ "");
+					
 						switch (result.charAt(i)) { 
 							case 'a': 	b=new AlienExplosion(v,h);
 										setBattleFieldElement(v, h, b);
@@ -706,22 +706,13 @@ public class BattleField {
 	public void newLevel(int lvl) throws IllegalElementException, IllegalPositionException{
 		
 		String newLvl="";
-		for(int v=0; v<rows; v++){ // each row starting from 0 
-			for(int h=0; h<columns; h++) { // each column starting from 0
-				if(battlefield[v][h] instanceof AlienShot || battlefield[v][h] instanceof GunShot || battlefield[v][h] instanceof Explosion ){ //if it is an AlienShot
-					setBattleFieldElement(v,h,new Empty(v,h));	 //set it as "not moved"
-				}
-				
-			}
-		}
+		clearShot();
 		String current=getBattleField();
 		String defence="asd";
 		StringTokenizer str= new StringTokenizer(current,"$");
 		while(str.hasMoreTokens()){
 			defence=str.nextToken();
 		}
-		System.out.println(defence);
-		System.out.println(defence);
 		
 		
 		switch (lvl) {
@@ -843,7 +834,7 @@ public class BattleField {
 	public void clearShot() throws IllegalElementException, IllegalPositionException {
 		for(int v=0; v<rows; v++){ 			// each row starting from 0 
 			for(int h=0; h<columns; h++) { 			// each column starting from 0
-				if(battlefield[v][h] instanceof GunShot || battlefield[v][h] instanceof AlienShot || battlefield[v][h] instanceof Explosion ){	//if it is an AlienShot
+				if(battlefield[v][h] instanceof GunShot || battlefield[v][h] instanceof AlienShot || battlefield[v][h] instanceof Explosion  ){	//if it is an AlienShot
 					setBattleFieldElement(v,h,new Empty(v,h));								//set it as "not moved"
 				}	
 			}
