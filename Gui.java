@@ -149,7 +149,7 @@ public class Gui extends JFrame implements KeyListener {
 				lblScore.setVisible(false);
 				lblStartLevel = new JLabel();
 				lblStartLevel.setHorizontalAlignment(SwingConstants.CENTER);
-				lblStartLevel.setIcon(new ImageIcon(Gui.class.getResource("/image/start4.gif")));
+				lblStartLevel.setIcon(new ImageIcon(Gui.class.getResource("/image/start3.gif")));
 				contentPane.add(lblStartLevel, BorderLayout.CENTER);
 				repaint();
 				pause = true;
@@ -165,7 +165,7 @@ public class Gui extends JFrame implements KeyListener {
 				repaint();
 				while (gameStart == false) {
 					try {
-						sleep(10);
+						sleep(1000);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
@@ -226,7 +226,7 @@ public class Gui extends JFrame implements KeyListener {
 					}
 
 					if (levelFinished == true) {
-						if(levelNumber<5){
+						if(levelNumber<3){
 							
 							try {
 
@@ -367,7 +367,7 @@ public class Gui extends JFrame implements KeyListener {
 		
 		case KeyEvent.VK_LEFT :
 			
-			if (left == false && xGun > 0 && gameOver == false && BattleField.dead == false && pause==false) {
+			if (left == false && xGun > 0 && gameOver == false && BattleField.dead == false && pause==false && !levelFinished) {
 				left = true;
 				try {
 					if (bf.battlefield[bf.rows - 2][xGun - 1].toString().equals("S")) {
@@ -402,7 +402,7 @@ public class Gui extends JFrame implements KeyListener {
 			}
 			break;
 		case KeyEvent.VK_RIGHT :
-			if ( right == false && xGun < bf.columns - 1 && gameOver == false && BattleField.dead == false && pause==false) {
+			if ( right == false && xGun < bf.columns - 1 && gameOver == false && BattleField.dead == false && pause==false && !levelFinished) {
 				
 				right = true;
 

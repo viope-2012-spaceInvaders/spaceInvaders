@@ -36,7 +36,7 @@ public class BattleField {
 	 */
 	public BattleField(String filename) throws IllegalElementException, IllegalPositionException {
 		score = 0;
-		life = 30;
+		life = 530;
 		setFilename(filename);
 		reload();
 		
@@ -305,11 +305,25 @@ public class BattleField {
 							
 							
 							
-				case 'S':	if(battlefield[v][h]==null || battlefield[v][h].toString().equals(" ")){
+				case 'S':	if(battlefield[v][h] instanceof AlienShot){
+								break;
+							}
+							if(battlefield[v][h] instanceof GunShot || battlefield[v][h] instanceof HiderExplosion){
+								battlefield[v][h]= new missileExplosion(v, h);
+								break;
+							}
+							
+							if(battlefield[v][h] instanceof Alien){
+								battlefield[v][h]= new AlienExplosion(v, h);
+								break;
+							}
+							if(battlefield[v][h].toString().equals(" ") ||battlefield[v][h].toString().equals("E") ||battlefield[v][h].toString().equals("a")){
 								battlefield[v][h]= b;
 								break;
 							}
 							else{
+								
+								System.out.println("TEST222"+battlefield[v][h]);
 								battlefield[v][h]=new Empty(v,h);
 								break;
 							}
@@ -371,6 +385,7 @@ public class BattleField {
 				}
 				else {									//it isn't!
 					for(int k=0;k<numberOfItem;k++){		//set "numberOfItem" element in the battlefield 
+						System.out.println(v+" "+h+ "");
 						switch (result.charAt(i)) { 
 							case 'a': 	b=new AlienExplosion(v,h);
 										setBattleFieldElement(v, h, b);
@@ -445,6 +460,7 @@ public class BattleField {
 	public void move() throws IllegalElementException, IllegalPositionException, InterruptedException{ 
 	  
 		AlienShot as=null;
+		HiderExplosion he;
 		int consecutiveRed=0;
 		int cA=0;
 		boolean theyMove= doTheyMove();
@@ -455,8 +471,11 @@ public class BattleField {
 				if (battlefield[v][h] instanceof GunExplosion){	//if it is an AlienShot
 					setBattleFieldElement(v,h,new Empty(v,h));
 					
-				} else if(battlefield[v][h] instanceof Explosion){	//if it is an AlienShot
-					setBattleFieldElement(v,h,new Empty(v,h));								//set it as "not moved"
+				} else if(battlefield[v][h] instanceof HiderExplosion){
+					he= (HiderExplosion)battlefield[v][h];
+					battlefield[v][h]=he.getHidden();
+					} else if(battlefield[v][h] instanceof Explosion ){	//if it is an AlienShot
+								setBattleFieldElement(v,h,new Empty(v,h));		//set it as "not moved"
 				}
 				
 			}
@@ -527,6 +546,8 @@ public class BattleField {
 									shotMovement(battlefield[v][h],v,h);
 								}
 								break;
+								
+					
 					
 													
 								
@@ -640,10 +661,11 @@ public class BattleField {
 				}//end h for
 				Random ran = new Random();
 				int numRand = ran.nextInt(100)+1;
-				if (numRand < 3 && bALien == true ) {
+				if (numRand < 5 && bALien == true ) {
 				
 						try {
-							setBattleFieldElement(osa.y+1,osa.x,new AlienShot(osa.y+1,osa.x));
+							if(!(battlefield[osa.y+2][osa.x] instanceof AlienShot))
+								setBattleFieldElement(osa.y+1,osa.x,new AlienShot(osa.y+1,osa.x));
 							
 						} catch (IllegalElementException
 								| IllegalPositionException e) {
@@ -681,51 +703,50 @@ public class BattleField {
 	
 	
 	
-	public void newLevel(int lvl) throws IllegalElementException, IllegalPositionException{String newLvl="";
-
-for(int v=0; v<rows; v++){ // each row starting from 0 
-for(int h=0; h<columns; h++) { // each column starting from 0
-if(battlefield[v][h] instanceof GunShot || battlefield[v][h] instanceof AlienShot || battlefield[v][h] instanceof Explosion ){ //if it is an AlienShot
-setBattleFieldElement(v,h,new Empty(v,h));	 //set it as "not moved"
-}	
-}
-}
-
-
-switch (lvl) {
-case 2:
-
-newLvl="13|17|1 9 5 2 $1 9 5 2 $2 2A1 1A1 1A1 1A1 1A2 1A2 $3 5A1 1A1 2A1 1A2 $5 1A1 3A1 2A1 1A2 $7 1A1 3A1 2A2 $9 1A1 2A1 1A2 $9 2 1A2 1A2 $1 9 5 2 $1 9 5 2 $1 9 5 2 $1 4 4 1G5 2 $1C9C5C2C$";;
-System.out.println("lvl2: "+newLvl);
-
-break;
-case 3:
-newLvl="13|17|1 9 5 2 $3 2A2 2A8 $3 2A2 2A1 5A2 $2 9 2A1 1A2 $5 2A1 3A2 2A2 $5 2A1 3A2 2A2 $9 3 2 1A2 $3 2A2 2A8 $3 2A2 2A8 $1 9 5 2 $1 9 5 2 $1 4 4 1G5 2 $1C9C5C2C$";
-System.out.println("lvl3: "+newLvl);
-
-break;
-case 4:
-newLvl="13|17|9 1R5 2 $1 9 5 2 $3 4A3 4A3 $3 4A3 4A3 $1 9 5 2 $1 9 5 2 $5 7A5 $3 2 7 2 3 $1 9 5 2 $1 9 5 2 $1 9 5 2 $1 4 4 1G5 2 $1C9C5C2C$";
-System.out.println("lvl4: "+newLvl);
-
-break;
-case 5:
-newLvl="13|17|1 9 5 2 $3 2A2 3A2 2A3 $4 4A1 4A4 $4 3A3 3A4 $3 1A3 3A3 1A3 $3 1A3 3A3 1A3 $4 3A1 1A1 3A4 $3 2A1 1A3 1A1 2A3 $5 1A5 1A5 $5 1A5 1A5 $1 9 5 2 $1 4 4 1G5 2 $1C9C5C2C$";
-System.out.println("lvl5"+newLvl);
-
-break;
-default:
-System.out.println("There is no fucking lvl");;
-break;
-}
-
-gunCounter--;
-setFilename(newLvl);
-setBattleField(filename);
-
+	public void newLevel(int lvl) throws IllegalElementException, IllegalPositionException{
+		
+		String newLvl="";
+		for(int v=0; v<rows; v++){ // each row starting from 0 
+			for(int h=0; h<columns; h++) { // each column starting from 0
+				if(battlefield[v][h] instanceof AlienShot || battlefield[v][h] instanceof GunShot || battlefield[v][h] instanceof Explosion ){ //if it is an AlienShot
+					setBattleFieldElement(v,h,new Empty(v,h));	 //set it as "not moved"
+				}
+				
+			}
+		}
+		String current=getBattleField();
+		String defence="asd";
+		StringTokenizer str= new StringTokenizer(current,"$");
+		while(str.hasMoreTokens()){
+			defence=str.nextToken();
+		}
+		System.out.println(defence);
+		System.out.println(defence);
+		
+		
+		switch (lvl) {
+			case 2: 	newLvl="13|17|1 9 5 2 $1 9 5 2 $2 2A1 1A1 1A1 1A1 1A2 1A2 $3 5A1 1A1 2A1 1A2 $5 1A1 3A1 2A1 1A2 $7 1A1 3A1 2A2 $9 1A1 2A1 1A2 $9 2 1A2 1A2 $1 9 5 2 $1 9 5 2 $1 9 5 2 $1 4 4 1G5 2 $"+defence+"$";
+						break;
+					
+			case 3:		newLvl="13|17|1 9 5 2 $3 2A2 2A8 $3 2A2 2A1 5A2 $2 9 2A1 1A2 $5 2A1 3A2 2A2 $5 2A1 3A2 2A2 $9 3 2 1A2 $3 2A2 2A8 $3 2A2 2A8 $1 9 5 2 $1 9 5 2 $1 4 4 1G5 2 $"+defence+"$";
+						break;
+						
+			case 4:		newLvl="13|17|9 1R5 2 $1 9 5 2 $3 4A3 4A3 $3 4A3 4A3 $1 9 5 2 $1 9 5 2 $5 7A5 $3 2 7 2 3 $1 9 5 2 $1 9 5 2 $1 9 5 2 $1 4 4 1G5 2 $"+defence+"$";
+						break;
+						
+			case 5:		newLvl="13|17|1 9 5 2 $3 2A2 3A2 2A3 $4 4A1 4A4 $4 3A3 3A4 $3 1A3 3A3 1A3 $3 1A3 3A3 1A3 $4 3A1 1A1 3A4 $3 2A1 1A3 1A1 2A3 $5 1A5 1A5 $5 1A5 1A5 $1 9 5 2 $1 4 4 1G5 2 $"+defence+"$";
+						break;
+						
+			default:	break;
+		}
+	
+		gunCounter--;
+		setFilename(newLvl);
+		setBattleField(filename);
 
 
-}
+
+	}
 	
 	
 	
@@ -759,7 +780,6 @@ setBattleField(filename);
 							}
 							break;
 					
-					
 				case "A":	//destroy it
 							setBattleFieldElement(v+upOrDown,h,new AlienExplosion(v+upOrDown,h));
 							Sound.invaderkilled.play();
@@ -779,23 +799,30 @@ setBattleField(filename);
 							setBattleFieldElement(v+upOrDown,h, new GunExplosion(v+upOrDown,h));
 							gunCounter--;
 							setBattleFieldElement(rows-2, columns/2, new Gun(rows-2,columns/2));
-							
 							break;
-					
-					
-					
+				
 				case "C":	//destroy it
 							setBattleFieldElement(v+upOrDown,h, new CasemateExplosion(v+1,h));
 							break;
 				
+				case "I":
 				case "S":
 				case "s":	//destroy and give score plz
 							score += 10;
 							setBattleFieldElement(v+upOrDown,h, new missileExplosion(v+upOrDown,h));
 							break;
 							
+				case "E":
+				case "a":
+				case "r":	b.move(v+upOrDown, h);
+							if(b instanceof AlienShot){
+								setBattleFieldElement(v+upOrDown,h, new HiderExplosion(v+upOrDown,h,b,AlienShot.getVdirection() ));
+							}
+							else{
+								setBattleFieldElement(v+upOrDown,h, new HiderExplosion(v+upOrDown,h,b,GunShot.getVdirection() ));	
+							}
+							break;
 							
-				
 				default: System.out.println("test"+battlefield[v+upOrDown][h].toString());
 			
 			}//end Switch

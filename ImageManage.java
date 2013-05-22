@@ -48,6 +48,7 @@ public class ImageManage {
 					this.image = new SingleImageCellRepresentation("/image/ce.png");
 					gp.put(j,i, this.image);
 					break;
+				case "I":
 				case "r":
 					this.image = new SingleImageCellRepresentation("/image/re.png");
 					gp.put(j,i, this.image);

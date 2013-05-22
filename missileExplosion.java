@@ -1,7 +1,10 @@
 public class missileExplosion extends Explosion {
 
+	
+	
 	public missileExplosion(int v, int h) {
 		super(v, h);
+		
 	}
 
 

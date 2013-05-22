@@ -1,11 +1,16 @@
 
 public abstract class Explosion extends BattleFieldElement {
 
+		//FIELD
+		
+	
+	//CONSTRUCTOR
 	public Explosion(int v, int h) {
 		super(v, h);
+		}
 
-	}
-
+	
+	//METHOD
 
 	public void move(int v, int h) {
 		
