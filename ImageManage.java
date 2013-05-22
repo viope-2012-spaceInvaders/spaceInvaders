@@ -65,7 +65,6 @@ public class ImageManage {
 			}
 		}
 		if (nbA == 0) {
-			Gui.levelNumber++;
 			Gui.levelFinished = true;
 			
 		}

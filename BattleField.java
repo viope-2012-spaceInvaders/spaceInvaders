@@ -782,8 +782,8 @@ public class BattleField {
 	
 	
 	
-	public void newLevel() throws IllegalElementException, IllegalPositionException{
-		
+	public void newLevel(int lvl) throws IllegalElementException, IllegalPositionException{
+		String newLvl="";
 		
 		for(int v=0; v<rows; v++){ 			// each row starting from 0 
 			for(int h=0; h<columns; h++) { 			// each column starting from 0
@@ -793,40 +793,60 @@ public class BattleField {
 			}
 		}
 		
-		
-		String actLevel=getBattleField();
-		String newLvl="";
-		String temp;
-		int Alien1to9;
-		int col;
-		StringTokenizer nl = new StringTokenizer(actLevel,"$");
-		for(int k=0;nl.hasMoreTokens();k++){
-			temp=nl.nextToken();
-			if(k==1 || k==2 || k==3){ //for line 1-2-3 place some alien
-				Alien1to9=0;
-				col=getColumns()-6;
-				newLvl=newLvl+"3 ";
-				while(col>0){
-					if(Alien1to9==9){
-						newLvl=newLvl+"9A";
-						Alien1to9=1;
-					}
-					else{
-						Alien1to9++;
-					}
-					col--;
-				}
-				if(Alien1to9!=0)
-					newLvl=newLvl+Alien1to9+"A"+"3 $";
-				else
-					newLvl=newLvl+Alien1to9+"A"+"3 $";
-				
-			}
-			else{
-				newLvl=newLvl+temp+"$";
-			}
+		switch (lvl) {
+		case 1:
+			newLvl="13|17|9 1R5 2 $9A1A5 2 $9A1A5 2 $1 9 5 2 $1 9 5 2 $1 9 5 2 $1 9 5 2 $1 9 5 2 $1 9 5 2 $1 9 5 2 $1 9 5 2 $1 4 4 1G5 2 $1C9C5C2C$";
+			System.out.println("lvl1");
 			
+			break;
+		case 2:
+			newLvl="13|17|9 1R5 2 $9A1A5 2 $9A1A5 2 $1 9 5 2 $1 9 5 2 $1 9 5 2 $1 9 5 2 $1 9 5 2 $1 9 5 2 $1 9 5 2 $1 9 5 2 $1 4 4 1G5 2 $1C9C5C2C$";
+			System.out.println("lvl2");
+			
+			break;
+		case 3:
+			
+			newLvl="13|17|9 1R5 2 $9A1A5 2 $9A1A5 2 $1 9 5 2 $1 9 5 2 $1 9 5 2 $1 9 5 2 $1 9 5 2 $1 9 5 2 $1 9 5 2 $1 9 5 2 $1 4 4 1G5 2 $1C9C5C2C$";
+			System.out.println("lvl3");
+			
+			break;
+		default:
+			System.out.println("There is no fucking lvl");;
+			break;
 		}
+//		String actLevel=getBattleField();
+//		String newLvl="";
+//		String temp;
+//		int Alien1to9;
+//		int col;
+//		StringTokenizer nl = new StringTokenizer(actLevel,"$");
+//		for(int k=0;nl.hasMoreTokens();k++){
+//			temp=nl.nextToken();
+//			if(k==1 || k==2 || k==3){ //for line 1-2-3 place some alien
+//				Alien1to9=0;
+//				col=getColumns()-6;
+//				newLvl=newLvl+"3 ";
+//				while(col>0){
+//					if(Alien1to9==9){
+//						newLvl=newLvl+"9A";
+//						Alien1to9=1;
+//					}
+//					else{
+//						Alien1to9++;
+//					}
+//					col--;
+//				}
+//				if(Alien1to9!=0)
+//					newLvl=newLvl+Alien1to9+"A"+"3 $";
+//				else
+//					newLvl=newLvl+Alien1to9+"A"+"3 $";
+//				
+//			}
+//			else{
+//				newLvl=newLvl+temp+"$";
+//			}
+//			
+//		}
 		gunCounter--;
 		setFilename(newLvl);
 		setBattleField(filename);

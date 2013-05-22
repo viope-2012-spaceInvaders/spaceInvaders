@@ -28,6 +28,7 @@ public class Gui extends JFrame implements KeyListener {
 	private BattleField bf;
 	private int xGun;
 	private Random ran;
+	private int lvl=1;
 	protected static boolean shootAllowed = true;
 	protected static boolean gameOver = false;
 	protected static boolean gameStart = false;
@@ -40,7 +41,7 @@ public class Gui extends JFrame implements KeyListener {
 	protected JLabel lblIcon;
 	protected String info;
 	protected static Thread novaThread;
-	protected static int levelNumber = 0;
+	protected static int levelNumber = 1;
 	protected static boolean levelFinished = false;
 	protected static boolean pause = false;
 	protected static boolean gameLoad = true;
@@ -80,7 +81,7 @@ public class Gui extends JFrame implements KeyListener {
 		// setBounds(100, 100,694,691);
 		setBounds(100, 100, 50 * bf.getColumns(), 50 + 50 * bf.getRows());
 		contentPane = new JPanel();
-		info = (" Earth life : " + bf.life + "     Score : " + bf.score + "     Level : " + levelNumber);
+		info = (" Earth life : " + bf.life + "     Score : " + bf.score + "     Level : " + lvl);
 		contentPane.setBackground(col);
 		contentPane.setBorder(new EmptyBorder(0, 0, 0, 0));
 		contentPane.setLayout(new BorderLayout(0, 0));
@@ -173,6 +174,7 @@ public class Gui extends JFrame implements KeyListener {
 				contentPane.add(battlefieldGrid, BorderLayout.CENTER);
 				int sc = 0;
 				int li = 3;
+				
 				while (gameOver == false) {
 					if (pause) {
 						try {
@@ -219,12 +221,15 @@ public class Gui extends JFrame implements KeyListener {
 					}
 
 					if (levelFinished == true) {
-						if(levelNumber!=10){
+						if(levelNumber<3){
 							
 							try {
 
 								sleep(2000);
-								bf.newLevel();
+								levelNumber++;
+								info = (" Earth life : " + bf.life + "     Score : " + bf.score + "     Level : " + levelNumber);
+								bf.newLevel(levelNumber);
+								
 								
 								levelFinished=false;
 							} catch (IllegalElementException e) {
