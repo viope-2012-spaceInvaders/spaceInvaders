@@ -226,7 +226,7 @@ public class Gui extends JFrame implements KeyListener {
 					}
 
 					if (levelFinished == true) {
-						if(levelNumber<3){
+						if(levelNumber<5){
 							
 							try {
 

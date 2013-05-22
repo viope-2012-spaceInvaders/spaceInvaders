@@ -681,44 +681,51 @@ public class BattleField {
 	
 	
 	
-	public void newLevel(int lvl) throws IllegalElementException, IllegalPositionException{
-		String newLvl="";
-		
-		for(int v=0; v<rows; v++){ 			// each row starting from 0 
-			for(int h=0; h<columns; h++) { 			// each column starting from 0
-				if(battlefield[v][h] instanceof GunShot || battlefield[v][h] instanceof AlienShot || battlefield[v][h] instanceof Explosion ){	//if it is an AlienShot
-					setBattleFieldElement(v,h,new Empty(v,h));								//set it as "not moved"
-				}	
-			}
-		}
-		
-		switch (lvl) {
-		case 1:
-			newLvl="13|17|9 1R5 2 $9A1A5 2 $9A1A5 2 $1 9 5 2 $1 9 5 2 $1 9 5 2 $1 9 5 2 $1 9 5 2 $1 9 5 2 $1 9 5 2 $1 9 5 2 $1 4 4 1G5 2 $1C9C5C2C$";
-			System.out.println("lvl1");
-			
-			break;
-		case 2:
-			newLvl="13|17|9 1R5 2 $9A1A5 2 $9A1A5 2 $1 9 5 2 $1 9 5 2 $1 9 5 2 $1 9 5 2 $1 9 5 2 $1 9 5 2 $1 9 5 2 $1 9 5 2 $1 4 4 1G5 2 $1C9C5C2C$";
-			System.out.println("lvl2");
-			
-			break;
-		case 3:
-			
-			newLvl="13|17|9 1R5 2 $9A1A5 2 $9A1A5 2 $1 9 5 2 $1 9 5 2 $1 9 5 2 $1 9 5 2 $1 9 5 2 $1 9 5 2 $1 9 5 2 $1 9 5 2 $1 4 4 1G5 2 $1C9C5C2C$";
-			System.out.println("lvl3");
-			
-			break;
-		default:
-			System.out.println("There is no fucking lvl");;
-			break;
-		}
-		
-		gunCounter--;
-		setFilename(newLvl);
-		setBattleField(filename);
-		
-	}
+	public void newLevel(int lvl) throws IllegalElementException, IllegalPositionException{String newLvl="";
+
+for(int v=0; v<rows; v++){ // each row starting from 0 
+for(int h=0; h<columns; h++) { // each column starting from 0
+if(battlefield[v][h] instanceof GunShot || battlefield[v][h] instanceof AlienShot || battlefield[v][h] instanceof Explosion ){ //if it is an AlienShot
+setBattleFieldElement(v,h,new Empty(v,h));	 //set it as "not moved"
+}	
+}
+}
+
+
+switch (lvl) {
+case 2:
+
+newLvl="13|17|1 9 5 2 $1 9 5 2 $2 2A1 1A1 1A1 1A1 1A2 1A2 $3 5A1 1A1 2A1 1A2 $5 1A1 3A1 2A1 1A2 $7 1A1 3A1 2A2 $9 1A1 2A1 1A2 $9 2 1A2 1A2 $1 9 5 2 $1 9 5 2 $1 9 5 2 $1 4 4 1G5 2 $1C9C5C2C$";;
+System.out.println("lvl2: "+newLvl);
+
+break;
+case 3:
+newLvl="13|17|1 9 5 2 $3 2A2 2A8 $3 2A2 2A1 5A2 $2 9 2A1 1A2 $5 2A1 3A2 2A2 $5 2A1 3A2 2A2 $9 3 2 1A2 $3 2A2 2A8 $3 2A2 2A8 $1 9 5 2 $1 9 5 2 $1 4 4 1G5 2 $1C9C5C2C$";
+System.out.println("lvl3: "+newLvl);
+
+break;
+case 4:
+newLvl="13|17|9 1R5 2 $1 9 5 2 $3 4A3 4A3 $3 4A3 4A3 $1 9 5 2 $1 9 5 2 $5 7A5 $3 2 7 2 3 $1 9 5 2 $1 9 5 2 $1 9 5 2 $1 4 4 1G5 2 $1C9C5C2C$";
+System.out.println("lvl4: "+newLvl);
+
+break;
+case 5:
+newLvl="13|17|1 9 5 2 $3 2A2 3A2 2A3 $4 4A1 4A4 $4 3A3 3A4 $3 1A3 3A3 1A3 $3 1A3 3A3 1A3 $4 3A1 1A1 3A4 $3 2A1 1A3 1A1 2A3 $5 1A5 1A5 $5 1A5 1A5 $1 9 5 2 $1 4 4 1G5 2 $1C9C5C2C$";
+System.out.println("lvl5"+newLvl);
+
+break;
+default:
+System.out.println("There is no fucking lvl");;
+break;
+}
+
+gunCounter--;
+setFilename(newLvl);
+setBattleField(filename);
+
+
+
+}
 	
 	
 	
