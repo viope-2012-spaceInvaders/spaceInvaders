@@ -36,7 +36,7 @@ public class BattleField {
 	 */
 	public BattleField(String filename) throws IllegalElementException, IllegalPositionException {
 		score = 0;
-		life = 20;
+		life = 2000;
 		setFilename(filename);
 		reload();
 		
@@ -294,7 +294,7 @@ public class BattleField {
 									Sound.shoot.play();
 								}
 								if(battlefield[v][h].toString().equals("S")) {
-									score += 10;
+									score += 3;
 									battlefield[v][h]  = new missileExplosion(v, h);
 									break;
 								}
@@ -322,8 +322,6 @@ public class BattleField {
 								break;
 							}
 							else{
-								
-								System.out.println("TEST222"+battlefield[v][h]);
 								battlefield[v][h]=new Empty(v,h);
 								break;
 							}
@@ -649,9 +647,10 @@ public class BattleField {
  * doTheyShot method.  A method to determine it they shoot.
  */
 	public void doTheyShot(){
-		Random ran=new Random();
+		Random ran = new Random();
 		int numRand;
-		OneStepAlien osa=null;
+		OneStepAlien osa = null;
+		
 		for(int h=0; h<columns; h++){				// each row starting from 0 
 
 				for(int v=0; v<rows-1; v++){ 			// each column starting from 0
@@ -660,18 +659,19 @@ public class BattleField {
 					}
 				}//end h for
 				numRand = ran.nextInt(100)+1;
-				if (osa!=null && numRand < 4) {
+				if (osa != null && numRand < 4) {
+				
 						try {
-							if(!(battlefield[osa.y+2][osa.x] instanceof AlienShot)){
+							if(!(battlefield[osa.y+2][osa.x] instanceof AlienShot)){	
 								setBattleFieldElement(osa.y+1,osa.x,new AlienShot(osa.y+1,osa.x));
-								osa=null;
+								osa = null;
 							}
-								
+							
 						} catch (IllegalElementException
 								| IllegalPositionException e) {
 						
 						}
-						
+
 				}
 		}//end v for
 
@@ -716,13 +716,13 @@ public class BattleField {
 		
 		
 		switch (lvl) {
-			case 2: 	newLvl="13|17|1 9 5 2 $1 9 5 2 $2 2A1 1A1 1A1 1A1 1A2 1A2 $3 5A1 1A1 2A1 1A2 $5 1A1 3A1 2A1 1A2 $7 1A1 3A1 2A2 $9 1A1 2A1 1A2 $9 2 1A2 1A2 $1 9 5 2 $1 9 5 2 $1 9 5 2 $1 4 4 1G5 2 $"+defence+"$";
+			case 2: 	newLvl="13|17|1 9 5 2 $7 2A8 $6 4A7 $5 6A6 $4 2A1 2A1 2A5 $4 8A5 $6 1A2 1A7 $5 1A1 2A1 1A6 $4 1A1 1A2 1A1 1A5 $9 8 $9 8 $1 4 4 1G5 2 $"+defence+"$";
 						break;
 					
-			case 3:		newLvl="13|17|1 9 5 2 $3 2A2 2A8 $3 2A2 2A1 5A2 $2 9 2A1 1A2 $5 2A1 3A2 2A2 $5 2A1 3A2 2A2 $9 3 2 1A2 $3 2A2 2A8 $3 2A2 2A8 $1 9 5 2 $1 9 5 2 $1 4 4 1G5 2 $"+defence+"$";
+			case 3:		newLvl="13|17|1 9 5 2 $5 1A5 1A5 $6 1A3 1A6 $5 7A5 $4 2A1 3A1 2A4 $3 9A2A3 $3 1A1 7A1 1A3 $3 1A1 1A5 1A1 1A3 $6 2A1 2A6 $1 9 5 2 $1 9 5 2 $1 4 4 1G5 2 $"+defence+"$";
 						break;
 						
-			case 4:		newLvl="13|17|9 1R5 2 $1 9 5 2 $3 4A3 4A3 $3 4A3 4A3 $1 9 5 2 $1 9 5 2 $5 7A5 $3 2 7 2 3 $1 9 5 2 $1 9 5 2 $1 9 5 2 $1 4 4 1G5 2 $"+defence+"$";
+			case 4:		newLvl="13|17|1 9 5 2 $1 9 5 2 $3A2 1A1 3A1 1A5 $1A2 1A1 1A1 1A3 1A5 $1A2 1A1 1A1 2A2 1A5 $1A2 1A1 1A1 1A9 $3A2 1A1 3A1 1A5 $1 9 5 2 $1 9 5 2 $1 9 5 2 $1 9 5 2 $1 4 4 1G5 2 $"+defence+"$";
 						break;
 						
 			case 5:		newLvl="13|17|1 9 5 2 $3 2A2 3A2 2A3 $4 4A1 4A4 $4 3A3 3A4 $3 1A3 3A3 1A3 $3 1A3 3A3 1A3 $4 3A1 1A1 3A4 $3 2A1 1A3 1A1 2A3 $5 1A5 1A5 $5 1A5 1A5 $1 9 5 2 $1 4 4 1G5 2 $"+defence+"$";
@@ -799,7 +799,7 @@ public class BattleField {
 				case "I":
 				case "S":
 				case "s":	//destroy and give score plz
-							score += 10;
+							score += 3;
 							setBattleFieldElement(v+upOrDown,h, new missileExplosion(v+upOrDown,h));
 							break;
 							

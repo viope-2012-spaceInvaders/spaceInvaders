@@ -100,7 +100,7 @@ public class Gui extends JFrame implements KeyListener {
 
 		lblScore = new JLabel(info);
 		lblScore.setFont(new Font("Space Invaders", Font.PLAIN, 16));
-		lblScore.setHorizontalAlignment(SwingConstants.LEFT);
+		lblScore.setHorizontalAlignment(SwingConstants.CENTER);
 
 		lblScore.setForeground(Color.WHITE);
 		contentPane.add(lblScore, BorderLayout.NORTH);
@@ -109,10 +109,15 @@ public class Gui extends JFrame implements KeyListener {
 		lblIcon.setFont(new Font("Space Invaders", Font.PLAIN, 16));
 		lblIcon.setForeground(Color.BLACK);
 		lblIcon.setHorizontalAlignment(SwingConstants.CENTER);
-		lblIcon.setIcon(new ImageIcon(Gui.class
-				.getResource("image/startScreen1.png")));
+		lblIcon.setIcon(new ImageIcon(Gui.class.getResource("image/startScreen1.png")));
 		contentPane.add(lblIcon, BorderLayout.CENTER);
-
+		
+		lblPause = new JLabel("PAUSE");
+		lblPause.setFont(new Font("Space Invaders", Font.PLAIN, 18));
+		lblPause.setHorizontalAlignment(SwingConstants.CENTER);
+		lblPause.setForeground(Color.BLACK);
+		contentPane.add(lblPause, BorderLayout.SOUTH);
+		
 		xGun = 0;
 
 		for (int i = 0; i < bf.columns; i++) {
@@ -174,13 +179,20 @@ public class Gui extends JFrame implements KeyListener {
 				pause = false;
 				lblStartLevel.setVisible(false);
 				battlefieldGrid.setVisible(true);
-				battlefieldGrid.setGridBackground(Color.BLACK);
+				//battlefieldGrid.setGridBackground(Color.BLACK);
+				battlefieldGrid.setGridBackground("/back.jpg");
 				lblScore.setVisible(true);
 				contentPane.add(battlefieldGrid, BorderLayout.CENTER);
 				int sc = 0;
 				int li = 3;
 				while (gameOver == false) {
 					if (pause) {
+						lblPause.setForeground(Color.WHITE);
+					
+						repaint();
+
+						
+						
 						try {
 							sleep(100);
 						} catch (InterruptedException e) {
@@ -227,25 +239,18 @@ public class Gui extends JFrame implements KeyListener {
 
 					if (levelFinished == true) {
 						if(levelNumber<5){
-							
 							try {
-
 								sleep(2000);
 								levelNumber++;
 								info = (" Earth life : " + bf.life + "     Score : " + bf.score + "     Level : " + levelNumber);
 								bf.newLevel(levelNumber);
-								
-								
 								levelFinished=false;
-							} catch (IllegalElementException e) {	
-								e.printStackTrace();
-							} catch (IllegalPositionException e) {
-								e.printStackTrace();
-							} catch (InterruptedException e) {
+							} catch (IllegalElementException | IllegalPositionException | InterruptedException e) {	
 								e.printStackTrace();
 							}
 						}
 						else{
+							gameOver = true;
 							lblLevelFinished = new JLabel("You saved the earth ! - Score : "+BattleField.score);
 							lblLevelFinished.setFont(new Font("Space Invaders", Font.PLAIN, 25));
 							lblLevelFinished.setHorizontalAlignment(SwingConstants.CENTER);
@@ -254,15 +259,19 @@ public class Gui extends JFrame implements KeyListener {
 							battlefieldGrid.setVisible(false);
 							lblScore.setVisible(false);
 							this.interrupt();
+							
 						}
 					}
 
+					
 					int newsc = BattleField.score;
 					if (newsc != sc) {
 
 						sc = newsc;
 						lblScore.setText(info);
 					}
+					
+					
 					for (int i = 0; i < bf.columns; i++) {
 						if (bf.battlefield[bf.rows - 2][i].toString().equals(
 								"G")) {
@@ -277,9 +286,7 @@ public class Gui extends JFrame implements KeyListener {
 					
 					try {
 						SwingUtilities.invokeAndWait(iterator);
-					} catch (InvocationTargetException e) {
-						e.printStackTrace();
-					} catch (InterruptedException e) {
+					} catch (InvocationTargetException | InterruptedException e) {
 						System.out.println("Thread Stoped");
 					}
 					
@@ -327,6 +334,7 @@ public class Gui extends JFrame implements KeyListener {
 	static boolean left = false;
 	static boolean right = false;
 	static boolean shot = false;
+	private JLabel lblPause;
 
 	/**
 	 * Key Detection
@@ -350,13 +358,7 @@ public class Gui extends JFrame implements KeyListener {
 				gameStart = true;
 				break;
 			}
-//			try {
-//				bf.clearShot();
-//			} catch (IllegalElementException e2) {
-//				e2.printStackTrace();
-//			} catch (IllegalPositionException e2) {
-//				e2.printStackTrace();
-//			}
+
 		}
 		
 		
@@ -457,17 +459,22 @@ public class Gui extends JFrame implements KeyListener {
 			break;
 		
 			
+		case KeyEvent.VK_L :
+			BattleField.life++;
+			break;
+		
+			
 		case KeyEvent.VK_P :
 			if (pause == false) {
 				pause = true;
-				
+			
 			} else {
 				pause = false;
+				lblPause.setForeground(Color.BLACK);
 			}
 			
 			
-			break;
-		
+			break;	
 			
 		case KeyEvent.VK_ENTER :
 			if (gameEnd ==true ) {
@@ -517,6 +524,9 @@ public class Gui extends JFrame implements KeyListener {
 		if (gameLoad == true) {
 			
 		} 
+		
+		
+		
 	}
 
 }

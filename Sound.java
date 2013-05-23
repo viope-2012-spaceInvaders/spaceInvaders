@@ -2,6 +2,12 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 
+/**
+ * 
+ * Thanks to Dj CUTMAN for his awesome background music
+ *
+ */
+
 
 public class Sound {
 	
