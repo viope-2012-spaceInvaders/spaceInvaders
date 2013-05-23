@@ -53,7 +53,7 @@ public class ImageManage {
 						this.image = new SingleImageCellRepresentation("/image/ce.png");
 					}
 					else{
-						this.image = new SingleImageCellRepresentation("/image/aC.png");
+						this.image = new SingleImageCellRepresentation("/image/aCe.png");
 						}
 					gp.put(j,i, this.image);
 					break;
