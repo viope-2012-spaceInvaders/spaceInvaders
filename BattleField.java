@@ -649,29 +649,29 @@ public class BattleField {
  * doTheyShot method.  A method to determine it they shoot.
  */
 	public void doTheyShot(){
-		OneStepAlien osa = null;
-		boolean bALien = false;
+		Random ran=new Random();
+		int numRand;
+		OneStepAlien osa=null;
 		for(int h=0; h<columns; h++){				// each row starting from 0 
 
 				for(int v=0; v<rows-1; v++){ 			// each column starting from 0
 					if(battlefield[v][h] instanceof OneStepAlien){	//if it is an Alien
 						osa=(OneStepAlien)battlefield[v][h];		//put it in the "osa" variable
-						bALien = true;
 					}
 				}//end h for
-				Random ran = new Random();
-				int numRand = ran.nextInt(100)+1;
-				if (numRand < 5 && bALien == true ) {
-				
+				numRand = ran.nextInt(100)+1;
+				if (osa!=null && numRand < 4) {
 						try {
-							if(!(battlefield[osa.y+2][osa.x] instanceof AlienShot))
+							if(!(battlefield[osa.y+2][osa.x] instanceof AlienShot)){
 								setBattleFieldElement(osa.y+1,osa.x,new AlienShot(osa.y+1,osa.x));
-							
+								osa=null;
+							}
+								
 						} catch (IllegalElementException
 								| IllegalPositionException e) {
 						
 						}
-						bALien = false;
+						
 				}
 		}//end v for
 
