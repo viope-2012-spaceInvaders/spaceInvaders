@@ -28,8 +28,12 @@ public class ImageManage {
 					this.image = new SingleImageCellRepresentation("/image/as.png");
 					gp.put(j,i, this.image);
 					break;
-				case "C":
-					this.image = new SingleImageCellRepresentation("/image/C.png");
+				case "C":	if(i==BattleField.getRows()-1){
+								this.image = new SingleImageCellRepresentation("/image/C.png");
+							}
+							else{
+								this.image = new SingleImageCellRepresentation("/image/aC.png");
+							}	
 					gp.put(j,i, this.image);
 					break;
 				case " ":
@@ -40,12 +44,17 @@ public class ImageManage {
 					this.image = new SingleImageCellRepresentation("/image/e.png");
 					gp.put(j,i, this.image);
 					break;
-				case "a":
+				case "a":	
 					this.image = new SingleImageCellRepresentation("/image/ae.png");
 					gp.put(j,i, this.image);
 					break;
 				case "c":
-					this.image = new SingleImageCellRepresentation("/image/ce.png");
+					if(i==BattleField.getRows()-1){
+						this.image = new SingleImageCellRepresentation("/image/ce.png");
+					}
+					else{
+						this.image = new SingleImageCellRepresentation("/image/aC.png");
+						}
 					gp.put(j,i, this.image);
 					break;
 				case "I":
