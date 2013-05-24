@@ -23,6 +23,18 @@ public class ImageManage {
 				case "s":
 					this.image = new SingleImageCellRepresentation("/image/gs.png");
 					gp.put(j,i, this.image);
+					
+					if (Gui.tooMuchShots == true) {
+						Gui.tooMuchShots = false;
+					}
+					
+					Gui.nbShot++;
+				
+					if (Gui.nbShot >= 4) {
+						Gui.tooMuchShots = true;
+					}
+					
+					
 					break;
 				case "S":
 					this.image = new SingleImageCellRepresentation("/image/as.png");
@@ -71,10 +83,14 @@ public class ImageManage {
 				}
 			}
 		}
+		
 		if (nbA == 0) {
 			Gui.levelFinished = true;
 			
 		}
+		
+		Gui.nbShot = 0;
+
 	}
 
 

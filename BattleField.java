@@ -36,7 +36,7 @@ public class BattleField {
 	 */
 	public BattleField(String filename) throws IllegalElementException, IllegalPositionException {
 		score = 0;
-		life = 20;
+		life = 1;
 		setFilename(filename);
 		reload();
 		
@@ -312,7 +312,10 @@ public class BattleField {
 								battlefield[v][h]= new missileExplosion(v, h);
 								break;
 							}
-							
+							if(battlefield[v][h] instanceof Casemate){
+								battlefield[v][h]= new CasemateExplosion(v, h);
+								break;
+							}
 							if(battlefield[v][h] instanceof Alien){
 								battlefield[v][h]= new AlienExplosion(v, h);
 								break;
@@ -514,28 +517,21 @@ public class BattleField {
 												break;
 											}
 								}
-								else break;
-					
-						
-						
-						
-				
-					
+								break;
+
 								//RedSpacecraft
 					case 'R':   if((battlefield[v][h].getXOffset()==0)  ) { //if near left border or near a shot just break
 									setBattleFieldElement(v,h,new Empty(v,h));				//replace with an empty cell
 									break;
 								} else if ((battlefield[v][h].getXOffset()!=0) && battlefield[v][h-1].toString().equals("s")) {
 									setBattleFieldElement(v,h,new RedExplosion(v,h));
-								}
-					
-								else {														//if far from border instead and not near a shot
+								} else {														//if far from border instead and not near a shot
 									battlefield[v][h].move(v,h-1);	//and put the RedSpacecraft to the left
 									battlefield[v][h-1]=battlefield[v][h];
-									setBattleFieldElement(v,h,new Empty(v,h));				//replace with an empty cell
-									break;//end case R						
+									setBattleFieldElement(v,h,new Empty(v,h));				//replace with an empty cell				
 								}//end else
 					
+								break;//end case R
 					case 's': 	shotMovement(battlefield[v][h],v,h);
 								break;
 					
@@ -566,7 +562,6 @@ public class BattleField {
 				}
 			}
 		}
-		
 		doTheyShot();
 		
 	}//end of method
@@ -624,23 +619,6 @@ public class BattleField {
 			return false;		//don't move if reach this instruction
 		}				
 	}//end method
-	
-/*
-	public void gunCollide(int v, int h, Gun g) throws IllegalElementException, IllegalPositionException {
-		
-		if (battlefield[v][h+g.getDirection()].equals("S")) {
-			setBattleFieldElement(v,h,new Empty(v,h));
-			setBattleFieldElement(v,h+g.getDirection(),new Empty(v,h+g.getDirection()));
-			gunCounter--;
-			setBattleFieldElement(rows-1,0,new Gun(rows-1,0));
-			System.out.println("DEAD");
-		} else {
-//			battlefield[v][h].move(v,h+g.getDirection());	
-//			battlefield[v][h+g.getDirection()]=battlefield[v][h];
-//			setBattleFieldElement(v,h,new Empty(v,h));
-		}
-	}
-	*/
 	
 
 /**
